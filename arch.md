@@ -1,5 +1,7 @@
 % Arch Linux
 
+# Arch Linux
+
 Dedico aquí un capítulo completo a la distribución Arch Linux porque creo que con ésta se puede aprender el
 funcionamiento interno de Linux de un modo muy práctico, aunque luego cada sistema tenga muchas
 particularidades. La distribución Arch Linux le "obliga" a configurar su sistema por usted mismo (en realidad,
@@ -12,3 +14,11 @@ tirado el dinero: pupede usarla como media center, como servidor de ficheros CIF
 
 Gran parte de los apartados incluidos aquí hacen referencia al uso del gestor de paquetes Pacman, que es el
 predeterminado en Arch Linux.
+
+También quisiera hacer una prueba con una ecuación como $$x=y^2 - v_{\mathrm{g}}$$ para ver:
+
+$$
+x^3 + y^4 = V_{g}.
+$$
+
+Pero bueno, ya está.
