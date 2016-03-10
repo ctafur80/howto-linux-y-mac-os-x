@@ -15,7 +15,6 @@ $ hostnamectl --static
 $ hostnamectl --transient
 $ hostnamectl --pretty
 ```
-podrá comprobar que ha establecido los nombres que pretendía. Si aún no ha configurado los locales en su sistema
-a su gusto (vea la sección [Lanuage](lang.md)), puede que el pretty hostname no aparezca como deseaba. Una vez
-cambiados estos nombres, reinicie el sistema y comprobará que el prompt del shell mostrará el nuevo static
-hostname.
+podrá comprobar que ha establecido los nombres que pretendía. Si aún no ha configurado los [locales](lang.md) en
+su sistema a su gusto, puede que el pretty hostname no aparezca como deseaba. Una vez cambiados estos nombres,
+reinicie el sistema y comprobará que el prompt del shell mostrará el nuevo static hostname.

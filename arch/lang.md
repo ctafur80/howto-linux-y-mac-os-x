@@ -9,7 +9,7 @@ directorio ~/Dropbox/Documentos/rasp/locales-total/ con los tres ficheros que al
 directorio home, por ejemplo; sería así:
 
 ```bash
-#? scp -r ~/Dropbox/Documentos/rasp/{{nombreRpi}}/* root@nRpI:/home/{{nombreUsuario}}
+#? scp -r ~/Dropbox/Documentos/rasp/{{nombreRpi}}/* root@{{nombreRpi}}:/home/{{nombreUsuario}}
 ```
 La opción `-r`, además de copiar los directorios recursivamente, sigue los enlaces simbólicos, que es lo que
 interesa aquí.
@@ -17,7 +17,7 @@ interesa aquí.
 Ahora,
 
 ```bash
-$ cd /home/uSernamE/locales-total/
+$ cd /home/{{nombreUsuario}}/locales-total/
 $ sh locales-total
 ```
 
