@@ -1,13 +1,13 @@
 ## Instalación básica de Arch Linux en un RbPi desde un sistema Linux
 
 La instalación básica desde Linux está basada en la explicación de la propia página oficial de [Arch
-Linux](archlinuxarm.org/platforms/armv7/broadcom/raspberry-pi-2).
+Linux](http://archlinuxarm.org/platforms/armv7/broadcom/raspberry-pi-2).
 
 La instalación inicial se hace directamente sobre la tarjeta microSD, pero antes de nada, deberá tener
-habilitada en su sistema Linux la cuenta de root, cosa que no es siempre cierta; por ejemplo, Ubuntu la trae
-deshabilitada (vea habilitar la cuenta de root). Si desea, tras la instalación básica de Arch Linux en su RbPi,
-puede deshabilitar la cuenta de root en su sistema Linux (vea deshabilitar cuenta root). No vale con simular que
-tiene una cuenta root (vea simular cuenta root).
+habilitada en su sistema Linux la cuenta de root, cosa que no es cierta siempre; por ejemplo, Ubuntu la trae
+deshabilitada (vea Habilitar la cuenta de root). Si desea, tras la instalación básica de Arch Linux en su RbPi,
+puede deshabilitar la cuenta de root en su sistema Linux (vea Deshabilitar cuenta root). No vale con simular que
+tiene una cuenta root (vea Simular cuenta root).
 
 
   * Introduzca en un lector de tarjetas microSD de su ordenador la tarjeta microSD que desea emplear para
@@ -33,20 +33,20 @@ tiene una cuenta root (vea simular cuenta root).
     microSD, desmóntela mediante el shell con el comando `umount`:
 
     ```
-    #? umount /dev/sdX[1-nUmM]
+    #? umount /dev/sdX[1-{{n}}]
     ```
 
-    donde `nUmM` es el número mayor de su partición del dispositivo /dev/sdX; si la numeración de dichas
+    donde `{{n}}` es el número mayor de su partición del dispositivo /dev/sd{{X}}; si la numeración de dichas
     particiones según sus nombres descriptores del kernel no es consecutiva, desmóntelas una a una. Si trata de
     desmontar estas particiones desde la interfaz gráfica, puede que lo desmonte completamente y no aparezcan
     los ficheros de dispositivo para dicha tarjeta cuando los muestra con el comando `lsblk`, con lo cual, a
     efectos prácticos, es como si hubiera extraído la tarjeta microSD de su ordenador. Si su sistema no intentó
     montar nada, mejor; no tendrá que hacer lo dicho.
 
-  * Ahora, ejecute el comando `fdisk` (como root o con `sudo`) de /dev/sdX:
+  * Ahora, ejecute el comando `fdisk` (como root o con `sudo`) de /dev/sd{{X}}:
 
     ```
-    #? fdisk /dev/sdX
+    #? fdisk /dev/sd{{X}}
     ```
 
   * Una vez en el entorno del comando `fdisk`, aparecerá `Command (m for help):`.  Entonces deberá borrar las
@@ -54,25 +54,25 @@ tiene una cuenta root (vea simular cuenta root).
     los cambios no tendrán efecto hasta que no introduzca la opción de la letra `w`):
 
 
-    * Escriba `o` y pulse `intro`. Esto borrará las particiones existentes en esta unidad (la del dispositivo
+    * Escriba `o` y pulse intro. Esto borrará las particiones existentes en esta unidad (la del dispositivo
       /dev/sdX).
 
-    * Escriba `p` y pulse `intro`. Esto muestra cuáles serían las particiones según los cambios que ha hecho con
+    * Escriba `p` y pulse intro. Esto muestra cuáles serían las particiones según los cambios que ha hecho con
       `fdisk` hasta ahora (recuerde que los cambios no tendrán efecto mientras no use la opción `w`); ahora
       mismo, no debería haber particiones, pues el comando `o` se supone que las ha "borrado".
 
-    * Escriba `n` y pulse `intro`; luego, para el tipo de partición, escriba `p` (de *primary*) y pulse `intro`,
-      y, para el número de partición, escriba `1` y pulse `intro`, para que esta partición que está creando sea
+    * Escriba `n` y pulse intro; luego, para el tipo de partición, escriba `p` (de *primary*) y pulse intro,
+      y, para el número de partición, escriba `1` y pulse intro, para que esta partición que está creando sea
       la 1 (dev/sdX1). En `first sector`, acepte el valor predeterminado (`default`), por tanto, sólo tendrá que
-      pulsar `intro` (el valor del sector es `2048`) y, para el último sector, introduzca `+100M` y pulse
-      `intro`, con lo que tendrá un tamaño de 100 MiB en la partición.
+      pulsar intro (el valor del sector es `2048`) y, para el último sector, introduzca `+100M` y pulse
+      intro, con lo que tendrá un tamaño de 100 MiB en la partición.
 
-    * Ahora escriba `t` y pulse `intro`; esto cambia el system id de la partición. Luego, escriba `c` y pulse
-      `intro`, para que establezca el tipo de partición como `W95 FAT32 (LBA)`; es decir, una partición del tipo
+    * Ahora escriba `t` y pulse intro; esto cambia el system id de la partición. Luego, escriba `c` y pulse
+      intro, para que establezca el tipo de partición como `W95 FAT32 (LBA)`; es decir, una partición del tipo
       FAT.
 
-    * Ahora debe crear otra partición, para lo que deberá pulsar `n` y luego `intro`. Luego, `p` y después
-      `intro`, para que la partición sea primaria como la anterior, y luego `2` y después `intro`, para que la
+    * Ahora debe crear otra partición, para lo que deberá pulsar `n` y luego intro. Luego, `p` y después
+      intro, para que la partición sea primaria como la anterior, y luego `2` y después intro, para que la
       partición sea la segunda (/dev/sdX2). Ahora, para seleccionar el primer sector, deberá pulsar intro para
       que se acepte el valor predeterminado, que debe ser de `206848` (número de sector), es decir, el primer
       sector justo a continuación de la partición anterior, y, para el último sector, asigne el tamaño que
@@ -84,19 +84,19 @@ tiene una cuenta root (vea simular cuenta root).
 
     * Ahora, si no ha usado todo el tamaño restante para la partición anterior, cree otra partición de Linux
       como la anterior sólo que esta vez en el último paso sí deberá seleccionar el valor predeterminado. Esta
-      partición será la /dev/sdX3.
+      partición será la /dev/sd{{X}}3.
 
-    * Ahora introduzca `w` y luego pulse `intro` para que se escriba la tabla de particiones en la tarjeta
+    * Ahora introduzca `w` y luego pulse intro para que se escriba la tabla de particiones en la tarjeta
       microSD y se cierre el programa Fdisk.
 
   * Ahora debe crear y montar el sistema de ficheros FAT16. Antes de hacerlo, si tiene montada alguna de las
-    particiones de /dev/sdX, debe desmontarlas con el comando `umount` desde el shell, aunque se le dijo antes
-    que las desmontara:
+    particiones de /dev/sd{{X}}, debe desmontarlas con el comando `umount` desde el shell, aunque se le dijo
+    antes que las desmontara:
 
     ```
-    #? mkfs.vfat /dev/sdX1
+    #? mkfs.vfat /dev/sd{{X}}1
     #? mkdir boot/
-    #? mount /dev/sdX1 boot/
+    #? mount /dev/sd{{X}}1 boot/
     ```
 
     Con esto ha creado el sistema de ficheros FAT16 en la partición /dev/sdX1, luego, el directorio boot/ (en la
@@ -106,15 +106,15 @@ tiene una cuenta root (vea simular cuenta root).
   * Ahora haga lo mismo con el sistema de ficheros EXT4 en la otra partición y con el directorio root/:
 
     ```
-    #? mkfs.ext4 /dev/sdX2
+    #? mkfs.ext4 /dev/sd{{X}}2
     #? mkdir root/
-    #? mount /dev/sdX2 root/
+    #? mount /dev/sd{{X}}2 root/
     ```
 
     También puede dar formato ahora a la tercera partición si la creó:
 
     ```
-    #? mkfs.ext4 /dev/sdX3
+    #? mkfs.ext4 /dev/sd{{X}}3
     ```
 
     Podría haber usado otro sistema de ficheros que sirva para Linux. No tiene que montar la partición. Si lo

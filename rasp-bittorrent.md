@@ -177,3 +177,5 @@ trabajar como cliente de descargas de BitTorrent y media center Kodi a la vez (l
 vídeos mediante Omxplayer, por ejemplo, pero es más engorroso que usar Kodi, que es una maravilla).
 
 En ese mismo fichero (/boot/config.txt) puede configurar su sistema para overclockearlo (vea TKTKTK).
+
+
