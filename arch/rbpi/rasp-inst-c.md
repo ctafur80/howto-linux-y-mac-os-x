@@ -1,7 +1,7 @@
 ## Instalación complementaria
 
 La instalación complementaria y de los drivers de la tarjeta wifi está basada en [este
-vídeo](www.youtube.com/watch?v=kCb5rmFJwzs) y en las entradas
+vídeo](http://www.youtube.com/watch?v=kCb5rmFJwzs) y en las entradas
 [fstab](https://wiki.archlinux.org/index.php/Fstab#Automount_with_systemd), [Persistent block device
 naming](https://wiki.archlinux.org/index.php/Persistent_block_device_naming) y
 [Autofs](https://wiki.archlinux.org/index.php/Autofs) del wiki de Arch Linux.
@@ -16,8 +16,8 @@ tiene asignada su interfaz eth0 tras cada reinicio. También puede configurar un
 necesidad de escribir la dirección, en su fichero /etc/hosts (en el del ordenador desde el que establecerá la
 sesión remota por SSH con el RbPi).
 
-Otro inconveniente para que pueda acceder por sesión de SSH es que, tras la instalación básica, la única cuenta
-que tiene en su sistema es root y viene deshabilitada la opción de acceder por SSH a la cuenta root del sistema.
+Otro inconveniente para poder acceder por sesión de SSH es que, tras la instalación básica, la única cuenta que
+tiene en su sistema es root y viene deshabilitada la opción de acceder por SSH a la cuenta root del sistema.
 Así, pues, para habilitarla deberá editar /etc/ssh/sshd_config y, si tiene descomentado
 
 ```
@@ -39,15 +39,15 @@ Luego puede, bien reiniciar el sistema, o bien reiniciar el servidor SSH:
 #? systemctl restart sshd.service
 ```
 
-Lo primero que suelo hacer es copiar los ficheros de configuración de mi ordenador, en el directorio
-/home/miUsuario/Dropbox/Docuentos/rasp/rbpiHostname/:
+Una vez que ha accedido a su RbPi por SSH, lo primero que suelo hacer es copiar los ficheros de configuración de
+mi ordenador, en el directorio /home/{{miUsuario}}/Dropbox/Docuentos/rasp/{{rbpiHostname}}/:
 
 ```
-#? scp -r /home/miUsuario/Dropbox/Documentos/rasp/ root@rbpiHostname-en0:/root/
+#? scp -r /home/{{miUsuario}}/Dropbox/Documentos/rasp/ root@{{rbpiHostname}}-en0:/root/
 ```
 
-Ahora actualice el RbPi (vea subsec:arch-update). Una vez terminada la actualización, puede instalar
-los paquetes que siempre suele usar:
+Ahora [actualice](../update.md) el RbPi. Una vez terminada la actualización, puede instalar los paquetes que
+siempre suele usar:
 
 ```
 #? pacman -S vim vim-spell-en vim-spell-es vim-colorsamplerpack wpa_supplicant bash-completion sudo wget
@@ -68,15 +68,14 @@ fichero de configuración global de Vim:
 #? rm /root/rasp/vimrc-add
 ```
 
-Ahora deberá reiniciar su RbPi (vea subsec:arch-reboot). También puede, luego, si lo desea, eliminar
-los paquetes huérfanos que pueda tener, aunque es raro que tenga alguno justo tras instalar el sistema (vea
-sec:arch-rm-orphan-p).
+Ahora deberá [reiniciar](../reboot.md) su RbPi. También puede, luego, si lo desea, [eliminar los paquetes
+huérfanos](../rm-orphan-p.md) que pueda tener, aunque es raro que tenga alguno justo tras instalar el sistema.
 
-Luego, cambie los nombres de host (vea subsec:arch-hostnames). Como puede que haya comprobado, no se le permite
-usar acentos gráficos ahora mismo; no es que no lo permita el comando `hostnamectl`, sino que su shell aún no
-tiene configurada la entrada de teclado en español (vea subsec:arch-lang). También puede ahora configurar la
-fecha y la hora de su sistema; vea subsec:arch-timedate. Ahora reinicie el sistema y comprobará que el prompt
-del shell mostrará el nuevo static hostname; ya no se llamará alarmpi, sino hostname.
+Luego, [cambie los nombres de host](../hostnames.md). Como puede que haya comprobado, no se le permite usar
+acentos gráficos ahora mismo; no es que no lo permita el comando `hostnamectl`, sino que su shell aún no tiene
+configurada la [entrada de teclado en español](../lang.md). También puede ahora [configurar la fecha y la hora
+de su sistema](../timedate.md). Ahora reinicie el sistema y comprobará que el prompt del shell mostrará el nuevo
+static hostname; ya no se llamará alarmpi, sino hostname.
 
 Ahora debería cambiar el idioma a su gusto. Para ello, introduzca lo siguiente:
 
@@ -252,16 +251,15 @@ Creo que ahora sería un buen momento de cambiar la contraseña de root. Para el
 
 Se le pedirá entonces dos veces que introduzca la contraseña nueva.
 
-Ahora puede crear los grupos que desee (vea sec:arch-grupo-nuevo). El único que a veces necesito y
-no viene de serie es kodi; los demás, como power, wheel, etc., vienen de serie en Arch Linux.
+Ahora puede crear los grupos que desee (vea [Crear un grupo nuevo](../grupo-nuevo.md)). El único que a veces
+necesito y no viene de serie es kodi; los demás, como power, wheel, etc., vienen de serie en Arch Linux.
 
-También puede crear una cuenta de usuario ahora, si lo desea (vea subsec:arch-crear-usuario). Es
-conveniente que el grupo principal al que pertenezca el usuario sea users y también hago que pertenezca a los
-grupos wheel y power:
+También puede crear una cuenta de usuario ahora, si lo desea (vea [Crear una cuenta de
+usuario](../crear-usuario.md). Es conveniente que el grupo principal al que pertenezca el usuario sea users y
+también hago que pertenezca a los grupos wheel y power:
 
 ```
-#? useradd -m -g users -G wheel,power,ftp,audio,video,storage,network \
-> -k /etc/skel/ -s /bin/bash username
+#? useradd -m -g users -G wheel,power,ftp,audio,video,storage,network -k /etc/skel/ -s /bin/bash username
 ```
 
 Ahora lo que suelo hacer es crear al usuario ctafur con permisos de administración que se los voy dando con
@@ -293,7 +291,7 @@ tiempo; porque, recuerde, Linux es multiusuario en todas sus versiones; tampoco 
 #? visudo
 ```
 
-Una vez dentro, descomente (elimine el símbolo de almohadilla (`#`) de)
+Una vez dentro, descomente (elimine el símbolo de almohadilla (`#`) de) la última línea del listado siguiente:
 
 ```bash
 ##
@@ -343,10 +341,10 @@ También podría crear configuraciones personalizadas para cada usuario, creando
 fichero /home/username/.bashrc.
 
 Creo que es bueno que ahora reinicie el sistema. A partir de ahora, es preferible hacer las cosas desde el
-usuario username en lugar de desde root, por seguridad. Aunque aquí vea el prompt `#`, lo único que quiere decir
-es que el comando debe ejecutarse con privilegios de administración; podría ejecutarlos desde una sesión de
-usuario precediéndolos de `sudo`. Así que lo mejor es reiniciar el sistema y entrar por sesión de SSH con el
-usuario username.
+usuario username en lugar de desde root, por seguridad. Aunque aquí vea el prompt `#?`, lo único que quiere
+decir es que el comando debe ejecutarse con privilegios que normalmente no tiene un usuario no administrador.
+Podría ejecutarlos desde una sesión de usuario precediéndolos de `sudo`. Así que lo mejor es reiniciar el
+sistema y entrar por sesión de SSH con el usuario username.
 
 También suelo instalar Vim, es decir, Vi Improved. Para ello, basta con introducir:
 
@@ -359,14 +357,14 @@ Luego, modifique el fichero de configuración global de Vim para todo el sistema
 
 ```vim
 syntax on
-:set encoding=utf8
-:set fileencoding=utf8
-:set textwidth=112
-:set tabstop=2
-:set softtabstop=2
-:set ai shiftwidth=2
-:set t_Co=256
-:set expandtab
+set encoding=utf8
+set fileencoding=utf8
+set textwidth=112
+set tabstop=2
+set softtabstop=2
+set ai shiftwidth=2
+set t_Co=256
+set expandtab
 colorscheme xoria256
 ```
 

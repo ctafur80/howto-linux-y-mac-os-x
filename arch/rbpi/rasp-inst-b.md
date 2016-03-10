@@ -13,11 +13,11 @@ tiene una cuenta root (vea Simular cuenta root).
   * Introduzca en un lector de tarjetas microSD de su ordenador la tarjeta microSD que desea emplear para
     instalar Arch Linux en su RbPi. Si no tiene instalado el software para poder operar con medios con sistema
     de ficheros exFAT en su ordenador y esta tarjeta tiene particiones en dicho formato, aparecerá un mensaje de
-    error al insertarla si su sistema intenta montarla automáticamente. No se preocupe; puede seguir con los
-    pasos siguientes.
+    error al insertarla si su sistema intenta montarla automáticamente. No se preocupe; puede ignorar dicho
+    mensaje y seguir con los pasos siguientes.
 
-  * Antes de nada, debe averiguar los nombres descriptores del kernel (*kernel name descriptors* (los ficheros
-    que están en /dev/) de las particiones de su tarjeta microSD. Para esto, puede usar el comando
+  * Antes de nada, debe averiguar los nombres descriptores del kernel (*kernel name descriptors*, que son los
+    ficheros que están en /dev/) de las particiones de su tarjeta microSD. Para esto, puede usar el comando
 
     ```
     $ lsblk
@@ -27,13 +27,13 @@ tiene una cuenta root (vea Simular cuenta root).
     seguro de cuál es la ruta de  dispositivo de la tarjeta microSD, no siga, pues puede que por equivocación
     termine eliminando particiones importantes de su sistema.
 
-  * En esta explicación se supondrá que dicha ruta es /dev/sdX; ese `X` es un carácter genérico que puede tener
-    como valor `a`, `b`, etc. Una vez que sepa a ciencia cierta cuál es la ruta de su fichero de dispositivo de
-    su tarjeta microSD, si según el comando `lsblk`  había montada alguna de las particiones de dicha tarjeta
-    microSD, desmóntela mediante el shell con el comando `umount`:
+  * En esta explicación se supondrá que dicha ruta es /dev/sd{{X}}; ese {{X}} es un carácter genérico que puede
+    tener como valor *a*, *b*, etc. Una vez que sepa a ciencia cierta cuál es la ruta de su fichero de
+    dispositivo de su tarjeta microSD, si según el comando `lsblk`  había montada alguna de las particiones de
+    dicha tarjeta microSD, desmóntela mediante el shell con el comando `umount`:
 
     ```
-    #? umount /dev/sdX[1-{{n}}]
+    #? umount /dev/sd{{X}}[1-{{n}}]
     ```
 
     donde `{{n}}` es el número mayor de su partición del dispositivo /dev/sd{{X}}; si la numeración de dichas
@@ -55,32 +55,31 @@ tiene una cuenta root (vea Simular cuenta root).
 
 
     * Escriba `o` y pulse intro. Esto borrará las particiones existentes en esta unidad (la del dispositivo
-      /dev/sdX).
+      /dev/sd{{X}}).
 
     * Escriba `p` y pulse intro. Esto muestra cuáles serían las particiones según los cambios que ha hecho con
       `fdisk` hasta ahora (recuerde que los cambios no tendrán efecto mientras no use la opción `w`); ahora
       mismo, no debería haber particiones, pues el comando `o` se supone que las ha "borrado".
 
-    * Escriba `n` y pulse intro; luego, para el tipo de partición, escriba `p` (de *primary*) y pulse intro,
-      y, para el número de partición, escriba `1` y pulse intro, para que esta partición que está creando sea
-      la 1 (dev/sdX1). En `first sector`, acepte el valor predeterminado (`default`), por tanto, sólo tendrá que
-      pulsar intro (el valor del sector es `2048`) y, para el último sector, introduzca `+100M` y pulse
-      intro, con lo que tendrá un tamaño de 100 MiB en la partición.
+    * Escriba `n` y pulse intro; luego, para el tipo de partición, escriba `p` (de *primary*) y pulse intro, y,
+      para el número de partición, escriba `1` y pulse intro, para que esta partición que está creando sea la 1
+      (dev/sd{{X}}1). En `first sector`, acepte el valor predeterminado (`default`), por tanto, sólo tendrá que
+      pulsar intro (el valor del sector es `2048`) y, para el último sector, introduzca `+100M` y pulse intro,
+      con lo que tendrá un tamaño de 100 MiB en la partición.
 
     * Ahora escriba `t` y pulse intro; esto cambia el system id de la partición. Luego, escriba `c` y pulse
       intro, para que establezca el tipo de partición como `W95 FAT32 (LBA)`; es decir, una partición del tipo
       FAT.
 
-    * Ahora debe crear otra partición, para lo que deberá pulsar `n` y luego intro. Luego, `p` y después
-      intro, para que la partición sea primaria como la anterior, y luego `2` y después intro, para que la
-      partición sea la segunda (/dev/sdX2). Ahora, para seleccionar el primer sector, deberá pulsar intro para
-      que se acepte el valor predeterminado, que debe ser de `206848` (número de sector), es decir, el primer
-      sector justo a continuación de la partición anterior, y, para el último sector, asigne el tamaño que
-      desee. Si quiere crear otra partición para algún uso particular, no podrá usar todo el tamaño restante
-      para ésta. Creo que asignando a esta 8 GiB (`+8G`) se tiene de sobra para instalar todo el software que
-      vaya a necesitar. No obstante, si lo prefiere, puede asignar a esta partición todo el tamaño restante y
-      luego reparticionarla mediante el uso en su ordenador de software de reparticionado, como, por ejemplo,
-      gParted.
+    * Ahora debe crear otra partición, para lo que deberá pulsar `n` y luego intro. Luego, `p` y después intro,
+      para que la partición sea primaria como la anterior, y luego `2` y después intro, para que la partición
+      sea la segunda (/dev/sd{{X}}2). Ahora, para seleccionar el primer sector, deberá pulsar intro para que se
+      acepte el valor predeterminado, que debe ser de `206848` (número de sector), es decir, el primer sector
+      justo a continuación de la partición anterior, y, para el último sector, asigne el tamaño que desee. Si
+      quiere crear otra partición para algún uso particular, no podrá usar todo el tamaño restante para ésta.
+      Creo que asignando a esta 8 GiB (`+8G`) se tiene de sobra para instalar todo el software que vaya a
+      necesitar. No obstante, si lo prefiere, puede asignar a esta partición todo el tamaño restante y luego
+      reparticionarla mediante el uso de software de reparticionado, como, por ejemplo, Parted o gParted.
 
     * Ahora, si no ha usado todo el tamaño restante para la partición anterior, cree otra partición de Linux
       como la anterior sólo que esta vez en el último paso sí deberá seleccionar el valor predeterminado. Esta
@@ -99,9 +98,9 @@ tiene una cuenta root (vea Simular cuenta root).
     #? mount /dev/sd{{X}}1 boot/
     ```
 
-    Con esto ha creado el sistema de ficheros FAT16 en la partición /dev/sdX1, luego, el directorio boot/ (en la
-    ruta desde la que haya introducido el comando) y ha montado dicho sistema de ficheros en el directorio que
-    acaba de crear.
+    Con esto ha creado el sistema de ficheros FAT16 en la partición /dev/sd{{X}}1, luego, el directorio boot/
+    (en la ruta desde la que haya introducido el comando) y ha montado dicho sistema de ficheros en el
+    directorio que acaba de crear.
 
   * Ahora haga lo mismo con el sistema de ficheros EXT4 en la otra partición y con el directorio root/:
 
@@ -138,7 +137,7 @@ tiene una cuenta root (vea Simular cuenta root).
     # sync
     ```
 
-  * Mueva ahora los ficheros de arranque a la primera partición (es decir, a /dev/sdX1):
+  * Mueva ahora los ficheros de arranque a la primera partición (es decir, a /dev/sd{{X}}1):
 
     ```
     $ mv root/boot/* boot/
