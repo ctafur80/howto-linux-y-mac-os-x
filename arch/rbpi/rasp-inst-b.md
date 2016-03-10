@@ -1,3 +1,5 @@
+%Instalación básica de Arch Linux en un RbPi desde un sistema Linux
+
 ## Instalación básica de Arch Linux en un RbPi desde un sistema Linux
 
 La instalación básica desde Linux está basada en la explicación de la propia página oficial de [Arch
