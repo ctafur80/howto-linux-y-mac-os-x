@@ -1,4 +1,6 @@
-## Instalación complementaria
+%Instalación complementaria de Arch Linux en un RbPi
+
+## Instalación complementaria de Arch Linux en un RbPi
 
 La instalación complementaria y de los drivers de la tarjeta wifi está basada en [este
 vídeo](http://www.youtube.com/watch?v=kCb5rmFJwzs) y en las entradas
