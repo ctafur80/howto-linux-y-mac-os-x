@@ -1,7 +1,7 @@
 # Summary
 
 * [Introducción](introduccion.md)
-* [Arch Linux](arch-linux.md)
-  * [Raspberry Pi](rasp.md)
-    * [BitTorrent](rasp-bittorrent.md)
-    * [Instalación básica de Arch Linux en un RbPi](rasp-ins-b.md)
+* [Arch Linux](arch.md)
+  * [Raspberry Pi](arch/rbpi.md)
+    * [BitTorrent](arch/rbpi/rasp-bittorrent.md)
+    * [Instalación básica de Arch Linux en un RbPi](arch/rbpi/rasp-inst-b.md)

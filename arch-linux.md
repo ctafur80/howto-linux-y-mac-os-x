@@ -1,3 +1,0 @@
-% Arch Linux
-
-Arch Linux es una distribución de Linux que...
