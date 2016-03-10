@@ -2,13 +2,13 @@
 
 Para reiniciar su sistema Arch Linux, deberá introducir el comando
 
-```
+```bash
 #? systemctl reboot
 ```
 
 El comando `systemctl` es del nuevo sistema init Systemd, y es mejor usar este comando que
 
-```
+```bash
 #? reboot
 ```
 

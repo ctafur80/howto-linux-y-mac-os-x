@@ -3,7 +3,7 @@
 Deberá introducir el comando
 
 ```bash
-sudo usermod username -G group1[,group2[,...[,groupn]]]
+#? usermod {{nombreUsuario}} -G {{grupo1}}[,{{grupo2}}[,...[,{{grupoN}}]]]
 ```
 
-donde `group1`,..., `groupn` son los grupos a los que desea añadir al usuario username.
+donde `{{grupo1}}`,..., `{{grupoN}}` son los grupos a los que desea añadir al usuario `{{nombreUsuario}}`.

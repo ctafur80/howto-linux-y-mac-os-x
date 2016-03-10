@@ -1,23 +1,22 @@
-## Configuración de idioma(s) en Arch Linux
+## Configuración de idiomas
 
-Esta explicación está sacada principalmente del [wiki de Arch
-Linux](https://wiki.archlinux.org/index.php/Locale), aunque he terminado consultando muchas otras fuentes para
-hacer cosas que no vienen ahí.
+Esta explicación está sacada principalmente de la entrada [Locale](https://wiki.archlinux.org/index.php/Locale)
+del wiki de Arch Linux, aunque he terminado consultando muchas otras fuentes para hacer cosas que no vienen ahí.
 
 Tengo un directorio que contiene un script y dos locales personalizados. Con esto, es muy sencillo el proceso de
 configuración de mis sistemas a mi gusto. Lo primero que debe hacer es copiar a su RbPi, desde mi ordenador, el
 directorio ~/Dropbox/Documentos/rasp/locales-total/ con los tres ficheros que alberga. Puede copiarlos en su
 directorio home, por ejemplo; sería así:
 
-```
-#? scp -r ~/Dropbox/Documentos/rasp/nRpI/* root@nRpI:/home/uSernamE
+```bash
+#? scp -r ~/Dropbox/Documentos/rasp/{{nombreRpi}}/* root@nRpI:/home/{{nombreUsuario}}
 ```
 La opción `-r`, además de copiar los directorios recursivamente, sigue los enlaces simbólicos, que es lo que
 interesa aquí.
 
 Ahora,
 
-```
+```bash
 $ cd /home/uSernamE/locales-total/
 $ sh locales-total
 ```
@@ -30,7 +29,7 @@ puesto que los predefinidos a veces se actualizan al actualizar el sistema y ech
 No obstante, ahora explicaré todo el proceso, por si quiere hacer alguna variación. Lo primero que debe hacer es
 ver qué locales tiene generados, que no es lo mismo que los que tiene habilitados. Para ello, deberá introducir:
 
-```
+```bash
 $ localectl list-locales
 ```
 
@@ -41,8 +40,8 @@ referencia al idioma inglés, pues es el idioma que viene predefinido, aunque no
 Para poder generar los locales creados por mí, es decir, zfur_en_US.UTF8 y zfur_es_ES.UTF8, deberá copiarlos
 al directorio /usr/share/i18n/locales/:
 
-```
-#? cp /home/uSernamE/ zfur_* /usr/share/i18n/locales/
+```bash
+#? cp /home/{{nombreUsuario}}/zfur_* /usr/share/i18n/locales/
 ```
 
 Puede ver también la lista de todos los que se pueden generar y habilitar en su sistema editando
@@ -60,7 +59,7 @@ zfur_es_ES.UTF-8 UTF-8
 Las entradas zfur_es_ES.UTF-8 UTF-8 y zfur_es_ES.UTF-8 UTF-8 no se han descomentado, sino que he tenido que
 escribirlas, como es lógico. Ahora podrá generar los locales. Para ello, introduzca:
 
-```
+```bash
 #? locale-gen
 ```
 Ojo, debe usar siempre este comando para generar los locales nuevos; no vale con reiniciar.
@@ -68,7 +67,7 @@ Ojo, debe usar siempre este comando para generar los locales nuevos; no vale con
 Para mostrar ahora, para la cuenta de usuario desde la que está en el shell, el locale que tiene fijado
 actualmente y los valores de sus variables de entorno de locales, introduzca:
 
-```
+```bash
 $ localectl list-locales
 ```
 Si ha configurado los mismos que yo, deberá aparecerle lo siguiente:
@@ -98,7 +97,7 @@ LC_TIME=en_DK.UTF8
 El locale para todo el sistema se puede establecer creando o editando /etc/locale.conf, pero yo prefiero usar el
 comando `localectl`. Por ejemplo, puede usar:
 
-```
+```bash
 #? localectl set-locale LANG=en_US.utf8 LANGUAGE=en_US LC_NUMERIC=zfur_es_ES.utf8 \
 > LC_TIME=es_ES.utf8 LC_MONETARY=zfur_es_ES.utf8 LC_PAPER=es_ES.utf8 LC_NAME=es_ES.utf8 \
 > LC_ADDRESS=es_ES.utf8 LC_TELEPHONE=es_ES.utf8 LC_MEASUREMENT=es_ES.utf8 \
@@ -106,11 +105,13 @@ comando `localectl`. Por ejemplo, puede usar:
 #? localectl set-keymap es
 #? localectl set-x11-keymap es
 ```
+
 Aunque aquí se ha dividido para que quepa en la hoja, se debe poner todo en un solo comando. Luego, con:
 
-```
+```bash
 $ localectl status
 ```
+
 podrá ver ćomo ha quedado. Esto dependerá de sus gustos. Yo prefiero tener los mensajes en inglés. De entre
 estas variables de entorno, una de las más importantes es `LANG`, pues es la que se usará para las variables que
 comienzan por `LC_` y no tienen un valor establecido de forma explícita.
@@ -162,14 +163,14 @@ cuando preceda de `sudo` al comando. El comando tendrá efecto en todo el sistem
 introduce el comando `localectl list-locales`, verá que ha cambiado la configuración de todos los usuarios.
 Puede comprobar que efectivamente ha cambiado a español la variable `LC_TIME` introduciendo el comando:
 
-```
+```bash
 $ date
 ```
 
 Si la fecha aparece ahora en español es que lo ha hecho correctamente. También puede poner ahora como nombre
 pretty de host un nombre con acentos gráficos; por ejemplo:
 
-```
+```bash
 #? hostnamectl --pretty set-hostnme "Raspberry Pi 2 Para Descargas y Reproducción de Vídeos"
 ```
 
@@ -195,10 +196,10 @@ keycode   58 = Escape
 ```
 
 Luego deberá establecer los locales, pero no como lo hizo antes, ahora deberá seleccionar el mapeado de teclas
-zfur_es, en lugar de es, tanto en el mapeado de teclas de la consola virtual
-(`VC Keymap`), como en el de la disposición en X11 (`X11 Layout`):
+zfur_es, en lugar de es, tanto en el mapeado de teclas de la consola virtual (`VC Keymap`), como en el de la
+disposición en X11 (`X11 Layout`):
 
-```
+```bash
 #? localectl set-locale LANG=en_US.utf8 LANGUAGE=en_US LC_ALL=en_US.UTF-8
 #? localectl set-keymap zfur_es
 #? localectl set-x11-keymap zfur_es
@@ -206,7 +207,7 @@ zfur_es, en lugar de es, tanto en el mapeado de teclas de la consola virtual
 
 Deberá comprobar que ha realizado correctamente los cambios con el siguiente comando:
 
-```
+```bash
 $ localectl status
 System Locale: LANG=en_US.utf8
                LANGUAGE=en_US
@@ -226,7 +227,7 @@ System Locale: LANG=en_US.utf8
 En Mac OS X lo mejor es que añada a su fichero de configuración de su shell (si es Bash, suele ser ~/.bashrc) lo
 siguiente:
 
-```
+```bash
 #? export LC_ALL=en_US.UTF-8
 #? export LANG=en_US.UTF-8
 ```
@@ -234,6 +235,6 @@ siguiente:
 Recuerde que, para entrar con Mosh a una sesión remota de otro sistema, deberán ser compatibles los locales de
 ambos sistemas. Si no desea configurarlos, puede hacer entonces lo siguiente:
 
-```
+```bash
 $ mosh root@server4 --server="LANG=$LANG mosh-server"
 ```

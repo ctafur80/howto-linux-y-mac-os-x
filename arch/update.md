@@ -1,7 +1,8 @@
 ## Actualizar el sistema
 
-Para actualizar el sistema, debe introducir el siguiente comando:
+Para actualizar el sistema, si usa el gestor de paquetes Pacman ---el predefinido de Arch Linux---, debe
+introducir el siguiente comando:
 
 ```bash
-sudo pacman -Syu
+#? pacman -Syu
 ```

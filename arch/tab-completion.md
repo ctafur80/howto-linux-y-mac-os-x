@@ -1,7 +1,7 @@
-## Habilitar autocompletado de comandos
+## Habilitar autocompletado de comandos de su shell
 
 Para habilitar el autocompletado de comandos en su shell, es decir, que, teniendo a medio escribir un comando en
-su shell, pulse la tecla *tab* y se termine de completar el comando, o en caso de que existan varias
+su shell, pulse la tecla Tab y se termine de completar el comando, o en caso de que existan varias
 posibilidades, se complete hasta el punto en que coincidan dichas posibilidades y se muestren debajo dichas
 posibilidades, en principio no debe hacer nada en su sistema Arch Linux, pues ya viene de serie. El problema es
 que no viene completo. Por ejemplo, si introduce `sudo` o `man`, lo siguiente ya no tendrá autocompletado. Para

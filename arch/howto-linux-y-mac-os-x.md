@@ -1,3 +1,0 @@
-# Introducción
-
-Esto es sólo una introducción a...

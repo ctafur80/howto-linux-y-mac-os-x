@@ -1,9 +1,9 @@
-## Crear un grupo nuevo
+## Crear un grupo
 
-Para crear un nuevo grupo, basta con que introduzca
+Para crear un grupo en su sistema, basta con que introduzca
 
 ```
-#? groupadd grupo
+#? groupadd {{grupo}}
 ```
 
-donde `grupo` es el nombre del nuevo grupo que desea añadir a su sistema.
+donde `{{grupo}}` es el nombre del grupo que desea añadir a su sistema.

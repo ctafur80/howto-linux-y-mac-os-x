@@ -1,9 +1,7 @@
-%Instalación básica de Arch Linux en un RbPi desde un sistema Linux
-
 ## Instalación básica de Arch Linux en un RbPi desde un sistema Linux
 
 La instalación básica desde Linux está basada en la explicación de la propia página oficial de [Arch
-Linux](http://archlinuxarm.org/platforms/armv7/broadcom/raspberry-pi-2).
+Linux ARM](http://archlinuxarm.org/platforms/armv7/broadcom/raspberry-pi-2).
 
 La instalación inicial se hace directamente sobre la tarjeta microSD, pero antes de nada, deberá tener
 habilitada en su sistema Linux la cuenta de root, cosa que no es cierta siempre; por ejemplo, Ubuntu la trae
@@ -21,7 +19,7 @@ tiene una cuenta root (vea Simular cuenta root).
   * Antes de nada, debe averiguar los nombres descriptores del kernel (*kernel name descriptors*, que son los
     ficheros que están en /dev/) de las particiones de su tarjeta microSD. Para esto, puede usar el comando
 
-    ```
+    ```bash
     $ lsblk
     ```
 
@@ -34,8 +32,8 @@ tiene una cuenta root (vea Simular cuenta root).
     dispositivo de su tarjeta microSD, si según el comando `lsblk`  había montada alguna de las particiones de
     dicha tarjeta microSD, desmóntela mediante el shell con el comando `umount`:
 
-    ```
-    #? umount /dev/sd{{X}}[1-{{n}}]
+    ```bash
+    $? umount /dev/sd{{X}}[1-{{n}}]
     ```
 
     donde `{{n}}` es el número mayor de su partición del dispositivo /dev/sd{{X}}; si la numeración de dichas
@@ -47,8 +45,8 @@ tiene una cuenta root (vea Simular cuenta root).
 
   * Ahora, ejecute el comando `fdisk` (como root o con `sudo`) de /dev/sd{{X}}:
 
-    ```
-    #? fdisk /dev/sd{{X}}
+    ```bash
+    $? fdisk /dev/sd{{X}}
     ```
 
   * Una vez en el entorno del comando `fdisk`, aparecerá `Command (m for help):`.  Entonces deberá borrar las
@@ -94,10 +92,10 @@ tiene una cuenta root (vea Simular cuenta root).
     particiones de /dev/sd{{X}}, debe desmontarlas con el comando `umount` desde el shell, aunque se le dijo
     antes que las desmontara:
 
-    ```
-    #? mkfs.vfat /dev/sd{{X}}1
-    #? mkdir boot/
-    #? mount /dev/sd{{X}}1 boot/
+    ```bash
+    $? mkfs.vfat /dev/sd{{X}}1
+    $? mkdir boot/
+    $? mount /dev/sd{{X}}1 boot/
     ```
 
     Con esto ha creado el sistema de ficheros FAT16 en la partición /dev/sd{{X}}1, luego, el directorio boot/
@@ -106,16 +104,16 @@ tiene una cuenta root (vea Simular cuenta root).
 
   * Ahora haga lo mismo con el sistema de ficheros EXT4 en la otra partición y con el directorio root/:
 
-    ```
-    #? mkfs.ext4 /dev/sd{{X}}2
-    #? mkdir root/
-    #? mount /dev/sd{{X}}2 root/
+    ```bash
+    $? mkfs.ext4 /dev/sd{{X}}2
+    $? mkdir root/
+    $? mount /dev/sd{{X}}2 root/
     ```
 
     También puede dar formato ahora a la tercera partición si la creó:
 
-    ```
-    #? mkfs.ext4 /dev/sd{{X}}3
+    ```bash
+    $? mkfs.ext4 /dev/sd{{X}}3
     ```
 
     Podría haber usado otro sistema de ficheros que sirva para Linux. No tiene que montar la partición. Si lo
@@ -125,7 +123,7 @@ tiene una cuenta root (vea Simular cuenta root).
   * Ahora elimine la imagen que tenga y descargue la última que exista, que deberá luego copiar a la tarjeta
     microSD:
 
-    ```
+    ```bash
     $ rm ArchLinuxARM-rpi-2-latest.tar.gz
     $ wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
     ```
@@ -141,14 +139,14 @@ tiene una cuenta root (vea Simular cuenta root).
 
   * Mueva ahora los ficheros de arranque a la primera partición (es decir, a /dev/sd{{X}}1):
 
-    ```
+    ```bash
     $ mv root/boot/* boot/
     ```
 
   * Desmonte ahora las dos particiones:
 
-    ```
-    #? umount boot/ root/
+    ```bash
+    $? umount boot/ root/
     ```
 
   * Extraiga la tarjeta microSD, introdúzcala en su RbPi, conecte el cable de red Ethernet a su RbPi y luego
