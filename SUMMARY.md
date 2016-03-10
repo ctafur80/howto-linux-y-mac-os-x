@@ -1,6 +1,6 @@
 # Summary
 
-* [Introducción](introduccion.md)
+* [Introducción](README.md)
 * [Arch Linux](arch.md)
   * [Raspberry Pi](arch/rbpi.md)
     * [BitTorrent](arch/rbpi/rasp-bittorrent.md)
