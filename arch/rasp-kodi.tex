@@ -1,0 +1,153 @@
+\section{Instalar Kodi en un RbPi2}\label{sec:rasp-arch-kodi}
+% --------------------------------------------------------------------------------------------------------------
+Los documentos que he consultado para la elaboración de este tutorial son
+\url{https://wiki.archlinux.org/index.php/Kodi} y
+\url{http://blog.kwarf.com/2015/02/arch-and-kodi-on-the-raspberry-pi-2/}.
+
+Tras la instalación y la configuración básica, puede instalar ahora el cliente de BitTorrent Deluge (vea TKTKTK)
+o, si lo prefiere, luego. Creo que es mejor que lo haga después.
+
+Edite \path{/boot/config.txt} y descomente \lstinline+disable_overscan=1+ (para que se aproveche más el espacio
+de la pantalla durante la reproducción) y, en la última fila, cambie \lstinline+gpu_mem=64+ por
+\lstinline+gpu_mem=320+ (para asignar más RAM para la GPU de su RbPi2, cosa bastante conveniente para reproducir
+videos). Si lo desea, también puede overclockear su RbPi2 (vea TKTKTK). Luego reinicie.
+
+Ahora debe instalar el paquete \lstinline+kodi-rbp+ y luego arrancar y habilitar el servicio kodi (o, lo que es
+lo mismo, kodi.service). Luego, detenga el servicio.
+
+Ahora deberá instalar un servidor NFS (\foreignlanguage{english}{\emph{network filesystem}}). El servidor NFS es
+proporcionado por el paquete \lstinline+nfs-utils+; instálelo. Ahora establezca las comparticiones:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@mkdir -p /srv/nfs/{tv-shows,movies,music}@@
+  !\promptr! @@mkdir -p /mnt/{tv-shows,movies,music}@@
+  !\promptr! @@mount --bind /mnt/tv-shows /srv/nfs/tv-shows@@
+  !\promptr! @@mount --bind /mnt/movies /srv/nfs/movies@@
+  !\promptr! @@mount --bind /mnt/music /srv/nfs/music@@
+\end{lstlisting}
+
+\noindent y deberá añadir también las entradas correspondientes, para estos montajes, en el fichero
+\path{/etc/fstab}, para que no tenga que montarlas manualmente cada vez que inicia su sistema:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  ...
+
+  /mnt/tv-shows   /srv/nfs/tv-shows   none  bind  0 0
+  /mnt/movies     /srv/nfs/movies     none  bind  0 0
+  /mnt/music      /srv/nfs/music      none  bind  0 0
+\end{lstlisting}
+
+\noindent En mi caso quedaría algo así:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  #
+  # /etc/fstab: static file system information
+  #
+  # <file system>                               <dir>               <type>  <options> <dump>  <pass>
+    UUID=1EA2-423D                              /boot               vfat    defaults  0       0
+    UUID=ee1f72c5-774d-42fe-b75e-d0a85de734f0   /                   ext4    defaults  0       0
+    UUID=6e072cd6-c20c-4bf1-947e-a8e5b9a88d3b   /home               ext4    defaults  0       2
+    /mnt/tv-shows                               /srv/nfs/tv-shows   none    bind      0       0
+    /mnt/movies                                 /srv/nfs/movies     none    bind      0       0
+    /mnt/music                                  /srv/nfs/music      none    bind      0       0
+\end{lstlisting}
+
+Comparta el contenido en \path{/etc/exports}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  /srv/nfs            !\val{ip-n-if}!/24(ro,fsid=0,no_subtree_check)
+  /srv/nfs/tv-shows   !\val{ip-n-if}!/24(ro,no_subtree_check,insecure)
+  /srv/nfs/movies     !\val{ip-n-if}!/24(ro,no_subtree_check,insecure)
+  /srv/nfs/music      !\val{ip-n-if}!/24(ro,no_subtree_check,insecure)
+\end{lstlisting}
+
+\noindent donde \val{ip-n-if} es la dirección IP de la interfaz de red de su RbPi2 que vaya a usar para
+conectarse a su red local (en mi caso, se trata de una interfaz wireless). Como siempre que se hace un cambio al
+fichero \path{/etc/exports}, deberá refrescar los exports:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@exportfs -rav@@
+\end{lstlisting}
+
+Arranque y habilite los servicios rpcbind.service y nfs-server.service.
+
+Ahora debe instalar y configurar el servidor MySQL. Para ello, deberá instalar el paquete \lstinline+mariadb+.
+Tal y como le dice Pacman al final de la instalación, 
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  :: You need to initialize the MariaDB data directory prior to starting
+     the service. This can be done with mysql_install_db command, e.g.:
+     mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+\end{lstlisting}
+
+\noindent Así, pues, deberá ejecutar el mismo comando que se le indica en la última línea; creo que debe
+mantener esos mismos valores:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql@@
+\end{lstlisting}
+
+Ahora arranque y habilite el servicio mysqld.service.
+
+Ahora deberá introducir lo siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@mysql_secure_installation@@
+\end{lstlisting}
+
+\noindent En las preguntas que le haga el script, conteste sí (\lstinline!y!) a todo. Ahora introduzca:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@mysql -u root -p@@
+\end{lstlisting}
+
+\noindent Introduzca la contraseña de root de MySQL que asígnó en el primer paso del script anterior. Ahora le
+aparecerá una CLI interactiva de MySQL. Introduzca lo siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  MariaDB [(none)]> @@create user 'kodi' identified by 'kodi';@@
+  Query OK, 0 rows affected (0.01 sec)
+  MariaDB [(none)]> @@grant all on *.* to 'kodi';@@
+  Query OK, 0 rows affected (0.00 sec)
+  MariaDB [(none)]> @@\q@@
+  Bye
+\end{lstlisting}
+
+Ahora hay que configurar Kodi para que use la biblioteca MySQL y los exports NFS. Este paso deberá hacerlo en
+cada uno de los nodos Kodi; no así los anteriores. Debe comprobar que tiene instalado el paquete
+\lstinline+libnfs+ (vea Comprobar TKTKTK); deberá tenerlo instalado, si instaló \lstinline+nfs-utils+. Ahora
+deberá crear el fichero \path{/var/lib/kodi/.kodi} con lo siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  <advancedsettings>
+    <videodatabase>
+      <type>mysql</type>
+      <host>!\val{ip-n-if}!</host>
+      <port>3306</port>
+      <user>kodi</user>
+      <pass>kodi</pass>
+    </videodatabase>
+
+    <musicdatabase>
+      <type>mysql</type>
+      <host>!\val{ip-n-if}!</host>
+      <port>3306</port>
+      <user>kodi</user>
+      <pass>kodi</pass>
+    </musicdatabase>
+
+    <videolibrary>
+      <importwatchedstate>true</importwatchedstate>
+      <importresumepoint>true</importresumepoint>
+    </videolibrary>
+  </advancedsettings>
+\end{lstlisting}
+
+\noindent Ahora deberá hacer que kodi sea el dueño del fichero y el grupo predeterminado sea kodi:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@chown -R kodi:kodi /var/lib/kodi@@
+\end{lstlisting}
+
+Para instalar algunos add-ons interesantes, puede seguir el tutorial que hay en
+\url{https://www.youtube.com/watch?v=YteNG2cT8uc}.

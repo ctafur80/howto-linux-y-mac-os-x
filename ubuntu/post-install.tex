@@ -1,0 +1,30 @@
+\section{Tareas post-instalación del sistema operativo}\label{sec:ubuntu-post-install}
+% --------------------------------------------------------------------------------------------------------------
+Después de instalar Linux, concretamente, Ubuntu, que es la distribución que suelo tener siempre, pues es la más
+conocida y usada, debo hacer una serie de cosas:
+
+\begin{itemize}
+  \item Instalar \TeX{} Live (vea \nameref{sec:tex-inst} e \nameref{sec:matplotlib}).
+  \item Instalar htop, que es como top pero más moderno. Sirve para ver en tiempo real el empleo de los recursos
+    del sistema por los distintos procesos.
+  \item Instalar tmux, que es un multiplexor de terminal. Está bastante bien por la comodidad que otorga. Había
+    otro programa parecido, llamado Terminator, pero creo que tmux es mejor.
+\end{itemize}
+
+Si instala \TeX{} Live, se instalarán varias fuentes de gran calidad automáticamente en la jerarquía de
+directorios de \TeX{} (por ejemplo, en \path{/usr/local/texlive/2013/texmf-dist/fonts/opentype/}), como las
+Adobe Source, las \TeX{} Gyre o las Linux Liberation. Si no va a instalar \TeX{} Live y desea tener estas
+fuentes, he creado en este mismo directorio varios scripts de Bash para instalar estas fuentes en la ruta usual
+de Linux para las fuentes (\path{/usr/share/fonts/truetype}) para que puedan ser usadas por todas las cuentas de
+usuario de su sistema (vea \nameref{sec:adobe-source} e \nameref{sec:lin-libertine}).
+
+Algo que solía configurar para el arranque de Linux es que se abra un terminal de GNOME con varias pestañas. El
+comando que añado es el siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract]
+  gnome-terminal --tab-with-profile=uno --tab-with-profile=dos --working-directory=/home/ctafur/Dropbox/Documentos/otros --tab-with-profile=tres --working-directory=/home/ctafur/Dropbox/Documentos/importante --tab-with-profile=cuatro
+\end{lstlisting}
+
+\noindent Ojo, las rutas hay que ponerlas de forma absoluta; no se puede poner \lstinline+~+ en lugar de
+\lstinline+/home/zfur/+. No obstante, ahora prefiero ir abriéndolas yo en los espacios de trabajo conforme las
+necesito; se abren con la combinación de teclas \tecla{alt} \tecla{ctrl} + \tecla{t}.

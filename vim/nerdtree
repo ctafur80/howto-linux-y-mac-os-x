@@ -1,0 +1,3 @@
+Para saltar de la ventana que muestra a la izquierda la jerarquía de directorios hacia la derecha, basta con
+hacer ctrl + w, ->. A fin de cuentas, esta extensión lo único que hace es abrir otra subventana. Para cerrarla,
+será como cerrar una ventana: :q.

@@ -1,0 +1,22 @@
+\section{Habilitar y deshabilitar la cuenta de root}\label{sec:root-hab}
+% --------------------------------------------------------------------------------------------------------------
+Para habilitar la cuenta de root, debe introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@sudo passwd root@@
+\end{lstlisting}
+
+\noindent Se le pedirá, entonces, dos veces, que introduzca la contraseña que desea usar para el usuario root.
+El usuario con el que invoca el comando debe tener permisos de administración mediante \lstinline!sudo!. Se le
+pedirá, entonces, antes, que introduzca la contraseña de su usuario actual para que se pueda ejecutar el comando
+que ha introducido (a menos que haya introducido hace poco otro comando con \lstinline+sudo+ delante).
+
+Para deshabilitarla, sólo deberá introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@sudo passwd -dl root@@
+\end{lstlisting}
+
+\noindent Podría haberlo introducido desde su sesión de root y no pasaría nada: una vez que saliera de esa
+sesión de shell, se eliminaría la cuenta de root. No olvide eliminar los ficheros o directorios que haya creado
+para root, para no tener ocupando espacio en su disco duro ficheros que ya no usa.

@@ -1,0 +1,14 @@
+\subsection{GnuPG en Linux}\label{subsec:gnupg-l}
+% --------------------------------------------------------------------------------------------------------------
+En Ubuntu, hago copias de seguridad incrementales diariamente de este directorio mediante el software Déjà Dup
+(vea \nameref{sec:deja-dup}). En Fedora, no uso nada parecido, de momento. Tampoco es problema, ya que dicho
+sistema operativo lo uso en una máquina virtual en un Mac, del que sí hago backups. En Fedora, al menos, no debe
+preocuparse por instalar GnuPG, pues se instala con la instalación normal del sistema operativo.
+
+Un manual muy bueno de cómo usar GnuPG se puede encontrar en
+\url{https://www.digitalocean.com/community/tutorials/how-to-use-gpg-to-encrypt-and-sign-messages-on-an-ubuntu-12-04-vps}.
+
+Para copiar un par de claves privada-pública a otro computador con Linux, deberá hacer lo que se explica en la
+web \url{https://www.phildev.net/pgp/gpg_moving_keys.html}. Una vez que haya importado sus claves al nuevo
+computador, debrá configurar Git y Pass si desea usarlos para almacenar de forma remota sus claves (vea
+\nameref{sec:git} y \nameref{sec:passwordstore}).

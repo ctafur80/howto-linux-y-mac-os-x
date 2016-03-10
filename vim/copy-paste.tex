@@ -1,0 +1,69 @@
+\section{Copiar y pegar texto}\label{sec:vim-cop-peg}
+% --------------------------------------------------------------------------------------------------------------
+Después de comerme mucho la cabeza, lo mejor creo que es copiar en el portapapeles de su entorno de escritorio
+(el de Mac OS X, Windows 10, Gnome, KDE, etc.) y pegarlo en el propio documento con la combinación que tenga
+para pegar en su emulador de terminal (por ejemplo, en Mac OS X, con \tecla{cmd} + \tecla{v}; en Linux,
+\tecla{ctrl} + \tecla{shift} + \tecla{v}).  Pero para poder hacer esto debe antes, en Vim, habilitar la opción
+de pegado, lo cual se realiza introduciendo en modo comando:
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  :set paste
+\end{lstlisting}
+
+\noindent y posteriormente pasando a modo insert. Ahora ya podrá pegar lo que desea y no habrá un desplazamiento
+del texto indentándose cada vez más. No olvide de quitar luego el modo paste con
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  :set nopaste
+\end{lstlisting}
+
+Existen varios modos de copiar y pegar cadenas de texto de distintos ficheros en Vi. Lo primero que debe
+tener en cuenta es que, para copiar/pegar cosas del/al portapapeles a/desde un terminal\footnote{Aunque aquí
+se hable de \emph{terminal}, al estar trabajando en un entorno de escritorio, en realidad quiere decir,
+\emph{emulador de terminal}.}, deberá usar una variación de las combinaciones usuales de comandos: deberá usar
+también la tecla \tecla{\(\Uparrow\)} siempre que opere en el terminal.  Así, para copiar texto de, por
+ejemplo, una web, a su terminal, deberá copiar primero el texto al portapapeles tal y como se hace
+normalmente, es decir, con la combinación \tecla{ctrl} \tecla{c} y luego, para copiarlo del portapapeles a su
+terminal, deberá usar \tecla{ctrl} \tecla{\(\Uparrow\)} \tecla{v}. En el caso opuesto, es decir, copiar de su
+terminal a una aplicación que sí opere directamente con el portapapeles del escritorio normalmente, deberá
+usar primero \tecla{ctrl} \tecla{\(\Uparrow\)} \tecla{c} y, luego, \tecla{ctrl} \tecla{v}. Este método sirve
+para copiar/pegar cosas de/a su terminal y, por supuesto, también desde Vi, pero al trabajar con Vi tendrá
+que tener en cuenta una particularidad: para copiar/pegar mediante este método, deberá estar en modo insert.
+
+Existen también otros métodos más incómodos para copiar y pegar entre ficheros abiertos con un mismo proceso
+de Vi (por ejemplo, ficheros abiertos en pestañas distintas de la misma sesión de Vi). Lo que debe hacer es:
+
+\begin{enumerate}
+  \item entrar en modo visual (vea \nameref{subsec:vim-sel-text}),
+  \item hacer \foreignlanguage{english}{\emph{yank}} al texto seleccionado, cosa que se consigue pulsando la
+    tecla \tecla{y},
+  \item ir a la ubicación donde desea pegar el texto seleccionado,
+  \item pulsar la tecla \tecla{p} (de \foreignlanguage{english}{\emph{paste}}).
+\end{enumerate}
+
+\noindent Lo que no se puede conseguir de este modo es pegar algo que hayamos copiado en algo externo a Vi,
+como, p.ej., una página web o un documento de LibreOffice. Es decir, no permite copiar de este modo cosas del
+portapapeles del escritorio. Tampoco permite copiar y pegar de ficheros abiertos en pestañas distintas de tmux,
+pues pertenecen a procesos distintos del sistema.
+
+Otro modo, más complicado en mi opinión, sería el siguiente:
+
+\begin{enumerate}
+  \item estás en Vi editando un fichero, que llamaremos aquí \path{file1},
+  \item en modo comando, pon: \lstinline+e: file2+, siendo \path{file2} el fichero donde está lo que quieres
+    copiar; se te abrirá entonces ese fichero en el editor,
+  \item copia entonces lo que quieres como sueles hacerlo (\tecla{6} \tecla{y} \tecla{y}, por ejemplo, si
+    quieres copiar 6 líneas desde donde estás),
+  \item Pon \lstinline+:b1+ para cambiar al buffer 1, es decir, donde está \path{file1},
+  \item coloca el cursor donde quieras pegar el texto y, en modo comando, pulsa \tecla{p}.
+\end{enumerate}
+
+Al haber abierto también el otro archivo, es decir, al haber usado dos buffers, puedes cambiar de uno a otro,
+como si hubieses habierto un tab nuevo en un navegador web. Se cambia de uno a otro con \tecla{ctrl} + \tecla{w}
+\tecla{s} o con \lstinline+:tabn+ (\foreignlanguage{english}{\emph{tab next}}) y \lstinline+:tabp+
+(\foreignlanguage{english}{\emph{tab previous}}).
+
+Esta explicación está sacada de
+\url{http://stackoverflow.com/questions/4620672/copy-and-paste-content-from-one-file-to-another-file-in-vi}.
+También explican otras muchas formas de hacerlo. Creo que con \lstinline-"+y- para copia y \lstinline-"+p- para
+pegar también debería poderse hacer, pero a mí no me funciona.

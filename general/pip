@@ -1,0 +1,4 @@
+Pip es un instalador de paquetes de Python para varios sistemas operativos. Para instalarlo en Mac OS X, deberá
+introducir:
+
+$ sudo easy_install pip

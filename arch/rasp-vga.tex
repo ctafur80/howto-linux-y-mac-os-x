@@ -1,0 +1,54 @@
+\section{Conectar su RbPi a un monitor VGA}\label{sec:rasp-vga}
+% --------------------------------------------------------------------------------------------------------------
+Para conectar su RbPi a un monitor que no tenga interfaz HDMI pero si una VGA, puede comprar algún adaptador
+compatible (cerciónese de que es compatible con las RbPi) y usarlo, siempre y cuando configure adecuadamente su
+RbPi. En \url{https://www.raspberrypi.org/documentation/configuration/config-txt.md} puede leer una explicación
+del fichero \path{/boot/config.txt} que tendrá en su RbPi (al menos, si tiene instalado Raspbian o Arch Linux
+para ARM), que en las RbPi es el fichero que sustituye a la BIOS de los sistemas de arquitectura x86.
+
+Resumiendo lo que explica esta web, usted podría seguir los pasos siguientes (estamos suponiendo que usted tiene
+acceso al sistema de ficheros de su RbPi mediante sesión SSH o montando el ``disco duro'', es decir, la tarjeta
+microSD, en otro ordenador):
+
+\begin{enumerate}
+  \item Establezca los valores
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      hdmi_group=1
+      hdmi_mode=1
+    \end{lstlisting}
+    \noindent en su fichero \path{/boot/config.txt} (compruebe que no están comentados, es decir, que están sin
+    \verb+#+ a la izquierda). Guarde el fichero con las modificaciones y reinicie su RbPi.
+  \item Introduzca el comando siguiente:
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@/opt/vc/bin/tvservice -m CEA@@
+    \end{lstlisting}
+    \noindent y guarde o anote la salida. Tendrá entonces lista de modos CEA soportados por su monitor. Puede
+    que uno de los modos venga acompañado de ``native''; ésta es la mejor de las opciones que le muestra.
+  \item Introduzca el comando siguiente:
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@/opt/vc/bin/tvservice -m DMT@@
+    \end{lstlisting}
+    \noindent y guarde o anote la salida. Tendrá entonces lista de modos DMT soportados por su monitor. Puede
+    que uno de los modos venga acompañado de ``native''; ésta es la mejor de las opciones que le muestra.
+  \item Introduzca el comando:
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@/opt/vc/bin/tvservice -s@@
+    \end{lstlisting}
+    \noindent lo cual le mostrara el estado actual, es decir qué modo está usando actualmente.
+  \item Asigne ahora a la clave \texttt{hdmi\_mode} (recuerde, en \path{/boot/config.txt}) el valor que desee de
+    los compatibles que se le han mostrado.
+\end{enumerate}
+
+Puede que siguiendo estos pasos ya le funcione el monitor. Aun así, deberá comprobar que le funciona no sólo con
+un reinicio suave, es decir, con un \lstinline!reboot!, sino que también le funciona con un reinicio fuerte, es
+decir, apagando (\lstinline!poweroff!), desconectando la alimentación y volviendo a alimentar. Si le funciona en
+ambos casos, ya ha terminado. Si no es así, deberá seguir lo que se indica en el paso siguiente:
+
+\begin{enumerate}[resume]
+  \item Introduzca los comandos siguientes para almacenar información más detallada de su monitor:
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@/opt/vc/bin/tvservice -d /boot/edid.dat@@
+      !\promptr! @@/opt/vc/bin/edidparser /boot/edid.dat@@
+    \end{lstlisting}
+  Añada también, a su fichero \path{/boot/config.txt}, \lstinline!hdmi_edid_file=1!.
+\end{enumerate}

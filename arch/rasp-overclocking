@@ -1,0 +1,3 @@
+Para overclockear su RbPi2, puede seguir las indicaciones de la web
+\url{http://haydenjames.io/raspberry-pi-2-overclock/}. Es bastante sencillo. Lo único que hay que modificar es
+el fichero \path{/boot/config.txt}. Es igual tanto para Raspbian como para Arch Linux de ARM para el RbPi2.

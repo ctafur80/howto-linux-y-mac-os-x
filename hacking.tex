@@ -1,0 +1,17 @@
+\chapter{Hacking}\label{chapter:hacking}
+% --------------------------------------------------------------------------------------------------------------
+En este capítulo se describirán varios ataques básicos a redes wifi. Para evitar exceso de prosa, se usará aquí
+una notación que hará más visual, aunque también más técnica, la lectura:
+
+\begin{itemize}
+  \item Dirección MAC de la NIC que usará usted en su sistema para realizar el ataque: \val{nic\_att\_mac}
+  \item Designador de la NIC wireless que usará usted en su sistema para realizar el ataque: \val{nic\_att}
+  \item Dirección MAC de la interfaz wireless LAN del AP: \val{bssid\_ap}
+  \item Designador de la red wireless creada por el AP: \val{essid\_ap}
+  \item Canal de wifi de la banda de \SI{2.4}{\giga\hertz} empleado por el AP: \val{canal\_ap}
+\end{itemize}
+
+
+\input{./hacking/mac-spoofing}
+\input{./hacking/crack-wep}
+\input{./hacking/crack-wifi-wps}

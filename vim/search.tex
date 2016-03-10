@@ -1,0 +1,19 @@
+\section{Buscar texto}\label{sec:vim-buscar}
+% --------------------------------------------------------------------------------------------------------------
+Para buscar texto basta con introducir, en modo comando,
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  /!\val{cadena}!
+\end{lstlisting}
+
+\noindent donde \val{cadena} es la cadena que desea buscar. Luego, conforme pulse \tecla{n}, se irán
+mostrando las coincidencias siguientes con la cadena que introdujo. Si pulsa \tecla{\(\Uparrow\)} + \tecla{n}
+(es decir, como si deseara escribir \emph{N}), se irán mostrando las coincidencias pero hacia atrás en el
+documento.
+
+Si hubiera querido buscar el primer término que aparece en el sentido inverso, tendría que haber puesto, en modo
+comando,
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  ?!\val{cadena}!
+\end{lstlisting}

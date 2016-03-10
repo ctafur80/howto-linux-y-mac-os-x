@@ -1,0 +1,38 @@
+\section{Crear un índice de palabras clave}\label{sec:tex-indice}
+% --------------------------------------------------------------------------------------------------------------
+Para crear un índice de palabras clave en algún artículo o libro hecho con \LaTeX{}, suelo usar el paquete
+\lstinline+imakeidx+, pues creo que es mejor que el método básico que viene con \LaTeX{}2e. Por tanto, en el
+fichero \path{pre-base.tex} donde declaro los paquetes que uso para todo tipo de documentos, he introducido:
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  \usepackage{imakeidx}
+\end{lstlisting}
+
+\noindent Luego, en el propio documento, antes de
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  \begin{document}
+\end{lstlisting}
+
+\noindent introduciré
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  \makeindex[name=indice,title=!\val{título}!,columns=2]
+\end{lstlisting}
+
+\noindent donde \val{título} será el título que desea que aparezca en el encabezado del índice. Debe tener
+cuidado pues los acentos quizás no los acepte si se introducen directamente, deberá usar en su lugar los
+comandos para introducir acentos como, por ejemplo, \lstinline+\'a+ para tener \emph{á}. Puede crear varios
+índices.  Yo suelo crear uno y por eso he puesto aquí un sólo índice, pero si deseara crear varios, debería
+hacer un \lstinline+\makeindex+ por cada uno; éstos deberían tener distinto el valor del parámetro
+\lstinline+name+.
+
+También deberá introducir, si lo desea, algunos ajustes del índice con el comando
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  \indexsetup{!\val{opciones}!}
+\end{lstlisting}
+
+\noindent donde estas opciones podrían ser, por ejemplo, \lstinline+noclearpage+, si desea que no se cree una
+página nueva para el índice, es decir que éste vaya corrido. Este comando deberá ir también en el preámbulo del
+documento.

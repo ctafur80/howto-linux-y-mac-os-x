@@ -1,0 +1,39 @@
+\section{Tmux}\label{sec:tmux}
+% --------------------------------------------------------------------------------------------------------------
+Tmux es un multiplexor de terminal. Es como tener pestañas de su shell sin necesidad de usar un entorno gráfico.
+Me viene bien, por ejemplo, cuando accedo por SSH a una de mis Raspberry Pi 2 y deseo tener ``pestañas''.
+Existen otros multiplexores de terminal, como, por ejemplo, Terminator, pero me gusta más Tmux.
+
+La web que seguí como tutorial básico para aprender a usar Tmux es
+\url{http://lukaszwrobel.pl/blog/tmux-tutorial-split-terminal-windows-easily}. Luego, estuve copiando ciertas
+cosas de \url{https://bitbucket.org/jasonwryan/shiv/src/f0b3396de2bd?at=default} para añadir cosas a mi fichero
+de configuración y que el banner de Tmux quede más bonito.
+
+El fichero \path{~/.tmux.conf} es el de configuración de Tmux para un usuario en particular. En lugar de éste,
+podría ser \path{~/.tmux/.conf}; vale cualquiera de los dos. Para la configuración de todo el sistema
+(\foreignlanguage{english}{\textit{systemwide}}), el fichero es \path{/etc/tmux.conf} (advierta que éste no
+empieza por punto). En principio, tras instalar Tmux, no tendrá estos ficheros, deberá crearlos si desea
+tenerlos. Como es habitual, en caso de que existan ambos y haya discrepancias, tendrá prioridad el del usuario.
+Mi preferencia actualmente es la de usar configuraciones para cada usuario. Suelo tener en repositorios de
+Github mis ficheros de configuración y es bastante cómodo descargarlas.
+
+El fichero \path{/etc/tmux.conf} que suelo usar ahora mismo en mis sistemas contiene lo siguiente:
+
+\VerbatimInput{/etc/tmux.conf}
+
+\noindent Para los sistemas en los que tengo habilitada la cuenta de root, creo el fichero
+\path{/root/.tmux.conf}, que contiene lo siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  set-window-option -g window-status-current-fg red
+\end{lstlisting}
+
+\noindent Esto hace que, cuando el usuario sea root, la ``pestaña'' resaltada, es decir, la activa, en lugar de
+estar coloreada de verde lo esté de rojo. Aun así, hay que evitar el uso de la cuenta root, ya que no deja
+rastro en los logs del sistema. El mantenimiento, si el sistema está bien configurado, puede realizarse con
+cuentas de administrador con los permisos adecuados.
+
+Antes lo usaba, pero ahora creo que me evito problemas si lo que uso son ventanas de terminal. Tmux me ha dado
+problemas con Vim, puesto que no es del todo compatible si usas xterm-256color; aquí lo explican:
+\url{http://sunaku.github.io/vim-256color-bce.html}. Además, quiero dejar de usar tantas pestañas, tanto en el
+shell como en Vim, y usar como buffers.

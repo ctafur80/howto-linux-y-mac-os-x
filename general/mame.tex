@@ -1,0 +1,36 @@
+\section{Instalar el software emulador de videojuegos Mame}\label{sec:mame}
+% --------------------------------------------------------------------------------------------------------------
+El programa Mame que solía usar es el que se llama Mame en el Software Center de Ubuntu. Tiene muy buenas
+opiniones en el Software Center. Una vez instalado dicho programa, conviene hacer que las ROMs las almacenemos
+en nuestro directorio personal (es decir, en nuestro home). Esto se puede hacer del siguiente modo.
+
+\begin{enumerate}
+
+  \item Cree el directorio \path{roms/} en \path{~/.mame/}:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptu! @@mkdir ~/.mame/roms@@
+    \end{lstlisting}
+
+  \item Cree luego un enlace simbólico en el directorio \path{/usr/local/share/games/mame/} y llámelo
+    \path{roms}; se hace así:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@ln -sd /usr/local/share/games/mame/ roms@@
+    \end{lstlisting}
+
+  \item Ahora ya puede almacenar sus ROMs en su directorio personal y no perderlas si formatea el equipo y se
+    acuerda de guardar los datos de su directorio personal.
+
+\end{enumerate}
+
+Conviene advertir de que lo normal es que las ROMs que funcionan con nuestro programa emulador son las que
+tienen la misma versión que éste, cosa que no siempre es fácil de encontrar. Aun así, creo que para jugar a
+emuladores lo mejor es usar un dispositivo que usemos solo para eso. Por ejemplo, un ordenador no muy potente
+puede servirle o una Raspberry Pi. El problema de la Raspberry Pi es que, aunque tenga potencia para ejecutar
+los juegos (al menos, la versión 2), la mayoría de las ROMs están hechas para arquitectura x86, no para ARM. Así
+que tiene que usar programas para convertirlas. En Raspberry Pi la mejor forma de instalar emuladores suele ser
+usando la distribución de Linux Retropie o usando alguna de media center (como, por ejemplo, Kodi) y
+posteriormente instalar algún plugin para ejecutar ROMs. Además de emuladores de máquinas recreativas (Mame),
+puede encontrar también emuladores de otras plataformas como, por ejemplo, las videoconsolas de Nintendo, Sony
+Playstation, etc.

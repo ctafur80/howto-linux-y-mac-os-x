@@ -1,0 +1,26 @@
+\section{Entorno de escritorio Lxde}\label{sec:rasp-lxde}
+% --------------------------------------------------------------------------------------------------------------
+Para instalar el entorno de escritorio Lxde en su Raspberry Pi con sistema operativo Arch Linux para ARM, deberá
+instalar tres paquetes:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@pacman -S xf86-video-fbdev lxde xorg-xinit}
+\end{lstlisting}
+
+\noindent Luego, quizás deba reiniciar. Después, para ejecutar el entonrno de escritorio, escriba desde su
+shell:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@xinit /usr/bin/lxsession}
+\end{lstlisting}
+
+Puede hacer que el servicio \lstinline!lxdm!, que es el servicio de display manager de Lxde, se ejecute al
+arrancar el sistema. No tiene que instalarlo, pues se instala junto con el paquete \lstinline!lxde!. Con Systemd
+se haría del siguiente modo:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@systemctl enable lxdm.service}
+\end{lstlisting}
+
+\noindent Por si no sabe qué he querido decir con esto último, se podría decir que esto hace que arranque Lxde
+al iniciar el sistema.

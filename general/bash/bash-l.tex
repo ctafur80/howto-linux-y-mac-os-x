@@ -1,0 +1,41 @@
+\subsection{Bash en Linux}\label{subsec:bash-l}
+% --------------------------------------------------------------------------------------------------------------
+La configuración de Bash puede hacerla para un único usuario o para todo el sitema. Las opciones que desea para
+un usuario, deberá introducirlas en \path{~/.bashrc}. Para todo el sistema
+(\foreignlanguage{english}{\textit{systemwide}}), la ruta de configuración será \path{/etc/bash.bashrc} (en Mac
+OS X es \path{/etc/bashrc}). En principio se aplican ambas configuraciones para su sistema, pero, en caso de
+contradicción, prevalece para su usuario la de \path{~/.bashrc}. Es decir, se aplican en orden, primero la de
+todo el sistema y después la del usuario sin restricciones.
+
+Por ejemplo, si desea que el usuario \val{nom\_usuario} use los key bindings de Vi, en lugar de los de Emacs
+(que son los que normalmente vienen de forma predeterminada en Linux), hay que añadir al arhivo
+\path{~/.bashrc} lo siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  set -o vi
+\end{lstlisting}
+
+\noindent Con esto, estará en modo insert al comienzo, pero luego, si lo desea, puede pasar a modo comando,
+pulsando la tecla \tecla{esc}. A dicho archivo podría añadir muchas otras opciones de configuración; por
+ejemplo:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  TERM=screen-256color
+\end{lstlisting}
+
+\noindent para usar 256 colores en el emulador de terminal (Gnome Terminal, Konsole, etc.).
+
+Yo, ahora prefiero que las configuraciones se hagan sólo para cada usuario. En mis cuentas en los distintos
+sistemas que uso, suelo usar la misma configuración, que simplemente tengo que clonarla de mi repositorio de
+Git.
+
+En Mac OS X existe una peculiaridad. el fichero de configuración, en principio, sería \path{~/.bash_profile}.
+Así que, lo que hago, es que en dicho fichero sólo dejo:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  source ~/.bashrc
+\end{lstlisting}
+
+\noindent y ya puedo usar \path{~/.bash_profile}, como en Linux. En
+\url{http://apple.stackexchange.com/questions/12993/why-doesnt-bashrc-run-automatically} puede encontraar una
+buena explicación---del usuario koiyu---de cómo difiere en Mac OS X respecto a Linux.

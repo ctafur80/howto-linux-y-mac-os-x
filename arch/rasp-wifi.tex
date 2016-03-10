@@ -1,0 +1,287 @@
+\section{Instalación y configuración del wifi}\label{sec:rasp-wifi}
+% --------------------------------------------------------------------------------------------------------------
+Ahora sería bueno instalar los drivers del chip wifi, si es que le ha puesto algún dongle de wifi. Si desea usar
+su sistema para aprender o practicar ataques a redes wifi, deberá entonces usar unos drivers que le permitan
+realizar inyección de paquetes, que no son los que se instalan siguiendo este tutorial; este tutorial es para un
+uso normal (es decir, simplemente conectarse a su red o a la de una organización). Si le interesa la otra
+opción, vea Instalar Software Para Crackear Redes Wi-Fi. Aun así, el paquete compat-wireless, que consta de unos
+drivers libres para poder realizar inyección de paquetes con ciertos chips wifi, no soporta aún los chips de
+los dongles de wifi que tengo (vea \url{http://www.aircrack-ng.org/doku.php?id=compat-wireless}).
+
+Los dongles que tengo para wi-fi son los siguientes:
+
+\begin{itemize}
+
+  \item Edimax Technology Co., Ltd EW-7811Un 802.11n Wireless Adapter [Realtek RTL8188CUS]. Usa el driver
+    rtl8192cu, que ya se instala automáticamente durante la instalación.
+
+  \item 8179 Realtek Semiconductor Corp. RTL8188EUS 802.11n Wireless Network Adapter. Usa el driver r8188eu;
+    tampoco tengo que instalarlo.
+
+\end{itemize}
+
+Tal y como explica el wiki de Arch Linux, el proceso de configurar el wireless consta de dos partes:
+
+\begin{enumerate}
+
+  \item Identificar y asegurarse de que en su sistema se encuentra instalado el driver adecuado y configurar la
+    interfaz wireless.
+
+  \item Seleccionar un método de gestión de conexiones wireless. El gestor de conexiones que empleo actualmente
+    es systemd-networkd.
+
+\end{enumerate}
+
+Lo primero que puede hacer es, una vez logueado, sea conectado realmente o mediante una sesión remota, conectar
+a alguno de sus puertos USB el dongle de wifi; no lo haga apagando el sistema e iniciándolo, pues, a mí me ha
+pasado que he al hacer esto no se conecta por Ethernet. Ahora vea qué interfaces tiene:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@networkctl@@
+\end{lstlisting}
+
+\noindent Debería aparecerle algo así:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@networkctl@@
+  IDX LINK             TYPE               OPERATIONAL SETUP
+    1 lo               loopback           carrier     unmanaged
+    2 eth0             ether              routable    configured
+    3 wlan0            wlan               off         unmanaged
+\end{lstlisting}
+
+\noindent Para obternet información más detallada de alguna interfaz, puede usar:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@networkctl status !\val{if}!@@
+\end{lstlisting}
+
+\noindent Donde \val{if} es el nombre de la interfaz que desea ver. Con este comando puede comprobar, por
+ejemplo, que su interfaz wireless tiene instalado un controlador. También le viene bien para ver la dirección
+MAC de cada una de sus NIC. Para cambiar ahora el nombre del dispositivo (lo que aparece bajo la columna
+\lstinline!LINK! con el comando \lstinline!networkctl!), debe crear una regla udev. Para hacer esto, debe editar
+\path{/etc/udev/rules.d/10-network.rules} (y crearlo, si no existe) e introducir lo siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="aa:bb:cc:dd:ee:ff", NAME="en0"
+  SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="ff:ee:dd:cc:bb:aa", NAME="wl0"
+\end{lstlisting}
+
+\noindent Si la dirección MAC de la interfaz a la que quiere llamar en0 es aa:bb:cc:dd:ee:ff y, la de wl0,
+ff:ee:dd:cc:bb:aa (cámbielas por las suyas). Yo suelo seguir la regla de llamar en\val{n}, siendo \val{n} un
+número empezando por el 0, a las interfaces Ethernet y wl\val{n}, empezando por el número 0, también, a las
+wireless. Tendrá que reiniciar para ver el/los nombre(s) nuevo(s).
+
+MEJOR: Introduzca lo siguiente:
+%
+%\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+%  !\promptr! @@mv /root/10-network.rules /etc/udev/rules.d/@@
+%\end{lstlisting}
+%
+%Ahora,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@mv /root/rasp/network/{en,wl}0.* /etc/systemd/network/ && \ @@
+  > @@rm /etc/systemd/network/eth0.*@@
+\end{lstlisting}
+
+Ahora,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@mv /root/rasp/network/wpa_supplicant-skel.conf /etc/wpa_supplicant/wpa_supplicant-wl0.conf@@
+\end{lstlisting}
+
+Ahora,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@cat /root/rasp/network/wpa_supplicant-zfur.conf >> /etc/wpa_supplicant/wpa_supplicant-wl0.conf@@
+\end{lstlisting}
+
+Luego,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@rm /root/rasp/network/wpa_supplicant-zfur.conf ; rm /etc/wpa_supplicant/wpa_supplicant.conf@@
+\end{lstlisting}
+
+Ahora,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@mv /root/rasp/network/network-wireless@.service /etc/systemd/system/ && \ @@
+  > @@mv /root/rasp/network/network-wireless-wl0 /etc/systemd/@@
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ahora deberá crear los ficheros de configuración de sus interfaces wifi. Estos ficheros deben encontrarse en
+\path{/etc/systemd/network/} y deberán tener como extensión \path{.link} o \path{.network}. Los que yo uso los
+puede encontrar en \path{~/Dropbox/Documentos/rasp/<nom_host>/}, donde \path{<nom_host>} es el nombre de host de
+mi RbPi2 (tengo configuraciones distintas para los distintos aparatos, puesto que, por ejemplo, cada uno tendrá
+direcciones IP distintas). Estos ficheros deberá copiarlos al directorio \path{/etc/systemd/network/} de su
+RbPi2. Deberá cambiar también, antes de reiniciar, el fichero de configuración de su interfaz, que se encuentra
+en \path{/etc/systemd/network/}. Ahora mismo tiene sólo uno llamado \path{eth0.network}. Deberá borrarlo y
+copiar ahí, desde mi ordenador, si no lo ha hecho antes, \path{~/Dropbox/Documentos/rasp/<nom_host>/en0.network}
+y \path{~/Dropbox/Documentos/rasp/<nom_host>/en0.link}. Ahora sí puede reiniciar y volver a entrar por SSH sin
+problemas.
+
+Una vez hecho esto, deberá instalar WPA Supplicant junto con sus dependencias:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@pacman -S wpa_supplicant@@
+\end{lstlisting}
+
+Ahora deberá copiar el fichero de configuración de WPA Supplicant, llamado, \path{wpa_supplicant-<w-if>.conf},
+donde \val{w-if} es el nombre de su interfaz wireless, que puede encontrar en mi ordenador en
+\path{~/Dropbox/Documentos/rasp/<nom_host>/}, al directorio \path{/etc/wpa_supplicant/} de su RbPi2; si lo ha
+copiado antes a su RbPi2, ya lo tendrá en algún directorio suyo. Tendrá que cambiar las configuraciones de estos
+dos últimos ficheros de los que le he hablado, puesto que la contraseña de su wifi será distinta a la mía y las
+direcciones que su router asigna a su RbPi2. También suelo borrar el fichero \path{wpa_supplicant.conf} que ya
+existe en \path{/etc/wpa_supplicant}.
+
+%Ahora sucede un problema que aún no he sido capaz de solucionar. Si tengo configuradas las interfaces en0 y wl0,
+%al desconectar el cable de red Ethernet del RbPi2, no consigo que, tras un reinicio, tenga conexión por wl0.
+%Sólo lo consigo si he eliminado los ficheros de configuración de en0. Quizás haya alguna opción para esto.
+
+Ahora es el momento de que cree una unidad de systemd para el demonio de WPA Supplicant. Para ello, puede
+copiar, si no lo ha hecho ya, mi fichero \path{~/Dropbox/Documentos/rasp/network-wireless@.service} al
+directorio \path{/etc/systemd/system/} de su RbPi2. También deberá crear un fichero donde almacene las variables
+de entorno que usa el script. Yo lo creo en  \path{/etc/systemd/} y lo llamo \path{network-wireless-wl0}; esta
+ruta tendrá que ponerla en el script, junto a \lstinline!EnvironmentFile!. Este fichero se encuentra también en
+mi ordenador, en \path{~/Dropbox/Documentos/rasp/<nom_host>/}. Algo que no soy capaz de solucionar es que, en
+\path{network-wireless@wl0.service}, tengo que invocar al comando \lstinline+wpa_supplicant+ necesariamente con
+la opción \lstinline+-B+, es decir, para que se ejecute en segundo plano, mientras que en los servicios
+predefinidos no habilitados para cargar al inicio que vienen con WPA Supplicant (en
+\path{/usr/lib/systemd/system/}) los invocan en primer plano.
+
+Ahora deberá habilitar el demonio \lstinline!network-wireless@\val{w-if}.service!:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@systemctl enable network-wireless@!\val{w-if}!.service@@
+\end{lstlisting}
+
+Ahora debería copiar los ficheros \path{~/Dropbox/Documentos/rasp/<nom_host>/wl0.network} y
+\path{~/Dropbox/Documentos/rasp/<nom_host>/wl0.link} a \path{/etc/systemd/network/}. Ahora apague (no reinicie)
+su RbPi2. Una vez apagada, desenchufe el cable Ethernet y enciéndala. Ahora debería ser capaz de entrar por SSH
+a su RbPi2 por medio de la interfaz \val{w-if}. Puede ver con el comando
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@systemctl --type=service@@
+\end{lstlisting}
+
+\noindent que el servicio \path{network-wireless@<w-if>.service} está iniciado, y puede ver el estado de dicho
+servicio con:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@systemctl status network-wireless@!\val{w-if}!.service@@
+\end{lstlisting}
+
+Con esto, tendría ya conectada su RbPi2 a una wifi. Cuando lo hice, luego me di cuenta de un problema. Si la
+tiene conectada a un monitor o a un televisor, verá que, donde debería aparacer el prompt para loguearse con
+alguna cuenta del sistema, le aparece repetidas veces un mensaje que contiene:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  cfg80211: Calling CRDA to update world regulatory domain
+\end{lstlisting}
+
+\noindent Y, finalmente, tras varias veces, aparecerá un mensaje que dice:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  cfg80211: Exceded CRDA call max attempts. Not calling CRDA
+\end{lstlisting}
+
+Estos mensajes son mensajes de error que muestra el kernel. Puede verlos también con el comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@dmesg | tail -10@@
+\end{lstlisting}
+
+Según leí en el foro oficial de Arch Linux de ARM, el problema se soluciona instalando el paquete
+\lstinline!crda! y, posteriormente, descomentando
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  #WIRELESS_REGDOM="\val{XX}"
+\end{lstlisting}
+
+\noindent de \path{/etc/conf.d/wireless-regdom}, donde \val{XX} indica el país o la región de la que desea tener
+configurada su interfaz wireless. El valor \lstinline!00! indica world domain; España es \lstinline!ES!. Para
+comprobar que lo ha cambiado correctamente, introduzca el comando
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@iw reg get@@
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+\begin{comment}
+% --------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+Ahora hay que instalar y habilitar el demonio NetworkManager, pero antes, por si acaso, compruebe que no lo
+tiene corriendo ya:
+
+# systemctl --type=service
+
+Este comando muestra todos los servicios que están cargados correctamente. Si no ve uno llamado
+NetworkManager.service, introduzca:
+
+# systemctl start NetworkManager
+
+Ahora introduzca:
+
+# nmtui
+
+Con esto, entrará en un interfaz gráfico de consola (sí, esas cosas existen; nmtui quiere decir Network Manager
+Terminal User Interface) con el que podrá configurar su acceso a redes, tanto wi-fi como wired. En el menú que
+aparece, seleccione Edit a connection. Luego, seleccione el SSID de la red a la que se desea conectar y luego le
+pedirá que introduzca la contraseña para conectarse a esa red. Una vez configurada, pinche en Quit y volverá al
+shell. TKTKTKTKTKTKTKTKTK
+
+Una vez fuera del TUI, puede volver a usar networkctl para ver si ahora tiene portadora (carrier). Es
+aconsejable configurar el router para que le asigne siempre la misma dirección IP a dicha interfaz del sistema
+al igual que se dijo para la interfaz eth0, puesto que para entrar por SSH es más cómodo pues no tendré que
+buscarla cada vez que desee entrar.
+
+Ahora, para habilitar el demonio NetworkManager para el inicio del sistema, introduzca:
+
+# systemctl enable NetworkManager
+
+Ahora, para comprobar si se ha configurado todo bien, deberá apagar el sistema, desconectar el cable de red
+Ethernet y arrancar el sistema (cosa que deberá hacer desconectando el cable que le suministra energía al
+RbPi2 y volviéndolo a conectar, pues este aparato no tiene botón de encendido/apagado). Para entrar por
+SSH, tenga en cuenta que ahora tendrá una dirección IP distinta, pues su RbPi2 está conectado ahora a
+la misma red con otra interfaz, la de su tarjeta wi-fi.
+
+Una cosa rara que sucede a veces tras este paso es que las letras salen muy grandes en la pantalla del televisor
+al que tengo conectada la RbPi2.
+
+
+\end{comment}

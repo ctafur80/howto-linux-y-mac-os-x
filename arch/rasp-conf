@@ -1,0 +1,274 @@
+  DESINSTALAR SOFTWARE CON PACMAN
+----------------------------------------------------------------------------------------------------------------
+Sacado de www.linuxandlife.com/2011/12/right-way-to-uninstall-software-in-arch.html.
+
+El modo correcto es mediante:
+
+# pacman -Rns <nom_paquete>
+
+pues así se desinstalarán, además del prorpio paquete <nom_paquete>, las dependencias y todas las
+configuraciones de la aplicación.
+
+Si quiere saber si tiene paquetes huérfanos en su sistema, puede comprobarlo con:
+
+# pacman -Qdt
+
+Si no aparece nada, es que no tiene paquetes huérfanos en su sistema. Para eliminar esos paquetes, puede usar el
+comando:
+
+# pacman -Rns $(pacman -Qdtq)
+
+
+  ACTUALIZAR EL SISTEMA
+----------------------------------------------------------------------------------------------------------------
+Sacado de www.linuxandlife.com/2011/12/right-way-to-uninstall-software-in-arch.html.
+
+El comando para actualizar el sistema es:
+
+# pacman -Syu
+
+Ahora bien, ha de tener en cuenta que Arch Linux es una distribución que cambia muy rápidamente, de modo que,
+para mantener limpio su sistema, debería usar también el comando:
+
+# pacman -Scc
+
+para limpiar la caché y los paquetes desactualizados. Aun así, esto debe hacerse sólo cuando se sepa que los
+paquetes nuevos funcionan correctamente. En caso de que no sea así, será conveniente que mantenga los paquetes
+viejos para hacer downgrade.
+
+
+
+	COMPROBAR SI TENGO UN PROGRAMA EN CONCRETO EN $PATH
+----------------------------------------------------------------------------------------------------------------
+Con el comando which puede comprobar si tiene en los directorios a los que apunta su $PATH un programa en
+concreto. Por ejemplo, si desea saber si tiene el programa <comando>, deberá introducir:
+
+$ which <comado>
+
+
+
+	COMPROBAR SI TIENE UN PAQUETE DEL GESTOR DE PAQUETES DE PACMAN INSTALADO
+----------------------------------------------------------------------------------------------------------------
+Si desea comprobar si tiene instalado el paquete <paquete> de su gestor de paquetes Pacman, deberá introducir el
+comando:
+
+$ pacman -Qs <paquete>
+
+Si el shell no le devuelve nada, es que no lo tiene instalado. Si le devuelve información sobre el paquete, sí
+lo tiene instalado.
+
+
+
+
+	INSTALAR SOFTWARE PARA CRACKEAR REDES WI-FI
+----------------------------------------------------------------------------------------------------------------
+El tutorial que he seguido para aprender el proceso básico es un vídeo de YouTube titulado ``How to crack WPA
+and WPA2 Wireless Networks'', del usuario JackTutorials: https://www.youtube.com/watch?v=LIIjitxblhQ.
+
+Lo primero es tener libre la interfaz wlan0. Es decir, puede seguir todos estos pasos con una sola interfaz
+wi-fi e introduciendo los comandos mediante un teclado conectado directamente a su RbPi2 o bien, si prefiere
+usar una sesión remota, sea de SSH o de VCN, deberá bien usar la interfaz en0 para conectarse a su router y
+dejar wl0 libre para el crackeo, o bien, tener dos interfaces wifi. Una vez considerado esto, deberá instalar el
+software aircrack-ng y sus dependencias (en el vídeo usan el comando airmont-ng, pero creo que ahora se llama
+aircrack-ng):
+
+# pacman -S aircrack-ng
+
+Si tiene configurado su equipo para que siempre se conecte a su router por wi-fi de forma automática, deberá
+deshabilitar momentáneamente su interfaz wi-fi (o, al menos, una de ellas). En el caso de que dicha interfaz
+sea wlan0 (será el caso que se considerará en este tutorial), deberá introducir:
+
+# ip link set wlan0 down
+
+Ahora podrá comprobar que dicha interfaz no está up, con el siguiente comando:
+
+$ ifconfig
+
+o con este otro, más moderno:
+
+$ ip addr show wlan0
+
+En este último debeŕa aparecer en la primera línea ``state DOWN''. Creo que lo mejor es hacerlo todo ahora como
+root, así que supondré que es dicho usuario. Introduzca ahora el comando:
+
+# airmon-ng
+
+Deberá aparecer su tarjeta de wi-fi que empleará para crackear la red wi-fi. Ahora introduzca:
+
+# airmon-ng stop wlan0
+
+para detener TKTKTKTKTK. Ahora introduzca:
+
+# airodump-ng wlan0
+
+TKTKTKTKTKTKTK Queda pendiente porque necesito instalar otros drivers para que mi tarjeta wi-fi sea capaz de
+hacer inyección de
+paquetes. Vea http://superuser.com/questions/301964/how-to-know-my-wireless-card-has-injection-enabled y 
+http://www.aircrack-ng.org/doku.php?id=compat-wireless TKTKTKTKTKTKTKTKTK
+
+En mi caso, la tarjeta wi-fi que estoy usando tiene un chipset Edimax Technology Co., Ltd EW-7811Un
+802.11n [Realtek RTL8188CUS] y el driver que tenía instalado mediante NetworkManager es un rtl8192cu.
+
+
+
+
+
+	CONFIGURAR EL SISTEMA COMO SISTEMA DE COPIAS DE SEGURIDAD CON RSYNC
+----------------------------------------------------------------------------------------------------------------
+Este tutorial está basado principalmente en el que puede encontrar en http://troy.jdmz.net/rsync/index.html, que
+me parece bastante bueno. Yo lo he adaptado para que las copias de seguridad se hagan en un RbPi2 con la
+distribución Arch Linux.
+
+Antes de nada, deberá instalar un servidor de SSH en su ordenador (el que contiene los datos a los que desea
+hacer las copias de seguridad). Yo he instalado OpenSSH en mi sistema, para el sistema operativo Ubuntu 14.04,
+que es el que uso actualmente. Realmente, el tutorial está pensado para que su sistema sea alguno basado en
+UNIX; si tiene Windows, quizás tenga que buscar cómo se hacen algunas cosas que se explican aquí. Para instalar
+en mi sistema el servidor de OpenSSH tuve que introducir:
+
+$ sudo apt-get install openssh-server
+
+Ahora ya puede hacer una prueba para ver si le funciona el comando rsync de forma remota. Para ello, introduzca
+desde su RbPi2:
+
+$ rsync -avz -e ssh <pc_user>@<pc_host>:/<pc_dir> /<rp_dir>
+
+Se le pedirá que introduzca la contraseña de <pc_user> en el sistema <pc_host>. La notación que se empleará
+aquí, para hacer más fácil la explicación, es la siguiente:
+
+	* <rp_host>: su RbPi2
+	*	<rp_user>: usuario de <rp_host>
+	* <rp_dir>: directorio de <rp_host> donde desea que se almacenen las copias de seguridad
+	* <pc_host>: su ordenador (del que desea realizar las copias de seguridad)
+	*	<pc_user>: usuario de <pc_host>
+	* <pc_dir>: directorio de <pc_user> del que desea realizar las copias de seguridad
+
+Lógicamente, tendrá que asegurarse también de que <pc_user> tiene permisos de lectura en <pc_dir> (en <pc_host>,
+claro) y de que <rp_user> tiene permisos de escritura en <rp_dir> (en <rp_host>, claro). También, <rp_user>
+tiene que tener rsync y ssh en su variable de entorno $PATH. También deberá estar rsync en el $PATH de <pc_user>
+y el demonio sshd deberá estar corriendo en <pc_host>.
+
+Configuración de <rp_host>
+-------------------------
+Necesita crear ahora un par de claves privada-pública para permitir una conexión SSH sin que se le pida una
+contraseña. Esto puede sonar peligroso, pero es mejor que almacenar la contraseña de un usuario (o key password)
+como texto claro en el script que usará. También puede poner limitaciones sobre de dónde pueden proceder las
+conexiones hechas con esta clave y sobre qué se puede hacer una vez conectado. Ahora genere la clave que usará
+en <rp_host> (como <rp_user>):
+
+$ ssh-keygen -t rsa -b 2048 -f /home/<rp_user>/cron/<rp_host>-rsync-key
+Generating public/private rsa key pair.
+Enter passphrase (empty for no passphrase): [press enter here]
+Enter same passphrase again: [press enter here]
+Your identification has been saved in /home/<rp_user>/cron/<rp_host>-rsync-key.
+Your public key has been saved in /home/<rp_user>/cron/<rp_host>-rsync-key.pub.
+The key fingerprint is:
+2e:28:d9:ec:85:21:e7:ff:73:df:2e:07:78:f0:d0:a0 <rp_user>@<rp_host>
+
+Ahora tiene una clave sin contraseña en los dos ficheros que le indica el shell: el de la clave privada, en
+/home/<rp_user>/cron/<rp_host>-rsync-key, y, el de la pública, en /home/<rp_user>/cron/<rp_host>-rsync-key.pub.
+Asegúrese de que ningún usuario no autorizado pueda leer el fichero de la clave privada (el que no tiene la
+extensión .pub).
+
+Esta clave no sirve de nada mientras no ponga la parte pública en el fichero authorized_keys en <pc_host>. En
+concreto, para <pc_user> está en /home/<pc_user>/.ssh/authorized_keys. Puede usar scp para mandar el fichero a
+<pc_host>:
+
+$ scp /home/<rp_user>/cron/<rp_host>-rsync-key.pub <pc_user>@<pc_host>:/home/<pc_user>
+
+Ahora deberá establecer una sesión de SSH a <pc_host> para preparar algunas cosas.
+
+Configuración en <pc_host>
+-------------------------
+Establezca una sesión de SSH hacia <pc_host>:
+
+$ ssh <pc_user>@<pc_host>
+
+Necesita asegurarse ahora de que tiene el directorio y ficheros que necesita para autorizar conexiones con esta
+clave:
+
+$ if [ ! -d .ssh ]; then mkdir .ssh ; chmod 700 .ssh fi
+$ mv <rp_host>-rsync-key.pub .ssh/
+$ cd .ssh/
+$ if [ ! -f authorized_keys ]; then touch authorized_keys ; chmod 600 authorized_keys ; fi
+$ cat <rp_host>-rsync-key.pub >> authorized_keys
+
+Ahora la clave puede usarse para hacer conexiones a <rp_host> pero estas conexiones se pueden establecer desde
+cualquier sitio (desde cualquier sitio que permita el demonio ssh en <pc_host>) y pueden hacer lo que quieran
+(siempre que pueda hacerlo también <pc_user>) y no desea eso, ¿verdad? Edite entonces el fichero authorized_keys
+y modifique la línea que contiene la información <rp_host>-rsync-key.pub. Sólo deberá añadir algunas cosas
+frente a lo que ya hay, cambiando la línea (y lo que sigue es sólo una línea) desde aquí:
+
+ssh-dss
+AAAAB3NzaC1kc3MAAAEBAKYJenaYvMG3nHwWxKwlWLjHb77CT2hXwmC8Ap+fG8wjlaY/9t4uA+2qx9JNorgdrWKhHSKHokFFlWRj+qk3q+lGHS+hsXuvta44W0yD0y0sW62wrEVegz+JVmntxeYc0nDz5tVGfZe6ydlgomzj1bhfdpYe+BAwop8L+EMqKLS4iSacNjoPlHsmqHMnbibn3tBqJEq2QJjEPaiYj1iP5IaCuYBhuTKQGa+oyH3mXEif5CKdsIKBj46B0tCy0/GC7oWcUN92QdLrUyTeRJZsTWsxKpRbMliD2pBh4oyX/aXEf8+HZBrO5vQjDBCfTFQA+35Xrd3eTVEjkGkncI0SAeUAAAAVAMZSASmQ9Pi38mdm6oiVXD55Kk2rAAABAE/bA402VuCsOLg9YS0NKxugT+o4UuIjyl6b2/cMmBVWO39lWAjcsKK/zEdJbrOdt/sKsxIK1/ZIvtl92DLlMhci5c4tBjCODey4yjLhApjWgvX9D5OPp89qhah4zu509uNX7uH58Zw/+m6ZOLHN28mV5KLUl7FTL2KZ583KrcWkUA0Id4ptUa9CAkcqn/gWkHMptgVwaZKlqZ+QtEa0V2IwUDWS097p3SlLvozw46+ucWxwTJttCHLzUmNN7w1cIv0w/OHh5IGh+wWjV9pbO0VT3/r2jxkzqksKOYAb5CYzSNRyEwp+NIKrY+aJz7myu4Unn9de4cYsuXoAB6FQ5I8AAAEBAJSmDndXJCm7G66qdu3ElsLT0Jlz/es9F27r+xrg5pZ5GjfBCRvHNo2DF4YW9MKdUQiv+ILMY8OISduTeu32nyA7dwx7z5M8b+DtasRAa1U03EfpvRQps6ovu79mbt1OE8LS9ql8trx8qyIpYmJxmzIdBQ+kzkY+9ZlaXsaU0Ssuda7xPrX4405CbnKcpvM6q6okMP86Ejjn75Cfzhv65hJkCjbiF7FZxosCRIuYbhEEKu2Z9Dgh+ZbsZ+9FETZVzKBs4fySA6dIw6zmGINd+KY6umMWyJNej2Sia70fu3XLHj2yBgN5cy8arlZ80q1Mcy763RjYGkR/FkLJ611HWIA= <rp_user>@<rp_host>
+
+a esto:
+
+from="10.1.1.1",command="/home/<pc_user>/cron/validate-rsync" ssh-dss
+AAAAB3NzaC1kc3MAAAEBAKYJenaYvMG3nHwWxKwlWLjHb77CT2hXwmC8Ap+fG8wjlaY/9t4uA+2qx9JNorgdrWKhHSKHokFFlWRj+qk3q+lGHS+hsXuvta44W0yD0y0sW62wrEVegz+JVmntxeYc0nDz5tVGfZe6ydlgomzj1bhfdpYe+BAwop8L+EMqKLS4iSacNjoPlHsmqHMnbibn3tBqJEq2QJjEPaiYj1iP5IaCuYBhuTKQGa+oyH3mXEif5CKdsIKBj46B0tCy0/GC7oWcUN92QdLrUyTeRJZsTWsxKpRbMliD2pBh4oyX/aXEf8+HZBrO5vQjDBCfTFQA+35Xrd3eTVEjkGkncI0SAeUAAAAVAMZSASmQ9Pi38mdm6oiVXD55Kk2rAAABAE/bA402VuCsOLg9YS0NKxugT+o4UuIjyl6b2/cMmBVWO39lWAjcsKK/zEdJbrOdt/sKsxIK1/ZIvtl92DLlMhci5c4tBjCODey4yjLhApjWgvX9D5OPp89qhah4zu509uNX7uH58Zw/+m6ZOLHN28mV5KLUl7FTL2KZ583KrcWkUA0Id4ptUa9CAkcqn/gWkHMptgVwaZKlqZ+QtEa0V2IwUDWS097p3SlLvozw46+ucWxwTJttCHLzUmNN7w1cIv0w/OHh5IGh+wWjV9pbO0VT3/r2jxkzqksKOYAb5CYzSNRyEwp+NIKrY+aJz7myu4Unn9de4cYsuXoAB6FQ5I8AAAEBAJSmDndXJCm7G66qdu3ElsLT0Jlz/es9F27r+xrg5pZ5GjfBCRvHNo2DF4YW9MKdUQiv+ILMY8OISduTeu32nyA7dwx7z5M8b+DtasRAa1U03EfpvRQps6ovu79mbt1OE8LS9ql8trx8qyIpYmJxmzIdBQ+kzkY+9ZlaXsaU0Ssuda7xPrX4405CbnKcpvM6q6okMP86Ejjn75Cfzhv65hJkCjbiF7FZxosCRIuYbhEEKu2Z9Dgh+ZbsZ+9FETZVzKBs4fySA6dIw6zmGINd+KY6umMWyJNej2Sia70fu3XLHj2yBgN5cy8arlZ80q1Mcy763RjYGkR/FkLJ611HWIA= <rp_user>@<rp_host>
+
+donde 10.1.1.1 es la dirección IP (versión 4) de <rp_host> y /home/<pc_user>/cron/validate-rsync (la cual es
+sólo una de varias opciones incluyendo customización para mejorar la seguridad) es un script que parece algo
+así:
+
+#!/bin/sh 
+
+case "$SSH_ORIGINAL_COMMAND" in 
+*\&*) 
+echo "Rejected" 
+;; 
+*\(*) 
+echo "Rejected" 
+;; 
+*\{*) 
+echo "Rejected" 
+;; 
+*\;*) 
+echo "Rejected" 
+;; 
+*\<*) 
+echo "Rejected" 
+;; 
+*\>*) 
+echo "Rejected" 
+;; 
+*\`*) 
+echo "Rejected" 
+;; 
+*\|*) 
+echo "Rejected" 
+;; 
+rsync\ --server*) 
+$SSH_ORIGINAL_COMMAND 
+;; 
+*) 
+echo "Rejected" 
+;; 
+esac
+
+Si <rp_host> tiene una dirección variable o comparte su dirección (mediante NAT o algo parecido) con hosts que
+no son de su confianza (de usted), omita la parte 'from=''10.1.1.1'',' de la línea (incluida la coma), pero
+deje la parte 'command'. De este modo, sólo el 'rsync' será posible desde conexiones que usen esta clave.
+Asegúrese de que el script validate-rsync es ejecutable por <pc_user> en <pc_host> y pruébelo.
+
+
+
+	INSTALAR EL SERVIDOR X Y EL ENTORNO DE ESCRITORIO XFCE
+----------------------------------------------------------------------------------------------------------------
+
+Para instalar el servidor X:
+
+# pacman -S xorg-server
+
+Para instalar drivers de video:
+
+# pacman -S xf86-video-fbdev xf86-video-vesa
+
+Para instalar el entorno de escritorio XFCE:
+
+# pacman -S xfce4
+
+Para arrancar el entorno de escritorio XFCE:
+
+$ startxfce4
+
+

@@ -1,0 +1,39 @@
+\section{NeoVim}\label{sec:nvim}
+% --------------------------------------------------------------------------------------------------------------
+Ahora mismo suelo usar NeoVim, pues creo que lo que pretenden crear es una versión de Vim que, aun manteniendo
+la compatibilidad casi al \SI{100}{\percent}, traerá muchas mejoras subyacentes.
+
+Instalar NeoVim es fácil. Por ejemplo, puede usar Brew en Mac OS X:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@brew install neovim/neovim/neovim@@
+\end{lstlisting}
+
+\noindent También se aconseja, tras la instalación, actualizarlo a la última versión:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@brew update@@
+  !\promptu! @@brew upgrade neovim@@
+\end{lstlisting}
+
+\noindent o apt-get, en Debian, Ubuntu, etc. Una vez que lo haya instalado, deberá establecer sus directorios de
+configuración para NeoVim.
+
+Para usar en NeoVim la configuración de Vim, deberá introducir, en su shell,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@mkdir -p ${XDG_CONFIG_HOME:=$HOME/.config}@@
+  !\promptu! @@ln -s ~/.vim $XDG_CONFIG_HOME/nvim@@
+  !\promptu! @@ln -s ~/.vimrc $XDG_CONFIG_HOME/nvim/init.vim@@
+\end{lstlisting}
+
+\noindent Como ve, lo que ha hecho es crear varios vínculos simbólicos que apuntan a sus directorios/ficheros de
+configuración de Vim. La variable \lstinline!$HOME!, en Mac OS X, será \path{/Users/<usuario>/}; en Linux,
+\path{/home/<usuario>/}.
+
+También puede olvidarse de Vim y usar sus propios directorios y ficheros de configuración para NeoVim. Quizás
+esto lo haga más adelante.
+
+Todo lo que se explica aquí, puede encontrarlo, con mayor detalle y mejor expresado (aunque en inglés), en el
+fichero de ayuda de Vi nvim-intro. Es decir, abra NeoVim y, en modo normal, introduzca
+\lstinline!:help nvim-intro!. Los enlaces de dicho fichero se ``pinchan'' con \tecla{ctrl} + \tecla{]}.

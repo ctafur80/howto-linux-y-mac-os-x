@@ -1,0 +1,38 @@
+\section{Usar tarjetas SD con sistema de ficheros exFAT}\label{sec:exfat}
+% --------------------------------------------------------------------------------------------------------------
+Creo que lo aconsejable es usar algún formato de archivo que sepamos que funciona bien en Linux, como EXT4 o FAT
+(de \num{16} o \SI{32}{\bit}), por ejemplo; aunque debe tener en cuenta que para FAT el tamaño máximo de fichero
+es de \SI{4}{\gibi\byte}. Las distribuciones de Linux no traen el software necesario para escribir en
+particiones con formato NTFS; para poder usarlo, deberá instalar el paquete \lstinline!ntfs-3g!, y nadie le
+garantiza que le vaya a funcionar bien---aunque también es cierto que ya no suele dar problemas---. En
+definitiva, si desea compatibilidad con Windows, use FAT; si desea usarlo sólo para Linux y otros sistemas UNIX,
+es mejor que use EXT4, o, en un futuro, cuando sea lo bastante estable, algún otro sistema de ficheros más
+moderno, como BTRFS. De todos modos, no creo que tengan mucho futuro las tarjetas SD, pues, bajo mi punto de
+vista, el almacenamiento externo se hará normalmente a través de la nube cuando las redes tengan mayor capacidad
+en unos años.
+
+Si desea usar una tarjeta SD (o microSD, nanoSD, etc.) en Linux manteniendo el sistema de ficheros exFAT, que es
+el que suelen traer este tipo de tarjetas---aunque en realidad pueden usar casi cualquier sistema de
+ficheros---, lo que debe hacer primero es instalar el programa Fuse, pues las distribuciones de Linux no suelen
+traer instalado el software para usar exFAT. Esto, en Ubuntu, se hace del modo siguiente:
+
+\begin{enumerate}
+
+  \item añada el repositorio \lstinline!relan/exfat!:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@add-apt-repository ppa:relan/exfat@@
+    \end{lstlisting}
+
+  \item actualice la lista de paquetes e instale el paquete \lstinline+fuse-exfat+:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@apt-get update@@
+      !\promptr! @@apt-get install fuse-exfat@@
+    \end{lstlisting}
+
+\end{enumerate}
+
+Una vez instalado el programa Fuse, deberá actuar según lo que desee. Si desea configurar el automontado de
+dichas tarjetas, deberá configurarlo o, si usa un entorno de escritorio, se puede configurar solo, sin que tenga
+que hacer nada usted (vea \nameref{sec:automontar}).

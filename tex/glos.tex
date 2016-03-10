@@ -1,0 +1,35 @@
+\section{Crear un glosario}\label{sec:tex-glos}
+% --------------------------------------------------------------------------------------------------------------
+Normalmente, creo un glosario en un documento cuando el documento es bastante grande. Al ser el documento
+grande, suelo hacer los capítulos o secciones (según se trate de formato \lstinline+book+ o \lstinline+article+,
+respectivamente) como ficheros separados a los que luego llamo dentro del fichero principal con el comando
+\lstinline+\input+.
+
+Así, pues, suponga que desea incluir el preámbulo en un fichero llamado \path{preamb.tex} en el mismo directorio
+que los demás que forman el documento de \LaTeX. En este fichero \path{preamb.tex} deberá incluir:
+
+\begin{enumerate}
+
+  \item La declaración del uso del paquete \lstinline+glossaries+, es decir,
+    \lstinline+\usepackage{glossaries}+. Prefiero usar este paquete al modo predeterminado que viene con
+    \LaTeX{}2e.
+
+  \item El comando \lstinline+\makenoidxglossaries+.
+
+  \item Las entradas del glosario, que tendrán la forma:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      \newglossaryentry{!\val{entrada}!}{name={!\val{name}!},plural={!\val{plural}!},description={!\val{description}!}}
+    \end{lstlisting}
+
+    \noindent donde \val{entrada} se refiere a la referencia que uso para luego llamarlo con el comando
+    \lstinline+\gls+, para hacer referencia a \val{name}, o \lstinline+\glspl+, para referenciar a \val{plural}. En
+    \val{description} deberá introducir la descripción del concepto que desea explicar; no debe poner punto al
+    final de la descripción, pues ya se encarga el comando de hacerlo por sí mismo. De estas entradas, se verán
+    luego sólo las que se usen realmente como referencia en el texto, es decir, las que se hayan referenciado
+    mediante el comando \lstinline+\gls+ o \lstinline+\glspl+.
+
+\end{enumerate}
+
+Luego, en el fichero principal que llama a los demás, se deberá introducir, donde se quiera incluir el glosario,
+\lstinline+\printnoidxglossaries+.

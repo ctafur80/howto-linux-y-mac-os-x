@@ -1,0 +1,93 @@
+\BOOKMARK [1][-]{section.0.1}{Notaci\363n}{}% 1
+\BOOKMARK [0][-]{chapter.1}{Linux en general}{}% 2
+\BOOKMARK [1][-]{section.1.1}{Apagar, suspender y reiniciar}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.2}{Bash}{chapter.1}% 4
+\BOOKMARK [2][-]{subsection.1.2.1}{Bash en Linux}{section.1.2}% 5
+\BOOKMARK [2][-]{subsection.1.2.2}{Bash en Mac OS X}{section.1.2}% 6
+\BOOKMARK [1][-]{section.1.3}{Buscar ficheros con un nombre en concreto en un directorio}{chapter.1}% 7
+\BOOKMARK [1][-]{section.1.4}{Comandos de control}{chapter.1}% 8
+\BOOKMARK [1][-]{section.1.5}{Programar tareas con el demonio Cron}{chapter.1}% 9
+\BOOKMARK [1][-]{section.1.6}{Hacer copias de seguridad con D\351j\340 Dup}{chapter.1}% 10
+\BOOKMARK [1][-]{section.1.7}{Instalar Dropbox}{chapter.1}% 11
+\BOOKMARK [1][-]{section.1.8}{Eliminar un directorio de su sistema mediante el shell}{chapter.1}% 12
+\BOOKMARK [1][-]{section.1.9}{Enpass}{chapter.1}% 13
+\BOOKMARK [1][-]{section.1.10}{Usar tarjetas SD con sistema de ficheros exFAT}{chapter.1}% 14
+\BOOKMARK [1][-]{section.1.11}{Instalar las fuentes Adobe Source}{chapter.1}% 15
+\BOOKMARK [1][-]{section.1.12}{Instalar las fuentes Linux Libertine}{chapter.1}% 16
+\BOOKMARK [1][-]{section.1.13}{Configurar Git}{chapter.1}% 17
+\BOOKMARK [1][-]{section.1.14}{GnuPG}{chapter.1}% 18
+\BOOKMARK [2][-]{subsection.1.14.1}{GnuPG en Linux}{section.1.14}% 19
+\BOOKMARK [2][-]{subsection.1.14.2}{GnuPG en Mac OS}{section.1.14}% 20
+\BOOKMARK [1][-]{section.1.15}{Encriptar un pendrive o un archivo con LUKS/dm-crypt}{chapter.1}% 21
+\BOOKMARK [1][-]{section.1.16}{Instalar el software emulador de videojuegos Mame}{chapter.1}% 22
+\BOOKMARK [1][-]{section.1.17}{Instalar las librer\355as Matplotlib}{chapter.1}% 23
+\BOOKMARK [1][-]{section.1.18}{Passwordstore}{chapter.1}% 24
+\BOOKMARK [1][-]{section.1.19}{Gesti\363n de permisos}{chapter.1}% 25
+\BOOKMARK [2][-]{subsection.1.19.1}{Permisos de UNIX}{section.1.19}% 26
+\BOOKMARK [2][-]{subsection.1.19.2}{ACLs}{section.1.19}% 27
+\BOOKMARK [2][-]{subsection.1.19.3}{Polkit}{section.1.19}% 28
+\BOOKMARK [1][-]{section.1.20}{Instalar Powerline}{chapter.1}% 29
+\BOOKMARK [1][-]{section.1.21}{Habilitar y deshabilitar la cuenta de root}{chapter.1}% 30
+\BOOKMARK [1][-]{section.1.22}{Tmux}{chapter.1}% 31
+\BOOKMARK [1][-]{section.1.23}{Instalar y desinstalar el software de virtualizaci\363n Vmware}{chapter.1}% 32
+\BOOKMARK [1][-]{section.1.24}{Automontar}{chapter.1}% 33
+\BOOKMARK [1][-]{section.1.25}{Emulador de terminal en MAC OS X}{chapter.1}% 34
+\BOOKMARK [1][-]{section.1.26}{Homebrew en Mac OS X}{chapter.1}% 35
+\BOOKMARK [0][-]{chapter.2}{Vim}{}% 36
+\BOOKMARK [1][-]{section.2.1}{Notaci\363n}{chapter.2}% 37
+\BOOKMARK [1][-]{section.2.2}{Arranque}{chapter.2}% 38
+\BOOKMARK [1][-]{section.2.3}{Instalaci\363n de esquemas de colores}{chapter.2}% 39
+\BOOKMARK [1][-]{section.2.4}{Empleo de pesta\361as}{chapter.2}% 40
+\BOOKMARK [1][-]{section.2.5}{Copiar y pegar texto}{chapter.2}% 41
+\BOOKMARK [1][-]{section.2.6}{Deshacer}{chapter.2}% 42
+\BOOKMARK [1][-]{section.2.7}{Seleccionar texto}{chapter.2}% 43
+\BOOKMARK [1][-]{section.2.8}{Guardar fichero}{chapter.2}% 44
+\BOOKMARK [1][-]{section.2.9}{Salir}{chapter.2}% 45
+\BOOKMARK [1][-]{section.2.10}{Buscar texto}{chapter.2}% 46
+\BOOKMARK [1][-]{section.2.11}{Reemplazar texto}{chapter.2}% 47
+\BOOKMARK [1][-]{section.2.12}{Actualizar ajuste de texto}{chapter.2}% 48
+\BOOKMARK [1][-]{section.2.13}{Autoindentar texto}{chapter.2}% 49
+\BOOKMARK [1][-]{section.2.14}{Introducir comentarios en vimrc}{chapter.2}% 50
+\BOOKMARK [1][-]{section.2.15}{Espacios o tabs en indentaci\363n}{chapter.2}% 51
+\BOOKMARK [1][-]{section.2.16}{Hacer autom\341ticamente roturas de l\355neas}{chapter.2}% 52
+\BOOKMARK [1][-]{section.2.17}{Agregar o eliminar nivel de indentaci\363n}{chapter.2}% 53
+\BOOKMARK [1][-]{section.2.18}{Insertado m\372ltiple}{chapter.2}% 54
+\BOOKMARK [1][-]{section.2.19}{Usar envoltura de texto}{chapter.2}% 55
+\BOOKMARK [1][-]{section.2.20}{NeoVim}{chapter.2}% 56
+\BOOKMARK [1][-]{section.2.21}{Pathogen}{chapter.2}% 57
+\BOOKMARK [0][-]{chapter.3}{TeX y LaTeX}{}% 58
+\BOOKMARK [1][-]{section.3.1}{Instalar TeX Live en Linux}{chapter.3}% 59
+\BOOKMARK [1][-]{section.3.2}{Desinstalar TeX Live}{chapter.3}% 60
+\BOOKMARK [1][-]{section.3.3}{Actualizar a una versi\363n nueva de TeX Live}{chapter.3}% 61
+\BOOKMARK [1][-]{section.3.4}{Instalaci\363n de un paquete}{chapter.3}% 62
+\BOOKMARK [1][-]{section.3.5}{Actualizar paquetes}{chapter.3}% 63
+\BOOKMARK [1][-]{section.3.6}{Documentaci\363n}{chapter.3}% 64
+\BOOKMARK [1][-]{section.3.7}{BibTeX}{chapter.3}% 65
+\BOOKMARK [1][-]{section.3.8}{Paquetes que suelo usar}{chapter.3}% 66
+\BOOKMARK [1][-]{section.3.9}{Crear un glosario}{chapter.3}% 67
+\BOOKMARK [1][-]{section.3.10}{Crear un \355ndice de palabras clave}{chapter.3}% 68
+\BOOKMARK [0][-]{chapter.4}{Ubuntu}{}% 69
+\BOOKMARK [1][-]{section.4.1}{Tareas post-instalaci\363n del sistema operativo}{chapter.4}% 70
+\BOOKMARK [0][-]{chapter.5}{Arch Linux}{}% 71
+\BOOKMARK [1][-]{section.5.1}{Actualizar el sistema}{chapter.5}% 72
+\BOOKMARK [1][-]{section.5.2}{Eliminar paquetes hu\351rfanos}{chapter.5}% 73
+\BOOKMARK [1][-]{section.5.3}{Reiniciar el sistema}{chapter.5}% 74
+\BOOKMARK [1][-]{section.5.4}{Habilitar autocompletado de comandos}{chapter.5}% 75
+\BOOKMARK [1][-]{section.5.5}{Cambiar los nombres de host}{chapter.5}% 76
+\BOOKMARK [1][-]{section.5.6}{Configurar la fecha y hora}{chapter.5}% 77
+\BOOKMARK [1][-]{section.5.7}{Crear un grupo nuevo}{chapter.5}% 78
+\BOOKMARK [1][-]{section.5.8}{Crear una cuenta de usuario}{chapter.5}% 79
+\BOOKMARK [1][-]{section.5.9}{A\361adir a un usuario a uno o varios grupos}{chapter.5}% 80
+\BOOKMARK [1][-]{section.5.10}{Configuraci\363n de idioma\(s\) en Arch Linux}{chapter.5}% 81
+\BOOKMARK [1][-]{section.5.11}{Instalaci\363n b\341sica de Arch Linux en un RbPi2 desde un sistema Linux}{chapter.5}% 82
+\BOOKMARK [1][-]{section.5.12}{Instalaci\363n complementaria}{chapter.5}% 83
+\BOOKMARK [1][-]{section.5.13}{Instalaci\363n y configuraci\363n del wifi}{chapter.5}% 84
+\BOOKMARK [1][-]{section.5.14}{Instalar el cliente de BitTorrent Deluge}{chapter.5}% 85
+\BOOKMARK [1][-]{section.5.15}{Instalar Kodi en un RbPi2}{chapter.5}% 86
+\BOOKMARK [1][-]{section.5.16}{Conectar su RbPi a un monitor VGA}{chapter.5}% 87
+\BOOKMARK [1][-]{section.5.17}{Entorno de escritorio Lxde}{chapter.5}% 88
+\BOOKMARK [1][-]{section.5.18}{Entorno de escritorio Xfce}{chapter.5}% 89
+\BOOKMARK [0][-]{chapter.6}{Hacking}{}% 90
+\BOOKMARK [1][-]{section.6.1}{MAC spoofing}{chapter.6}% 91
+\BOOKMARK [1][-]{section.6.2}{Cracking de redes wireless con seguridad WEP}{chapter.6}% 92
+\BOOKMARK [1][-]{section.6.3}{Cracking de redes wireless con WPS activado}{chapter.6}% 93

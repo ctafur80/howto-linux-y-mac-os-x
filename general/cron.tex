@@ -1,0 +1,59 @@
+\section{Programar tareas con el demonio Cron}\label{sec:cron}
+% --------------------------------------------------------------------------------------------------------------
+Algo que solía hacer en Linux era programar, con el uso del demonio Cron, la copia en local de los ficheros
+importantes de mi sistema. Luego, pasé a usar otras herramientas, como, Déjà Dup en Ubuntu (vea
+\nameref{subsec:deja-dup}) o Time Machine en Mac OS X. No obstante, dejo aquí la explicación de cómo usaba Cron,
+pues puede venir bien si deseo automatizar otras tareas o si tengo que usarlo en algún sistema antiguo en el
+trabajo. Creo que Cron es una herramienta que quedará obsoleta cuando se imponga Systemd en el mundo de Linux,
+dentro de poco.
+
+Lo que hacía era guardar, en el directorio \path{~/Backups}, copias de seguridad diarias de los ficheros
+\path{k-yo} y \path{cecom}. Este directorio debe tenerme a mí como propietario y estar en mi grupo; estas dos
+cosas se consiguen con los comandos \lstinline+chown+ y \lstinline+chgroup+ (o, simplemente, teniendo cuidado de
+no crearlos como root, sino con mi cuenta principal de usuario).
+
+En su shell introduzca el comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@crontab -e@@
+\end{lstlisting}
+
+\noindent Esto edita el fichero de configuracion de Cron del usuario que lo invoca. Creo que le pregunta, la
+primera vez que lo ejecuta, qué editor desea usar. Luego, a la hora de editar ese fichero, introduzca lo
+siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  10 2 * * 1 rm -rf /home/zfur/backups/k-yo-lun
+  15 2 * * 1 cp /home/zfur/Dropbox/Documentos/otros/k-yo  /home/zfur/backups/k-yo-lun
+  10 2 * * 2 rm -rf /home/zfur/Backups/k-yo-mar
+  15 2 * * 2 cp /home/zfur/Dropbox/Documentos/Otros/k-yo  /home/zfur/Backups/k-yo-mar
+  10 2 * * 3 rm -rf /home/zfur/Backups/k-yo-mie
+  15 2 * * 3 cp /home/zfur/Dropbox/Documentos/Otros/k-yo  /home/zfur/Backups/k-yo-mie
+  10 2 * * 4 rm -rf /home/zfur/Backups/k-yo-jue
+  15 2 * * 4 cp /home/zfur/Dropbox/Documentos/Otros/k-yo  /home/zfur/Backups/k-yo-jue
+  10 2 * * 5 rm -rf /home/zfur/Backups/k-yo-vie
+  15 2 * * 5 cp /home/zfur/Dropbox/Documentos/Otros/k-yo  /home/zfur/Backups/k-yo-vie
+  10 2 * * 6 rm -rf /home/zfur/Backups/k-yo-sab
+  15 2 * * 6 cp /home/zfur/Dropbox/Documentos/Otros/k-yo  /home/zfur/Backups/k-yo-sab
+  10 2 * * 0 rm -rf /home/zfur/Backups/k-yo-dom
+  15 2 * * 0 cp /home/zfur/Dropbox/Documentos/Otros/k-yo  /home/zfur/Backups/k-yo-dom
+
+  20 2 * * 1 rm -rf /home/zfur/Backups/cecom-lun
+  25 2 * * 1 cp /home/zfur/Dropbox/Documentos/Importante/cecom /home/zfur/Backups/cecom-lun
+  20 2 * * 1 rm -rf /home/zfur/Backups/cecom-mar
+  25 2 * * 1 cp /home/zfur/Dropbox/Documentos/Importante/cecom /home/zfur/Backups/cecom-mar
+  20 2 * * 1 rm -rf /home/zfur/Backups/cecom-mie
+  25 2 * * 1 cp /home/zfur/Dropbox/Documentos/Importante/cecom /home/zfur/Backups/cecom-mie
+  20 2 * * 1 rm -rf /home/zfur/Backups/cecom-jue
+  25 2 * * 1 cp /home/zfur/Dropbox/Documentos/Importante/cecom /home/zfur/Backups/cecom-jue
+  20 2 * * 1 rm -rf /home/zfur/Backups/cecom-vie
+  25 2 * * 1 cp /home/zfur/Dropbox/Documentos/Importante/cecom /home/zfur/Backups/cecom-vie
+  20 2 * * 1 rm -rf /home/zfur/Backups/cecom-sab
+  25 2 * * 1 cp /home/zfur/Dropbox/Documentos/Importante/cecom /home/zfur/Backups/cecom-sab
+  20 2 * * 1 rm -rf /home/zfur/Backups/cecom-dom
+  25 2 * * 1 cp /home/zfur/Dropbox/Documentos/Importante/cecom /home/zfur/Backups/cecom-dom
+\end{lstlisting}
+
+\noindent En este ejemplo, se ha programado Cron para que a las 2:10 am se elimine el fichero
+\path{k-<día-semana>} del directorio \path{~/Backups} y 5 minutos después haga una copia del mismo
+fichero. Lo mismo con el fichero \path{cecom}, pero a otras horas.

@@ -1,0 +1,35 @@
+\subsection{Bash en Mac OS X}\label{subsec:bash-m}
+% --------------------------------------------------------------------------------------------------------------
+Una vez que haya instalado Brew, puede instalar si lo desea el shell Bash por medio de Brew. Si hace esto
+tendrá entonces dos versiones de dicho programa. Algo que no permite la versión antigua es hacer
+autocompletion de Pass (Passwordstore). Para instalarlo mediante Brew, introduzca:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@brew install bash@@
+\end{lstlisting}
+
+\noindent También, vuelvo a instalar el paquete \lstinline!bash-completion!, aunque quizás ya lo tenga:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@brew install bash-completion@@
+\end{lstlisting}
+
+\noindent Ahora, debería configurar los programas de Mac OS para que tengan como ruta del shell la de la versión
+nueva.  Es decir, en lugar de tener \path{/bin/bash}, deberán usar \path{/usr/local/bin/bash}. Por ejemplo, en
+la aplicación Terminal, en el menú Terminal, en Preferences, en la pestaña General, en Shells open with: -->
+Command (complete path): deberá introducir \path{/usr/local/bin/bash}.
+
+\noindent También debería abrir una ventana de terminal e introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@chsh -s /usr/local/bin/bash@@
+\end{lstlisting}
+
+Si desea que este nuevo Bash sea también el shell para root, tendrá que introducir este mismo comando
+anteponiéndole sudo.
+
+Otra cosa que debe hacer es ir a System Preferences, pinchar en Users \& Groups, Pinchar sobre el candado para
+desbloquear la ventana de configuración y poder realizar cambios. Se le pedirá, para esto, que introduzca su
+contraseña de usuario administrador. Pinche con el botón derecho sobre su usuario y aparecerá un menú en el
+que pone Advanced Options\ldots Ahora aparecerá una nueva ventana. En el menú desplegable junto a Login shell:
+introduzca la ruta absoluta de su nuevo shell; es decir, \path{/usr/local/bin/bash} y pinche en OK.

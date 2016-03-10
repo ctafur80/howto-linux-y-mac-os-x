@@ -1,0 +1,18 @@
+En Mac OS, lo mejor para tener el software de TeX y sus paquetes asociados es instalar MacTeX. Es bastante
+sencillo. A partir de la version de Mac OS X El Capitán, el sistema operativo ha cambiado algo en cuanto a
+permisos: dicen que lo han hecho rootless, para reforzar la seguridad del sistema. Esto quiere decir que la
+mayor parte del árbol de directorios del sistema tiene la etiqueta restricted y, por lo tanto, no se permite
+la modificación de los mismos así como tampoco añadir nada a esos directorios. Por tanto, los programas nuevos
+que instale, lo hará bajo /usr/local. MacTeX ya tiene esto en cuenta, así que todo el software de TeX, así
+como los ficheros de configuración, se instalarán en principio en /usr/local/texlive/ (no olvide que MacTeX es
+un derivado de TeX Live).
+
+De forma predeterminada, MacTeX se instala para todos los usuarios del sistema.
+
+Para actualizar todo MacTeX, deberá actualizar antes el gestor de paquetes de MacTeX:
+
+# tlmgr update --self
+
+Luego, podrá actualizar los paquetes:
+
+# tlmgr update --all

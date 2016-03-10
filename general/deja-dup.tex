@@ -1,0 +1,33 @@
+\section{Hacer copias de seguridad con Déjà Dup}\label{sec:deja-dup}
+% --------------------------------------------------------------------------------------------------------------
+Déjà Dup es el software que usaba en Linux para hacer mis copias de seguridad. Ahora mismo uso Time Machine, en
+Mac OS X, que es el sistema operativo que uso ahora en mi sistema principal, para hacer copias de seguridad de
+mi sistema. Mi intención es montarme un servidor casero de copias de seguridad haciendo uso de un Raspberry Pi 2
+y el comando \lstinline!rsync! de Linux.
+
+Déjà Dup es un front-end de Duplicity; ambos vienen de serie al instalar Ubuntu de escritorio (al menos, en las
+versiones 12.04 y 14.04, que son las que yo he usado últimamente). Lo tengo configurado para que haga copias de
+seguridad incrementales con frecuencia diaria y se almacenen copias como mínimo de los últimos 6 meses, siempre
+y cuando lo permita el espacio disponible en la unidad de almacenamiento que uso, que es un pendrive de
+\SI{32}{\gibi\byte} de marca Verbatim. Las copias se hacen en el directorio \path{/backups} en dicho pendrive;
+es decir, el directorio, una vez automontada la unidad, es \path{/media/zfur/backups}. También hago copias en
+DVD+Rs externos con la grabadora de discos ópticos que tengo para tener copias en ubicaciones y formatos
+distintos. Los directorios que tengo seleccionados para hacerles copias de seguridad se muestran en la tabla
+\ref{table:deja-dup}.
+
+\begin{center}
+  \begin{table}
+    \taburowcolors[2] 2{color-tabu-a .. color-tabu-b}
+%   \everyrow{\hline}
+    \begin{tabu*}{l X[l]}
+      \rowfont[c]{\bfseries\sffamily}
+      Directorio                & Descripción\\
+      \path{~/documents}        & Aquí tengo apuntes que no deseo que estén en el directorio de Dropbox.\\
+      \path{~/Dropbox}          & Es mi directorio principal para todos mis documentos. Está sincronizada,
+                                  obviamente, con la nube de Dropbox.\\
+      \path{~/.passwordstore}   & Son las entradas que uso en el software PASS para gestionar mis claves de
+                                  acceso.\\
+      \path{~/docs-other}       & Aquí guardo, principalmente, libros y apuntes.\\
+    \end{tabu*}\caption{Directorios a guardar en Déjà Dup}\label{table:deja-dup}
+  \end{table}
+\end{center}

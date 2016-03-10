@@ -1,0 +1,42 @@
+\section{Emulador de terminal en MAC OS X}\label{sec:terminal-m}
+% -------------------------------------------------------------------------------------------------------------
+El terminal de Mac OS X, de forma predeterminada está configurado para usar una paleta de sólo 16 colores. Si
+desea poder usar una de 256, deberá hacer varias cosas. Hay quien cree que no le compensa hacer lo que explico
+en este tutorial y prefiere simplemente instalar otro emulador de terminal que pueda usar 256 colores sin tener
+que cambiar nada. Lo que a continuación explico es una copia de lo que puede encontrar en
+\url{https://gist.github.com/shawnbot/3277580}.
+
+Lo primero que debe hacer es asegurarse de que su emulador de terminal, es decir, el programa Terminal, está
+declarado como \lstinline!xterm-256color!. Para esto, en la versión de Mac OS X El Capitán, deberá:
+
+\begin{enumerate}
+  \item pinchar en el menú Terminal,
+  \item en el desplegable pinche en Preferences\ldots,
+  \item seleccione en la columna de la izquierda el perfil que desea configurar,
+  \item pinche luego en la pestaña Advanced y
+  \item seleccione, en el menú desplegable junto a ``Declare terminal as:'', xterm-256color.
+\end{enumerate}
+
+Ahora deberá construir una versión de screen que soporte 256 colores, pues la que tiene ahora mismo no lo
+soporta. Aquí se supondrá que tiene instalado y configurado el gestor de paquetes Homebrew:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@brew tap homebrew/dupes@@
+  !\promptu! @@brew install homebrew/dupes/screen@@
+\end{lstlisting}
+
+Tras esto, usted tendrá el binario \path{/usr/local/bin/screen}.
+
+Ahora, deberá, si no lo ha hecho anteriormente al configurar algún software, añadir, de forma permanente, la
+ruta al comienzo de su variable de entorno \lstinline!$PATH!:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@echo 'export PATH=/usr/local/bin:$PATH' >> \ @@
+  > @@/Users/!\val{user}!/.bashrc@@
+\end{lstlisting}
+
+Creo que lo normal es que este último paso lo realice justo tras instalar el gestor de paquetes Homebrew en su
+sistema, pues los paquetes que se instalan mediante Homebrew se instalan bajo \path{/usr/local/}. Entonces, con
+esta \lstinline!$PATH!, cualquier comando que escriba en su shell tratará de buscar el binario primero en
+\path{/usr/local/}. Muchas veces puede desear instalar mediante Homebrew un programa que ya tiene porque desea
+una versión más actualizada.

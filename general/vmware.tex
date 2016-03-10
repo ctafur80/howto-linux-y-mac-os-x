@@ -1,0 +1,34 @@
+\section{Instalar y desinstalar el software de virtualización Vmware}\label{sec:vmware}
+% --------------------------------------------------------------------------------------------------------------
+Para instalar VMware Player en Ubuntu 14.04, se necesita instalar la versión 6.0.2 o alguna posterior. Lo
+primero es introducir el siguiente comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@apt-get install build-essential linux-headers-$(uname -r)@@
+\end{lstlisting}
+
+\noindent Una vez realizada esta instalación, se descargará el archivo
+\path{VMware-Player-6.0.2-1744117.i386.bundle} en cualquier directorio de su disco duro y deberá asignarle
+permisos de lectura para todos, con el siguiente comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@chmod +x VMware-Player-6.0.2-1744117.i386.bundle@@
+\end{lstlisting}
+
+\noindent Luego, se ejecutará el propio archivo, que es un script, del siguiente modo:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@./VMware-Player-6.0.2-1744117.i386.bundle@@
+\end{lstlisting}
+
+\noindent Entonces sale el asistente interactivo de instalación (wizard). Cuando pide que se introduzca la
+clave del producto es por si desea actualizar a la versión Pro de VMware Player. Si desea seguir con la
+versión básica, no ponga ninguna clave y pinche en \boton{Siguiente}.
+
+Para desinstalar, deberá introducir el comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@vmware-installer -u vmware-player@@
+\end{lstlisting}
+
+\noindent y seguir las indicaciones del asistente que aparecerá.

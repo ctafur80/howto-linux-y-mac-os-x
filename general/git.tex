@@ -1,0 +1,35 @@
+\section{Configurar Git}\label{sec:git}
+% -------------------------------------------------------------------------------------------------------------
+Antes de nada, conviene especificar que Git no es la herramienta perfecta para almacenarlo todo en la nube. Es
+decir, es una herramienta increíblemente útil para crear proyectos de software de forma colaborativa o para que
+gente ajena a la empresa que crea cierto software pueda contribuir dando ideas o corrigiendo errores de software
+libre u open-source. Pero, por ejemplo, no es la herramienta ideal para almacenar muchos de sus ficheros
+personales. La razón de esto es la comodidad: no es cómodo tener que hacer un commit por línea de comandos cada
+vez que desea subir una foto a la nube. Para eso hay otras herramientas más adecuadas, como Dropbox, Google
+Drive, etc. Aun así, sí es cierto que mucha gente lo usa para tener un repositorio de ciertos ficheros de
+configuración de su sistema, como, por ejemplo, los de configuración de Bash o de Vim.
+
+Si en su shell de Linux o de Mac OS X introduce
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@man gittutorial@@
+\end{lstlisting}
+
+\noindent podrá leer un buen tutorial sobre lo básico de Git. Todo lo básico que deseaba explicar aquí, está
+escrito en el tutorial.
+
+Para actualizar el repositorio desde los cambios hechos en local, deberé introducir los siguientes tres
+comandos, estando en la ruta adecuada:
+
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  $ git add .
+\end{lstlisting}
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  $ git commit
+\end{lstlisting}
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  $ git push
+\end{lstlisting}

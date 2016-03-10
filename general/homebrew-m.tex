@@ -1,0 +1,74 @@
+\section{Homebrew en Mac OS X}\label{sec:homebrew-m}
+% -------------------------------------------------------------------------------------------------------------
+Homebrew es un gestor de paquetes (\foreignlanguage{english}{\textit{package manager}}) para Mac OS X. Está
+escrito completamente en el lenguaje Ruby y hace uso de Git. El sitio web oficial es \url{http://brew.sh/}. Para
+instalarlo en su sistema, sólo tiene que introducir lo siguiente en su shell o emulador de terminal:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"@@
+\end{lstlisting}
+
+\noindent Esto hará que se instale bajo \path{/usr/local/} y, por tanto, que no necesite permisos de
+administración para usarlo para instalar software. Quizás esto sea malo, porque creo que permite que cualquier
+usuario del sistema, aunque no se administrador, pueda instalar software mediante Homebrew en el mismo.
+
+Una vez que lo tenga instalado, si desea instalar el paquete \val{paquete}, sólo tendrá que introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@brew install !\val{paquete}!@@
+\end{lstlisting}
+
+Aunque hay veces que deberá hacerlo de otro modo:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@brew install --HEAD !\val{paquete}!@@
+\end{lstlisting}
+
+El software que haya instalado mediante Homebrew residirá bajo \path{/usr/local/Cellar/} y bajo
+\path{/usr/local/bin/} tendrá, junto al resto de software que haya instalado tras la instalación de Mac OS X,
+vínculos simbólicos a \path{/usr/local/Cellar/}.
+
+Puede encontrar la documentación oficial en
+\url{https://github.com/Homebrew/homebrew/tree/master/share/doc/homebrew#readme}.
+
+El software que suelo instalar mediante Homebrew es el siguiente:
+
+\begin{itemize}
+  \item Máxima prioridad:
+  \begin{itemize}
+    \item Wget. Para descargar de internet.
+    \item Vim. Es mi editor de textos favorito y el software que más uso en mi ordenador.
+    \item Git. Me permite clonar repositorios de sitios de SVC como Github u otros basados en Git. Gracias a
+      esto puedo, por ejemplo, descargar muy fácilmente, tras una reinstalación de mi sistema, los ficheros de
+      configuración de Bash y de Vim.
+    \item Bash. Suelo descargar una versión más moderna de Bash que la que trae Mac OS, pues, hay cosas, como el
+      tab autocompletion que no funcionan tan bien como desearía en las versiones antiguas.
+    \item Gpg. También conocido como GnuPG.
+    \item Herramientas de \TeX{} que se instalan solas con la instalación de MacTeX. Ojo, no instalo
+      MacTeX con Homebrew, sino con su instalador.
+  \end{itemize}
+  \item Prioridad secundaria:
+    \begin{itemize}
+      \item Mosh. Es como SSH pero más moderno. No sé si es menos seguro, lo que sí he notado es que es más
+        estable.
+      \item Pass. También conocido como Passwordstore. Para almacenar claves de forma cifrada en su sistema.
+      \item Python3.
+      \item Screen. Para poder usar 256 colores en el emulador de terminal que uso, que es el predefinido de Mac
+        OS X.
+      \item Tmux. Un multiplexor de terminal. Estoy intentando no usarlo tanto.
+      \item Bash completion. No sé si será necesario instalarlo. Lo veré la próxima vez que ``formatee'' el
+        sistema operativo.
+\end{itemize}
+  \item Prioridad terciaria:
+    \begin{itemize}
+      \item Atom. El editor de textos GUI. Yo prefiero usar Vim bajo mi emulador de terminal.
+      \item Fish. Es un shell, un sustituto de Bash que está teniendo algo de éxito entre los usuarios de Mac OS
+        X, aunque también lo está teniendo Zsh y yo prefiero seguir con Bash.
+    \end{itemize}
+\end{itemize}
+
+Hay cierto software que prefiero instalarlo con su propio instalador, como, por ejemplo, \TeX{} Live, que es el
+software que contiene todo lo necesario para procesar documentos de \TeX{}, \LaTeX{}, ConTeXt, LuaTeX,
+etc., es decir, \TeX{} y todos sus derivados. Es conveniente usar en este caso su propio instalador, puesto que
+conviene tenerlo, sobretodo por los paquetes (packages). \TeX{} Live trae su propio gestor de actualización,
+llamado con el comando \lstinline!tlmgr!.

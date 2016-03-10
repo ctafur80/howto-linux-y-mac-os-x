@@ -1,0 +1,112 @@
+La instalación de la distribución RetroPie se hace igual que la mayoría para Raspberry Pi; de hecho, esta
+distribución deriva de Raspbian.
+
+Si desea hacerla desde un sistema basado en Unix, ya sea desde un ordenador con
+Linux o con Mac OS X, por ejemplo, o incluso desde un Raspberry Pi con alguna de las distribuciones disponibles,
+deberá conectar la tarjeta microSD que hará de disco duro de su sistema con RetroPie a algún puerto de su
+sistema (interfaz de tarjetas microSD, SD, puerto USB, etc. mediante el adaptador adecuado, si corresponde).
+Luego, vea si se ha automontado en su sistema dicha tarjeta micro SD. Si no lo ha hecho, puede seguir al paso
+siguiente. Si, por el contrario, lo ha hecho, desmóntela (todas las particiones que haya montado).
+
+Ahora, mediante wget puede descargar del sitio web oficial de RetroPie la imagen comprimida que deberá volcar en
+su tarjeta microSD. En mi caso, es la de la Raspberry Pi 2:
+
+$ wget https://github.com/RetroPie/RetroPie-Setup/releases/download/3.4/retropie-v3.4-rpi2.img.gz.
+
+Como sabrá, hay otros modos de descargarla.
+
+La descomprimo:
+
+$ gunzip https://github.com/RetroPie/RetroPie-Setup/releases/download/3.4/retropie-v3.4-rpi2.img.gz
+
+Hacemos el volcado:
+
+# dd bs=4M if=<if> of=<of>
+
+Una vez hecho esto, ya tiene su tarjeta microSD con todo lo necesario. Conéctela a un Raspberry Pi. Yo suelo
+seguir ahora los pasos que indican en el repositorio oficial: https://github.com/RetroPie. Le puede venir muy
+bien seguir las explicaciones del wiki (vaya a la pestaña wiki). Expando el
+sistema de ficheros raíz, pues las tarjetas microSD que tengo suelen ser de 64 GB (que creo que es lo máximo que
+aceptan las Raspberry Pi).
+
+Ahora deberá descargar las imágenes de las ROMs que desee usar para jugar. Conviene ahora que lea lo que
+explican en https://github.com/RetroPie/RetroPie-setup/wiki/MAME. Un sitio del que puede descargarse imágenes de
+ROMs es http://www.theoldcomputer.com/roms/index.php?folder=MAME/Mame-0.37b5, pero creo que es de pago. Lo mejor
+es descargarse la lista completa de imágenes de ROMs de MAME, por ejemplo, de internet por algún medio cómodo
+como BitTorrent, por ejemplo.
+
+En cualquier momento, si lo desea, puede entrar por sesión remota mediante SSH. Ha de tener en cuenta que la
+cuenta de usuario predeterminada en su sistema es pi, con clave "raspberry".
+
+En cuanto a la configuración, he tenido un problema con el teclado que le conecté para configurar el wifi. Al
+final lo solucioné cambiándolo en el fichero /etc/default/keyboard.
+
+Una explicación de los problemas con las ROMs puede verla aquí:
+https://www.reddit.com/r/MAME/comments/2z4ucv/42_gb_mame_set_not_supported/.
+
+Ahora, a partir de la versión 3.0, el sistema le pide al inicial EmulationStation (que es algo así como los
+menús de gestión) que configure sus mandos. Luego, para configurarlo a mi gusto en RetroArch, que es necesario
+para configurar los controles para los emuladores, deberá editar /opt/retropie/config/all/retroarch.cfg.
+Modifique lo siguiente:
+
+# Joypad buttons.
+# Figure these out by using RetroArch-Phoenix or retroarch-joyconfig.
+# You can use joypad hats with hnxx, where n is the hat, and xx is a string representing direction.
+# E.g. “h0up”
+input_player1_a_btn = 1
+input_player1_b_btn = 2
+input_player1_y_btn = 3
+input_player1_x_btn = 0
+input_player1_start_btn = 7
+input_player1_select_btn = 6
+input_player1_l_btn = 4
+input_player1_r_btn = 5
+# input_player1_left_btn =
+# input_player1_right_btn =
+# input_player1_up_btn =
+# input_player1_down_btn =
+# input_player1_l2_btn =
+# input_player1_r2_btn =
+# input_player1_l3_btn =
+# input_player1_r3_btn =
+input_player2_a_btn = 1
+input_player2_b_btn = 2
+input_player2_y_btn = 3
+input_player2_x_btn = 0
+input_player2_start_btn = 7
+input_player2_select_btn = 6
+input_player2_l_btn = 4
+input_player2_r_btn = 5
+/p 
+# Axis for RetroArch D-Pad.
+# Needs to be either ‘+’ or ‘-‘ in the first character signaling either positive or negative direction of the axis, then the axis number.
+# Do note that every other input option has the corresponding _btn and _axis binds as well; they are omitted here for clarity.
+input_player1_left_axis = -0
+input_player1_right_axis = +0
+input_player1_up_axis = -1
+input_player1_down_axis = +1
+input_player2_left_axis = -0
+input_player2_right_axis = +0
+input_player2_up_axis = -1
+input_player2_down_axis = +1
+
+
+También, para poder salir directamente desde los mandos iBuffalo, añada:
+
+# Alternatively, all hotkeys for keyboard could be disabled by the user.
+input_enable_hotkey_btn = 6 #Select
+input_exit_emulator_btn = 7 #Start
+input_save_state_btn = 1 #A button
+input_load_state_btn = 2 #B button
+input_state_slot_increase_btn = 5 #R button
+input_state_slot_decrease_btn = 4 #L button
+input_reset_btn = 0 #X button
+input_menu_toggle_btn = 3 #Y button
+input_state_slot_increase_axis = +0 #Right on D pad
+input_state_slot_decrease_axis = -0 #Left on D pad
+input_reset_axis = -1 #Up on D pad
+input_audio_mute_axis = +1 #Down on D pad
+
+Todo esto es para los mandos iBuffalo de tipo Snes. No me funciona en Mame, al menos en Advanced Mame. En los
+emuladores de las consolas de Nintendo, sí. Esto último lo saqué de
+https://weekendengineer.wordpress.com/2014/08/28/mapping-controllers-3-of-3-setting-up-controllers-in-retroarch/.

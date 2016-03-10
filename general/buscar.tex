@@ -1,0 +1,11 @@
+\section{Buscar ficheros con un nombre en concreto en un directorio}\label{sec:buscar.tex}
+% --------------------------------------------------------------------------------------------------------------
+Para buscar los ficheros que tengan nombre \val{file} dentro del directorio \val{dir}, incluyendo los
+directorios que están dentro (es decir, búsqueda recursiva), debrá introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@find !\val{dir}! -iname '!\val{file}!'@@
+\end{lstlisting}
+
+\noindent Deberá tener cuidado, puesto que el nombre \val{file} debe coincidir exactamente con el que busca;
+no vale con que contenga dicha cadena.

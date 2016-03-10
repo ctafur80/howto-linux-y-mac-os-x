@@ -1,0 +1,47 @@
+\section{BibTeX}\label{sec:tex-bibtex}
+% --------------------------------------------------------------------------------------------------------------
+Tengo una base de datos de BibTeX con los libros que puedo usar como referencia. Esta base de datos irá
+creciendo continuamente. Estoy pensando en crear también una base de datos de webs de interés. La base de datos
+de libros está en el fichero \path{/home/zfur/Dropbox/Documentos/latex/bib1.bib}. Las entradas las escribo con
+minúscula, que también se puede, aunque mucha gente siga la costumbre antigua de poner en mayúsculas los nombres
+de los campos. Una cosa que hago como configuración para todos mis documentos de \TeX{} es que dichas
+referencias bibliográficas usen el estilo \lstinline+alpha+: \lstinline+\bibliographystyle{alpha}+; al ser para
+todos los documentos, tuve que configurarlo en \path{/home/zfur/Dropbox/Documentos/latex/pre-base.tex}. A la
+hora de hacer uso de estas referencias en un documento de \LaTeX{}, he intentado seguir las explicaciones de
+\cite{latex-kopka}, pero he terminado haciéndolo de otro modo que me gusta más; aquí explico cómo.
+
+Lo primero es introducir una sección de referencias, con el comando \lstinline+\bibliography+, en el documento
+de \LaTeX{}. En mi caso,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  \bibliography{/home/zfur/Dropbox/Documentos/latex/bib1}
+\end{lstlisting}
+
+\noindent para el fichero \path{bib1.bib}, en esa ruta absoluta que se indica. Advierta que no he puesto la
+extensión de nombre de fichero (\path{.bib}). Si se pone, luego, a la hora de enlazar, buscará en el fichero
+\path{bib1.bib.bib} (está hecho así, bastante mal). En \path{bib1.bib} se encuentra la base de datos de BibTeX
+en la que guardo los libros, artículos, etc. a los que puedo hacer referencia. Normalmente, prefiero que la
+sección de referencias sea un apéndice, por lo que deberá estar tras el comando \lstinline+\appendix+. No tiene
+por qué ser la primera sección de apéndice, así que no tiene por qué ir inmediatamente después de dicho comando.
+
+Luego, para insertar una referencia, dentro de un documento, a la lista de referencias, deberá usar el comando
+\lstinline!\cite{<clave>}!, \lstinline!\citep{<clave>}! o \lstinline!\citet{<clave>}!, donde \val{clave} es la
+cadena usada como referencia en la entrada en la base de datos.
+
+Finalmente, para crear el documento de \LaTeX{}, deberá hacer ahora otra cosa. Deberá primero ejecutar el
+programa de paginación como hace normalmente: \lstinline+pdflatex+, \lstinline+xelatex+, etc.:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@pdflatex howto-linux.tex@@
+\end{lstlisting}
+
+\noindent Luego, deberá ejecutar, sobre el programa \lstinline+bibtex+, el fichero \path{*.aux} creado:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@bibtex howto-linux.aux@@
+\end{lstlisting}
+
+\noindent dos veces. Esto sólo se hará cuando modifique la base de datos, es decir, el fichero \path{*.bib}. Y,
+finalmente, ejecutar otra vez el programa de paginación. Si no ha modificado la base de datos, podrá crear el
+documento de \LaTeX{} como siempre lo ha hecho: \lstinline+pdflatex+, \lstinline+xetex+, \lstinline+context+,
+etc.

@@ -1,0 +1,36 @@
+\section{Arranque}\label{sec:vim-arranque}
+% --------------------------------------------------------------------------------------------------------------
+Creo que lo mejor es configurar Vim a mi gusto para todos los usuarios del sistema. Esto se consigue editando el
+fichero \path{/etc/vimrc}. Si desea que algún usuario tenga una configuración distinta, deberá entonces editar
+\path{/home/<usuario>/.vimrc}, donde \val{usuario} es el nombre de dicho usuario en el sistema.
+
+Las opciones que tengo configuradas para el arranque de Vim en mi sistema son:
+
+%\VerbatimInput{/Users/zFur/.vimrc}
+\lstinputlisting{/Users/zFur/.vimrc}
+
+Otras opciones que puedo poner, aunque ahora mismo prefiero usarlas sobre la marcha cuando las necesite, son las
+que se muestran en la tabla \ref{table:vim-otras-op}.
+
+\begin{center}
+  \begin{table}
+%   \everyrow{\hline}
+    \taburowcolors[2] 2{color-tabu-a .. color-tabu-b}
+    \begin{tabu*}{l X[l]}
+      \rowfont[c]{\bfseries\sffamily}
+      Opciones                                  & Descripción\\
+      \lstinline+:set nu!+                      & Hace un toggle de los números que salen en el editor a la
+                                                  izquierda.\\
+      \lstinline+:set lbr!+                     & Hace un toggle de partir palabras a final de línea o no
+                                                  partirlas.\\
+      \lstinline+:set guifont=Ubuntu\ Mono\ 13+ & Para que gVim use esa fuente. En Windows sería
+                                                  \lstinline+:set guifont=Consolas:h11+, por ejemplo.\\
+      \lstinline+colorscheme tango2+            & Para cambiar al esquema de colores tango2, que es mi favorito
+                                                  (este esquema está en el \ruta{ColorSamplerPack.zip}, que se
+                                                  puede descargar de la web oficial de Vim.\\
+    \end{tabu*}\caption{Otras opciones de \texttt{.vimrc}}\label{table:vim-otras-op}
+  \end{table}
+\end{center}
+
+En Windows es igual sólo que el archivo de configuración global se crea solo, tras la instalación, en
+\path{C:\Program Files\Vim\_vimrc}. Está en \path{Program Files} o en \path{Archivos de Programas}.

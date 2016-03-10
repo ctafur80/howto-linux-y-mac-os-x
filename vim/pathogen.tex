@@ -1,0 +1,35 @@
+\section{Pathogen}\label{sec:pathogen}
+% --------------------------------------------------------------------------------------------------------------
+Pathogen es un plugin de Vim (y NeoVim) que le permitirá instalar otros plugins de forma muy sencilla. Si desea
+instalar Pathogen en Vim/NeoVim usando Git, deberá introducir lo siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@mkdir -p ~/.vim/autoload ~/.vim/bundle && \ @@
+  !\promptu! @@curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim@@
+\end{lstlisting}
+
+Tenga en cuenta que, si usa NeoVim y lo tiene configurado independientemente de Vim (o si sólo tiene NeoVim),
+es decir, si sus ficheros y directorios de configuración no están vinculados con los de Vim, deberá cambiar algo
+en el listado anterior. En concreto, si usa el esquema XDG y, por tanto, tiene sus ficheros de configuración de
+NeoVim bajo \path{~/.config/nvim/} (repito, sin estar vinculados a los de Vim), debería introducir algo así:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@mkdir -p ~/.config/nvim/autoload ~/.config/nvim/bundle && \ @@
+  !\promptu! @@curl -LSso ~/.config/nvim/autoload/pathogen.vim https://tpo.pe/pathogen.vim@@
+\end{lstlisting}
+
+Una vez que tenga correctamente instalado Pathogen, puede instalar otros plugins de Vim/NeoVim muy fácilmente.
+Por ejemplo, si desea instalar Nerdtree en Vim deberá hacer lo siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@cd ~/.vim/bundle@@
+  !\promptu! @@git clone https://github.com/scrooloose/nerdtree.git@@
+\end{lstlisting}
+
+En NeoVim (si, al igual que antes, usa el esquema de configuración XDG y no tiene sus ficheros de configuración
+de NeoVim vinculados a los de Vim),
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@cd ~/.config/nvim/bundle@@
+  !\promptu! @@git clone https://github.com/scrooloose/nerdtree.git@@
+\end{lstlisting}

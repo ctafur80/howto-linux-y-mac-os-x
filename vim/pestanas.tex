@@ -1,0 +1,20 @@
+\section{Empleo de pestañas}\label{sec:vim-pestanas}
+% --------------------------------------------------------------------------------------------------------------
+No suelo usar ya pestañas en Vi. Antes lo hacía porque creía que era más cómodo para copiar y pegar de un
+fichero a otro, pero la verdad es que es bastante incordio el simple proceso de cambiar de pestaña. Ahora, si
+tengo que editar varios ficheros, usaré un Vi en cada pestaña del emulador de terminal o, simplemente, los
+editaré con el editor Atom, que suelo usar más ahora.
+
+Para abrir una nueva pestaña (\foreignlanguage{english}{\emph{tab}}) vacía en Vim, lo que debe hacer es
+introducir el comando \lstinline!:tabnew!. Esa pestaña se abrirá sin ningún fichero cargado. Para cargarlo o
+crearlo se ha de usar \lstinline!:e <ruta-fichero>!, donde \val{ruta-fichero} indica la ruta del fichero a
+abrir. Puede pulsar \tecla{tab}, justo tras introcudir \lstinline!:e!, para poder ir navegando con las flechas
+por los ficheros en la barra de Vi, si es que la tiene activa. Con la flecha hacia arriba puede subir de
+directorio, y la flecha hacia abajo, para bajar. Una vez que tenga abiertas varias pestañas, puede cambiar de
+una a otra con el comando \lstinline+:tabn+ (\foreignlanguage{english}{\emph{next tab}}) y \lstinline+:tabp+
+(\foreignlanguage{english}{\emph{previous tab}}).
+
+Puede hacer en un solo paso el proceso de abrir una pestaña nueva con el fichero que desee. Se hace,
+simplemente, poniendo \lstinline!:tabnew <nom-fichero>!, en modo comando, donde \val{nom-fichero} es el nombre
+del fichero que desea abrir. También puede navegar por aquí con el uso de \tecla{tab}. Si \val{nom-fichero} no
+es el nombre de un fichero de esa misma carpeta, se creará dicho fichero, siempre y cuando lo guarde desde Vi.

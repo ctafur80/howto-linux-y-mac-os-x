@@ -1,0 +1,15 @@
+\section{Hacer automáticamente roturas de líneas}\label{sec:vim-l-break}
+% --------------------------------------------------------------------------------------------------------------
+Para dar cierto formato al texto en Vim, se pueden hacer varias cosas. Si lo que desea es que el propio Vim haga
+el salto de línea por usted creando al final de la línea una rotura de línea
+(\foreignlanguage{english}{\emph{line break}}) realmente, puede hacerlo simplemente estableciendo la anchura del
+texto (\foreignlanguage{english}{\emph{text width}}):
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  @@:set tw=!\val{tw}!@@
+\end{lstlisting}
+
+\noindent donde \val{tw} es la anchura que desee establecer. Yo, por el ordenador que uso y la resolución que
+empleo normalmente para Vim, suelo darle un valor de 112. Podía haber puesto \lstinline+textwidth+ en lugar de
+\lstinline+tw+. Si desea recuadrar el texto para producir las roturas de línea porque, por la causa que sea, no
+se encuentran cuadradas, puede ver cómo hacerlo en \ref{sec:vim-recuadrar}.

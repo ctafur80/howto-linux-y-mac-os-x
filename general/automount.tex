@@ -1,0 +1,95 @@
+\section{Automontar}\label{sec:automontar}
+% --------------------------------------------------------------------------------------------------------------
+Cuando aquí hablamos de \emph{unidades}, nos referimos tanto a medios removibles de almacenamiento, como a
+teléfonos o reproductores de medios que hagan uso del protocolo media transfer protocol (MTP), como a cámaras de
+foto digitales, etc.
+
+Esta sección le interesa si no va a instalar un entorno de escritorio en su sistema. Los entornos de escritorio,
+al menos los más usados, le instalan sin pedirle permiso herramientas que configuran el automontado de unidades
+en su sistema. Por ejemplo, si tiene un entorno de escritorio Gnome o uno basado en Gnome, tendrá instalado
+Gnome Virtual File System (\lstinline!gvfs!), que se encarga de automontar unidades en su sistema y será usado
+por su file manager (gestor de ficheros), como Nautilus, por ejemplo, o el que sea que tenga.
+
+Lo primero que debe hacer es instalar el paquete \lstinline!udisks2!. Ahora, cree el fichero
+\path{/etc/polkit-1/rules.d/50-udisks.rules} con el siguiente contenido:
+
+\begin{lstlisting}[gobble=2,style=bashcode,escapechar=!]
+  polkit.addRule(function(action, subject) {
+    var YES = polkit.Result.YES;
+    var permission = {
+      //// only required for udisks1:
+      //"org.freedesktop.udisks.filesystem-mount": YES,
+      //"org.freedesktop.udisks.filesystem-mount-system-internal": YES,
+      //"org.freedesktop.udisks.luks-unlock": YES,
+      //"org.freedesktop.udisks.drive-eject": YES,
+      //"org.freedesktop.udisks.drive-detach": YES,
+      // only required for udisks2:
+      "org.freedesktop.udisks2.filesystem-mount": YES,
+      "org.freedesktop.udisks2.filesystem-mount-system": YES,
+      "org.freedesktop.udisks2.encrypted-unlock": YES,
+      "org.freedesktop.udisks2.eject-media": YES,
+      "org.freedesktop.udisks2.power-off-drive": YES,
+      // required for udisks2 if using udiskie from another seat (e.g. systemd):
+      "org.freedesktop.udisks2.filesystem-mount-other-seat": YES,
+      "org.freedesktop.udisks2.encrypted-unlock-other-seat": YES,
+      "org.freedesktop.udisks2.eject-media-other-seat": YES,
+      "org.freedesktop.udisks2.power-off-drive-other-seat": YES
+    };
+    if (subject.isInGroup("storage")) {
+      return permission[action.id];
+    }
+  });
+\end{lstlisting}
+
+\noindent Yo, como suelo usar \lstinline!udisks2!, en este último listado comento (con \lstinline+//+, ya que
+este fichero tiene código Javascript) la parte de \lstinline!udisks1!. Esto hace que los usuarios que pertenecen
+al grupo \texttt{storage} puedan montar sistemas de ficheros. Tras reiniciar el sistema, ahora debería ser capaz
+de montar discos externos con cualquier usuario del grupo \texttt{storage}. Si lo ha probado con el comando
+\lstinline!mount! y no le ha funcionado, es porque debería haber usado el comando de Udisks2 para montar, que
+es:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@udisksctl mount -b !\val{disp-bloque}!@@
+\end{lstlisting}
+
+Ahora deberá instalar \lstinline!udevil!, que es un paquete que incluye el software \lstinline!devmon!, que es
+un Udisks wrapper, una herramienta que permite el automontado de unidades.
+
+Ahora, para montar unidades con \lstinline!udisks! o \lstinline!udisks2!, elimine el permiso SUID de
+\lstinline!udevil!:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@chmod -s /usr/bin/udevil@@
+\end{lstlisting}
+
+\noindent Tras esto, deberá habilitar el servicio \lstinline!devmon! para que se inicie con el inicio del
+sistema:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@systemctl enable devmon@!\val{usuario}!.service@@
+\end{lstlisting}
+
+\noindent En mi caso, \val{usuario} es kodi. Deberá hacerlo para todos los usuarios que desee que puedan
+automontar unidades.
+
+Lo que voy a explicar ahora tiene el propósito de que las unidades que se monten automáticamente no lo hagan a
+\path{/run/media/\$USER/}, que es la ruta predeterminada, sino a \path{/media/}. Para ello, deberá crear una
+regla en su sistema.
+
+Primero cree el directorio \path{/media/}, si es que no existe.
+
+Ahora cree la regla, es decir, cree el fichero \path{/etc/udev/rules.d/99-udisks2.rules} con el siguiente
+contenido:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashcode]
+  # UDISKS_FILESYSTEM_SHARED
+  # ==1: mount filesystem to a shared directory (/media/VolumeName)
+  # ==0: mount filesystem to a private directory (/run/media/$USER/VolumeName)
+  # See udisks(8)
+  ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{UDISKS_FILESYSTEM_SHARED}="1"
+\end{lstlisting}
+
+Las distribuciones de Linux no suelen traer instalado software para montar unidades de almacenamiento con
+sistema de ficheros NTFS. Para instalarlo en Arch Linux, deberá instalar el paquete \lstinline!ntfs-3g!. Para
+exFAT, \lstinline!fuse-exfat! o \lstinline!exfat-utils! (creo que es preferible el primero; vea
+\nameref{sec:exfat}). Para montar ISOs, puede usar \lstinline!fuseiso! (que, lógicamente, emplea FUSE).

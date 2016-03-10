@@ -1,0 +1,61 @@
+El plugin que uso como instalador del resto de plugins en Vim ahora mismo es NeoBundle. Es muy cómodo, pues, una
+vez que lo tengas configurado, basta con ir añadiendo/eliminando una lista de plugins a tu fichero de
+configuración de Vim (.vimrc o el que sea) y luego con un simple comando actualizará los ficheros necesarios
+como clones de Github o el SVC al que pertenezca cada plugin (normalmente suelen estar en Github).
+
+En https://github.com/Shougo/neobundle.vim explican cómo se instala. En Linux y Mac OS X, basta con que
+introduzca en su shell:
+
+$ curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh > install.sh
+$ sh ./install.sh
+
+
+Luego pegue lo siguiente a su fichero de configuración de Vim:
+
+" Note: Skip initialization for vim-tiny or vim-small.
+if !1 | finish | endif
+
+if has('vim_starting')
+if &compatible
+set nocompatible " Be iMproved
+endif
+
+" Required:
+set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+"%%%%%%%% YOUR PLUGINS HERE %%%%%%%%
+"Use the following format for each plugin:
+" NeoBundle "<url to the repo>"
+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+" AQUÍ VAN LAS LLAMADAS DE LOS PLUGINS
+" TIENEN LA FORMA SIGUIENTE
+"NeoBundle 'Lokaltog/vim-easymotion"
+
+
+
+call neobundle#end()
+
+" Required:
+filetype plugin indent on
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+
+Una vez que haya introducido alguna llamada a algún plugin, al abrir Vim, verá que le pregunta si desea instalar
+dicho plugin. Puede introducir varios a la vez. En la web explican otra forma de instalar y actualizar los
+plugins con NeoBundle.
+
+Puede ver el fichero de configuración de Vim de gente que lo cuelga en algún SVC. Por ejemplo, el de Mike
+Hartington, puede verlo en Github, bajo el repositorio dotfiles. Es bastante completo.

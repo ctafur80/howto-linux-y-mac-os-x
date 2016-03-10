@@ -1,0 +1,21 @@
+\section{Reemplazar texto}\label{sec:vim-reempl}
+% --------------------------------------------------------------------------------------------------------------
+Para reemplazar una determinada cadena de texto \val{cad-vieja} de un fichero, puede hacer lo siguiente, en modo
+comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  :%s/!\val{cad-vieja}!/!\val{cad-nueva}!/!\val{opciones}!
+\end{lstlisting}
+
+\noindent \lstinline+%+ indica que se haga para todo el documento. Si desea reemplazar texto desde la posición
+actual del cursor en adelante, deberá introducir, en modo comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  :.,$s/!\val{cad-vieja}!/!\val{cad-nueva}!/!\val{opciones}!
+\end{lstlisting}
+
+\noindent Ojo con la \lstinline+s+ al final, que es muy común olvidarla. En cuanto al parámetro \val{opciones},
+yo suelo usar \lstinline+g+ y \lstinline+c+ (se pueden poner juntos); con \lstinline+c+ consigo que me pregunte
+por cada cambio y, con \lstinline+g+, que se haga para todo el documento, no solo la línea en la que estoy.
+Como, al preguntarnos, nos da la opción de abortar, este mismo comando podría usarse también simplemente para
+buscar.

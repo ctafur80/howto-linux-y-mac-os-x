@@ -1,0 +1,20 @@
+\section{Instalación de un paquete}\label{sec:tex-install-p}
+% --------------------------------------------------------------------------------------------------------------
+El directorio donde se guardan normalmente los paquetes de \LaTeX{} es
+\path{/usr/local/texlive/<a\~no>/texmf-dist/tex/generic}, pero no será ésa la ruta a la que debe añadir los
+paquetes nuevos que cree, sino a \path{/usr/share/texmf/tex/latex}. Tendrá que crear un directorio que se llame
+como el paquete que desea instalar. Luego, copie el fichero \val{paquete}.sty ahí. Reinicie la caché de \LaTeX{}
+con
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@texhash@@
+\end{lstlisting}
+
+\noindent o
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@mktexlsr@@
+\end{lstlisting}
+
+Aun así, si ha realizado la instalación completa de \TeX\ Live o MacTeX, debería tener todos los paquetes. Yo no
+me he visto en la necesidad de tener que instalar paquetes.

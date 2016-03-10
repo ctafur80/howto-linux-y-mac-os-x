@@ -1,0 +1,131 @@
+\section{Instalar \TeX{} Live en Linux}\label{sec:inst-tex-l}
+% --------------------------------------------------------------------------------------------------------------
+Para elaborar este tutorial, me he basado, además de en la docuentación oficial de \TeX{} Live
+(\url{http://www.tug.org/texlive/quickinstall.html}), en el comentario del usuario Silke, en este hilo
+(\url{http://tex.stackexchange.com/questions/1092/how-to-install-vanilla-texlive-on-debian-or-ubuntu}) de los
+foros de \TeX{} de Stack Exchange. Al final he optado por hacerlo de una forma algo personal. Se trata de una
+instalación para el grupo de usuarios \texttt{tex}, que previamente a la instalación deberé haber creado.
+
+La mejor forma de instalar \TeX{} Live es desde el script instalador con nombre \path{install-tl} que hay en su
+web para descargar. Es mejor que con cualquier gestor de paquetes de Linux, tales como apt-get en Ubuntu, o DNF
+en Fedora. Esto me permite tener más actualizados los paquetes que componen \TeX{} Live. Cada año por verano
+sale una versión nueva de \TeX{} Live. La última es la de 2015, que salió el 24 de junio.
+
+Lo primero es descargarse de \url{http://www.tug.org/texlive/acquire-netinstall.html} el archivo
+\path{install-tl-unx.tar.gz}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz@@
+\end{lstlisting}
+
+\noindent Luego lo descomprimirá donde quiera (puede valer dentro de \path{~/Downloads/}, por ejemplo):
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@tar zxvf install-tl.tar.gz@@
+\end{lstlisting}
+
+Antes de seguir con la instalación, debe limpiar las instalaciones existentes que tenga de \TeX Live:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@rm -rf /usr/local/texlive/!\val{año}!/@@
+  !\promptr! @@rm -rf ~/.texlive!\val{año}!/@@
+\end{lstlisting}
+
+\noindent donde \val{año} es el año de la versión de \TeX{} Live que tenía instalada y desea eliminar; las
+versiones de \TeX{} Live se sacan anualmente, normalmente en verano. Puede que tenga más de una versión
+instalada. Lo mejor en dicho caso sería eliminarlas todas e instalar la última. Realmente no es necesario
+eliminar las instalaciones anteriores para instalar otra; pueden coexistir varias a la vez. Cada una se
+encontraría en su directorio \path{/usr/local/texlive/<a\~no>/}, donde ese \val{año} es donde se separan las
+distintas instalaciones.
+
+Ahora deberá preparar el directorio \path{/usr/local/texlive/}. Seguramente, si ya existe, tendrá como dueño a
+root, será del grupo de root y los permisos Unix que tiene serán 775. Según mi método, deberá primero crear en
+su sistema el grupo tex:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@groupadd tex@@
+\end{lstlisting}
+
+\noindent Ahora, cambiar el grupo del directorio:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@chown root:tex /usr/local/texlive/@@
+\end{lstlisting}
+
+\noindent Ahora, asignar permisos de escritura para dicho directorio a los miembros del grupo tex:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@chmod g+w /usr/local/texlive/@@
+\end{lstlisting}
+
+Una vez hecho esto, deberá añadir al/los usuario(s) que desee al grupo tex:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@usermod -aG tex !\val{n\_usuario}!@@
+\end{lstlisting}
+
+\noindent Cuidado, no olvide la opción \lstinline!a!; si lo hace, dicho usuario perderá todos los demás grupos a
+los que pertenecía. Ahora puede comprobar que el usuario \val{n\_usuario} pertenece al grupo tex:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@groups !\val{n\_usuario}!@@
+\end{lstlisting}
+
+Ahora deberá ejecutar el instalador pero con el usuario \val{n\_usuario}. Para ello, entre en el directorio
+donde haya desarchivado y descomprimido el archivo \path{install-tl-unx.tar.gz}, que ahora sería simplemente
+\texttt{install-tl-\val{año}\val{mes}\val{día}} y, una vez dentro del mismo, ejecute desde el shell:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@./install-tl@@
+\end{lstlisting}
+
+\noindent Ahora aparecerá una pantalla interactiva sobre qué desea hacer. Para instalar basta con pulsar
+\tecla{i} y luego \tecla{intro}. Como puede ver en la Quick Install, existen varias opciones a la hora de
+instalar. Si lo hace como he explicado aquí, se le instalarán todos los paquetes de \TeX{} Live, cosa que
+tarda un un rato, aunque es algo que se puede hacer en un terminal mientras se hacen otras cosas y no consume
+casi nada de recursos ni ancho de banda. Se pueden cambiar algunas opciones antes de la instalación, pero las
+predefinidas creo que bastarán a casi todo el mundo. Aun así, esas opciones pueden cambiarse dentro del
+\path{*.tex} para cada documento en particular. Al hacer la instalación completa, además de \LaTeX,
+PDF\LaTeX{} y Plain \TeX, también pueden usarse, XeTeX, LuaTeX y ConTeXt, aunque yo prefiero seguir usando
+\LaTeX, pues en los otros no encuentro tantos paquetes.
+
+Ahora hay que hacer algo importante, pues, si no se hace, no se podrán ejecutar los comandos de \LaTeX. Lo que
+se debe hacer es agregar, de forma permanente, la dirección donde se encuentran los ejecutables de \LaTeX{} a
+la variable de entorno \lstinline+PATH+ del usuario (o de los usuarios) que vaya(n) a usar \TeX{} Live. Existen
+muchas formas de hacerlo; puede ver una explicación de las distintas formas en
+\url{http://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux}. Primero deberá crear
+un vínculo simbólico:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@ln -s /usr/local/texlive/!\val{año}!/bin/* /opt/texbin@@
+\end{lstlisting}
+
+Ahora deberá añadir la ruta \path{/opt/texbin} a su variable de entorno \lstinline+PATH+:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@echo 'export PATH=$PATH:/opt/texbin' >> /home/!\val{user}!/.bashrc@@
+\end{lstlisting}
+
+\noindent Ese \val{user} es porque mi directorio personal es \path{/home/<user>}. Ahora debe cerrar su sesión
+y volver a entrar, para que los cambios tengan efecto; o, si lo prefiere, reinicie su sistema. Puede ver, tras
+el reinicio/reentrada, cómo ha quedado la variable de entorno \lstinline+PATH+ con:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@echo $PATH@@
+\end{lstlisting}
+
+\noindent También puede comprobar que ha modificado correctamente la variable \lstinline!PATH!:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@which tex@@
+  /opt/texbin/tex
+\end{lstlisting}
+
+\noindent Debería dar ese resultado que se muestra.
+
+También es muy útil instalar las librerías Matplotlib, para poder representar gráficas 2D mediante la inserción
+de código Python en el documento (vea \nameref{subsec:matplotlib}). En cuanto a las fuentes, la instalación
+completa de \TeX{} Live instala muchas fuentes de gran calidad, como las Adobe Source, las \TeX{} Gyre y las
+Linux Liberation (para más información, vea \nameref{sec:adobe-source} e \nameref{sec:lin-libertine}).
+ 
+Para entornos Windows creo que es mejor instalar MiKTeX. En Mac OS X, MacTeX.

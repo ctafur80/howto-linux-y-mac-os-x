@@ -1,0 +1,24 @@
+\section{Documentación}\label{sec:tex-doc}
+% --------------------------------------------------------------------------------------------------------------
+Tengo varios documentos que he hecho para tener como referencia en varios campos. El \emph{Howto --- Linux}, por
+ejemplo, es decir, este mismo documento, es un documento en el que explico asuntos sobre la instalación,
+configuración y uso de cierto software que uso en Linux, aunque la mayoría existe también para otras
+plataformas, como Microsoft Windows, por ejemplo. La mayoría de estos documentos están hechos con \LaTeX{} y
+tienen bastante trabajo. Los preámbulos los guardo en el directorio
+\path{/home/zfur/Dropbox/Documentos/importante/latex/}; también están en dicho directorio la sección general
+sobre notación que uso en la mayoría de mis documentos (\path{notacion-artcl.tex}) y las bases de datos de
+BibTeX. Estos ficheros los usaré como base, pero pueden ser complementados con ficheros de preámbulo o notación
+en el mismo directorio que los demás que forman el documento en concreto.
+
+Lo normal es usar el comando \verb+\input+ para introducir esos preámbulos o sección de notación. Por ejemplo,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  \input{/home/zfur/Dropbox/Documentos/latex/frmat-artc.tex}
+  \input{/home/zfur/Dropbox/Documentos/latex/lang-sp.tex}
+  \input{/home/zfur/Dropbox/Documentos/latex/pre-base.tex}
+  \input{/home/zfur/Dropbox/Documentos/latex/pre-artcl.tex}
+\end{lstlisting}
+
+\noindent podría usarse para un artículo. Es necesario que se pongan en ese orden. También puedo poner después
+un fichero de preámbulo del propio documento, pero sólo lo creo cuando modifico muchas cosas para ese documento;
+lo normal es que sean muy pocas y, por tanto, las dejo en el fichero principal que llama a los demás.

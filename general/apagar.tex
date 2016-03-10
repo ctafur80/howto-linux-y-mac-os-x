@@ -1,0 +1,32 @@
+\section{Apagar, suspender y reiniciar}\label{sec:apagar}
+% -------------------------------------------------------------------------------------------------------------
+Para apagar su sistema Linux desde el shell, tradicionalmente la mejor forma ha sido con:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@shutdown -h now@@
+\end{lstlisting}
+
+\noindent Con la opción \lstinline+-r+ (en lugar de \lstinline+-h+) se reiniciaría. No obstante, yo prefiero los
+comandos de apagado \lstinline+poweroff+ (apagado), \lstinline+reboot+ (reinicio) y \lstinline+halt+
+(suspender). Ahora que estas órdenes se ejecutan a tranvés de Systemd, los comandos serán:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@systemctl poweroff@@
+  !\promptu! @@systemctl reboot@@
+  !\promptu! @@systemctl halt@@
+\end{lstlisting}
+
+Debe tener ciertos privilegios para poder apagar el sistema. Lo normal es que exista en su sistema un grupo de
+usuarios, llamado \texttt{power}, con la intención de dar permisos de apagado, suspensión, etc. Una solución
+para dar dichos permisos puede ser editando el fichero \path{/etc/sudoers} (la mejor forma de editarlo es con el
+comando \lstinline+visudo+, pues así evita que varias personas lo puedan modificar simultáneamente):
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  %power ALL=(ALL) NOPASSWD: /usr/bin/systemctl -i poweroff,/usr/bin/systemctl -i halt,/usr/bin/systemctl -i reboot
+\end{lstlisting}
+
+\noindent \lstinline+NOPASSWD+ hace que no se le pida su contraseña al usuario al introducir alguno de estos
+tres comandos.
+
+Otra forma, mejor, en mi opinión, de dar este tipo de permisos a los usuarios del grupo \texttt{power} es con el
+uso de Polkit (vea \nameref{subsec:polkit}).

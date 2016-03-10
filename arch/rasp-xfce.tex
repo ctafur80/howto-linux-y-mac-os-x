@@ -1,0 +1,98 @@
+\section{Entorno de escritorio Xfce}\label{sec:rasp-xfce}
+% --------------------------------------------------------------------------------------------------------------
+En \url{http://blog.adityapatawari.com/2013/05/arch-linux-on-raspberry-pi-running-xfce.html} hay un manual que
+está bien, aunque es de 2013.
+
+Lo primero será instalar las librerías Xorg:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@pacman -S xorg-xinit xorg-server xorg-server-utils xterm@@
+\end{lstlisting}
+
+\noindent Ahora, instale Xfce:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@pacman -S xfce4@@
+\end{lstlisting}
+
+\noindent Le preguntará si desea instalar sólo ciertos paquetes. Yo elijo instalar todo, que es la opción
+predeterminada. También me gusta instalar un paquete que le proporciona plugins para Xfce4:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@pacman -S xfce4-goodies@@
+\end{lstlisting}
+
+\noindent También instalo los drivers de display:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@pacman -S xf86-video-fbdev xf86-video-vesa@@
+\end{lstlisting}
+
+Ahora, para arrancar el entorno de escritorio XFCE, deberá introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@startx@@
+\end{lstlisting}
+
+\noindent o
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@startxfce4@@
+\end{lstlisting}
+
+Si desea arrancarlo al iniciar el sistema, puede hacerlo de dos formas:
+
+\begin{enumerate}
+
+  \item Mediante el empleo de un login manager (en español, se podría decir \emph{gestor de login}). Esto hará
+    que aparezca una pantalla en la que podrá seleccionar el usuario, el entorno de escritorio (si es que tiene
+    varios instalados), el idioma, etc. Puede elegir de entre varios login managers, independientemente del
+    entorno de escritorio, aunque también es cierto que algunos entornos de escritorio tienen su login manager
+    predeterminado, que mantiene el mismo diseño y se suelen instalar junto con el entorno de escritorio.
+    Existen login managers GUI y CLI. En Xfce4, el login manager predeterminado es Xfwm. Yo no he sabido
+    configurarlo, así que he usado LightDM. Para instalar éste último, deberá introducir:
+
+    \begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@pacman -S lightdm@@
+    \end{lstlisting}
+
+    \noindent Luego, deberá instalar un greeter para LightDM:
+
+    \begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@pacman -S lightdm-gtk-greeter@@
+    \end{lstlisting}
+
+    \noindent Ahora debería habilitar el login manager que haya seleccionado (de ahora en adelante,
+    \val{l-manager}):
+
+    \begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+      # systemctl enable \val{l-manager}.service
+    \end{lstlisting}
+
+    \noindent Ahora debería funcionar. Si no es así, usted debería reestablecer un vínculo simbólico
+    \path{default.target} propio que apunte al \path{graphical.target} predeterminado. Tras habilitar
+    \lstinline!\val{l-manager}.service!, debería existir un vínculo simbólico \path{display-manager.service} en
+    el directorio \path{/etc/systemd/system/} que apunte a
+    \path{/usr/lib/systemd/system/\val{l-manager}.service}.
+
+  \item Añadiendo
+
+    \begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+      [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
+    \end{lstlisting}
+
+    \noindent a su fichero \path{~/.bash\_profile}. Esto hará que el sistema muestre un prompt en CLI en su
+    shell para que acceda a una sesión de una cuenta de usuario de su sistema y, una vez introducida
+    correctamente la contraseña, entrará en su shell y directamente el sistema abrirá el entorno de escritorio
+    para la misma cuenta de usuario.
+
+\end{enumerate}
+
+\noindent No tiene sentido que configure el inicio de ambas formas. Lo normal es que elija una, preferiblemente
+la primera. La segunda tiene más sentido si desea crear ciertos usuarios de su sistema que no tengan acceso al
+entorno de escritorio.
+
+A la hora de eliminar Xfce de mi sistema, tuve problemas, pues me decía que tal software no podía eliminarse
+porque requería \lstinline!xfce4-panel!. Al final, lo solucioné usando la opción \lstinline!-Rc!, en lugar de
+\lstinline!-Rns!, que son las que suelo usar para eliminar software con Pacman. \lstinline!-Rc! es más agresivo
+y puede eliminar partes necesarias de su sistema, así que no debe usarse a la ligera.

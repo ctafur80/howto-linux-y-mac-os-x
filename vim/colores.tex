@@ -1,0 +1,19 @@
+\section{Instalación de esquemas de colores}\label{sec:vim-color}
+% --------------------------------------------------------------------------------------------------------------
+Para instalar nuevos esquemas de colores, puede hacerlo con un gestor de paquetes que use su sistema; por
+ejemplo, con Pacman, que es el que trae Arch Linux, se puede instalar el paquete
+\lstinline!vim-colorsamplerpack!; con Ubuntu creo que también habrá un paquete, aunque no sé cómo se llama ahora
+mismo. Este paquete instala los esquemas de colores más conocidos; luego, usted deberá editar el fichero de
+configuración para poder usar realmente alguno de estos esquemas de colores.
+
+Lo normal es que, si los instala de forma global, los ficheros de los esquemas de colores estén en el directorio
+\path{/usr/share/vim/vim<vers\_n>/colors/}, donde \val{vers\_n} es el número de versión de Vim que tiene
+instalada en su sistema. Creo que no tiene mucho sentido instalarlos para un único usuario; aun así, si desea
+hacerlo así, deberá entonces descomprimir el fichero \path{ColorSamplerPack.zip}, que puede descargar de
+\url{http://www.vim.org/scripts/script.php?script_id=625}, a \path{/home/<nom\_usuario>/.vim/colors/}; si no
+existe dicho directorio, deberá crearlo. Luego, tal y como se dijo antes, deberá activar alguno de los esquemas
+de colores en su fichero de configuración (local, en este caso).
+
+En Windows, para instalación local, es igual sólo que deberá descomprimir en \path{C:\Program
+Files\Vim\vimfiles} o en \path{C:\Archivos de programa (x86)\Vim\vimfiles} el fichero. Son dos directorios los
+que se sobrescriben: \path{colors} y \path{plugins}.

@@ -1,0 +1,22 @@
+\section{Actualizar a una versión nueva de \TeX{} Live}\label{sec:tex-upgrade}
+% --------------------------------------------------------------------------------------------------------------
+Para actualizar a una versión nueva de \TeX{} Live deberá, antes de nada, instalar la versión nueva tal y como
+se hace normalmente (vea \nameref{sec:inst-tex-l}). No hay problema porque tenga dos instalaciones de distintas
+versiones en la misma máquina: recuerde que, bajo el directorio \path{/usr/local/texlive/} habrá varios
+diectorios, uno por cada año de versión de \TeX{} Live; así que pueden coexistir sin conflicto alguno.
+
+Luego, deberá cambiar el vínculo simbólico que tienen sus usuarios de \TeX{} Live en \lstinline+PATH+ para
+\TeX{}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@unlink /usr/local/texlive/!\val{año\_antiguo}!/bin/*@@
+  !\promptr! @@ln -s /usr/local/texlive/!\val{año\_nuevo}!/bin/* /opt/texbin@@
+\end{lstlisting}
+
+Ahora, compruebe que todo funciona correctamente en la versión nueva de \TeX{} Live. Si es así, elimine si lo
+desea la instalación antigua (tenga en cuenta que ocupa bastante y quizás no le venga bien mantener la antigua
+en su disco duro):
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@rm -rf /usr/local/texlive/!\val{año}!/@@
+\end{lstlisting}

@@ -1,0 +1,44 @@
+\section{Comandos de control}\label{sec:com-ctrl}
+% --------------------------------------------------------------------------------------------------------------
+Existe una serie de comandos para el control de las tareas (\foreignlanguage{english}{\textit{jobs}}) de
+Linux. En la tabla \ref{table:com-ctrl} hay una lista de los más importantes.
+
+Si tiene un proceso que se ha abierto mediante la ejecución de algún comando de shell y desea pasarlo ahora a
+segundo plano, puede hacerlo con la combinación de teclas \tecla{ctrl} + \tecla{z}. El shell le indicará que el
+proceso se encuentra detenido. Con
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@!\val{comando}! &@@
+\end{lstlisting}
+
+\noindent se abriría directamente en segundo plano el proceso que invoca el comando \val{comando}.
+
+Si lo desea, puede hacer que se ejecute en segundo plano cualquier proceso, no sólo los que haya arrancado
+mediante un comando de shell. Para esto, deberá buscar el número de proceso \val{núm} que tiene asignado
+actualmente dicho proceso en su sistema operativo (por ejemplo, con el comando \lstinline!top! o
+\lstinline!htop!) e introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@bg %!\val{núm}!@@
+\end{lstlisting}
+
+\begin{center}
+  \begin{table}
+    \taburowcolors[2] 2{color-tabu-a .. color-tabu-b}
+    \begin{tabu*}{l X[l]}
+      \rowfont[c]{\bfseries\sffamily}
+      Comando                           & Descripción\\
+      \lstinline+jobs+                  & Muestra las tareas actuales.\\
+      \lstinline+fg+                    & Reanuda la próxima tarea de la lista.\\
+      \lstinline+fg \%<núm>+            & Reanuda la tarea número \val{núm}.\\
+      \lstinline+bg+                    & Pone en segundo plano (\foreignlanguage{english}{\textit{background}})
+                                          la siguiente tarea de la lista.\\
+      \lstinline+bg \%<núm>+            & Pone en segundo plano la tarea número \val{núm}.\\
+      \lstinline+kill \%<núm>+          & Mata la tarea con número \val{núm}.\\
+      \lstinline+kill <señal> \%<núm>+  & Envía la señal \val{señal} a la tarea con número \val{núm}.\\
+      \lstinline+disown \%<núm>+        & Elimina la pertenencia (\foreignlanguage{english}{\textit{disown}})
+                                          del proceso (el terminal ya no será más el dueño) de modo que el
+                                          comando vivirá incluso tras cerrar el terminal.\\
+    \end{tabu*}\caption{Comandos de control más útiles en Linux}\label{table:com-ctrl}
+  \end{table}
+\end{center}

@@ -1,0 +1,123 @@
+\section{Encriptar un pendrive o un archivo con LUKS/dm-crypt}\label{sec:luks}
+% --------------------------------------------------------------------------------------------------------------
+LUKS significa \foreignlanguage{english}{Linux Unified Key Setup}, y es un método de encriptación\footnote{Para
+ver la terminología y notación que se emplea en este documento, incluida la polémica de los términos
+\emph{encriptar} y \emph{cifrar}, vea \nameref{sec:notacion}.} que se implementa en Linux por medio del paquete
+\lstinline!cryptsetup!, y, en Windows, por FreeOTF. Este tutorial es prácticamente una copia del que aparece en
+\url{https://balau82.wordpress.com/2011/08/25/encrypting-data-on-usb-flash-drives-with-luks/}, aunque algunas
+cosas las he hecho de modo distinto. Aun así, creo que Google ha creado encriptación a nivel del sistema de
+ficheros EXT4 y este desarrollo lo ha liberado como software libre; creo que se implementará a partir de las
+versiones 4.1 o 4.2 del núcleo de Linux.
+
+Antes de nada, deberá tener instalada la herramienta Cryptsetup en su distribución de Linux. Para las que usan
+el sistema de paquetes APT, se hará con:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@apt-get install cryptsetup@@
+\end{lstlisting}
+
+\noindent Para Windows, se deberá instalar la herramienta FreeOTF.
+
+Una vez hecho esto, los pasos a seguir son los siguientes:
+
+\begin{enumerate}
+
+  \item Inserte el medio removible (como, por ejemplo, el pendrive) y pruebe con el comando \lstinline+lsblk+ el
+    dispositivo (\foreignlanguage{english}{\textit{device}}) que se crea para acceder a éste. Lo normal es que
+    sea \path{/dev/sd<x>}, siendo \val{x} una letra mayor que \texttt{a}. Si no está seguro de cuál es el
+    dispositivo, no siga, pues podría perder los datos de alguna partición de alguno de sus discos duros. Para
+    el caso de ejemplo que mostramos aquí, supondremos que el dispositivo es \path{/dev/sdc}. En la web original
+    donde aprendí este proceso, decían que se usase el comando \lstinline+dmesg+, pero creo que es más sencillo
+    de ver con \lstinline+lsblk+.
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=|]
+      |\promptr| @@fdisk /dev/sdc@@
+      Command (m for help): @@o@@
+      Building a new DOS disklabel with disk identifier 0xe6978b70.
+      Changes will remain in memory only, until you decide to write them.
+      After that, of course, the previous content won't be recoverable.
+
+      Warning: invalid flag 0x0000 of partition table 4 will be corrected by w(rite)
+
+      Command (m for help): @@w@@
+      The partition table has been altered!
+
+      Calling ioctl() to re-read partition table.
+
+      WARNING: Re-reading the partition table failed with error 16: Device or resource busy.
+      The kernel still uses the old table. The new table will be used at
+      the next reboot or after you run partprobe(8) or kpartx(8)
+      Syncing disks.
+    \end{lstlisting}
+
+  \item Ahora deberá crear una nueva partición que albergue la información encriptada:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=|]
+      |\promptr| @@fdisk /dev/sdc@@
+      Command (m for help): @@n@@
+      Command action
+      e   extended
+      p   primary partition (1-4)
+      @@p@@
+      Partition number (1-4, default 1):
+      Using default value 1
+      First sector (2048-62530623, default 2048):
+      Using default value 2048
+      Last sector, +sectors or +size{K,M,G} (2048-62530623, default 62530623):
+      Using default value 62530623
+
+      Command (m for help): @@w@@
+      The partition table has been altered!
+
+      Calling ioctl() to re-read partition table.
+
+      WARNING: Re-reading the partition table failed with error 16: Device or resource busy.
+      The kernel still uses the old table. The new table will be used at
+      the next reboot or after you run partprobe(8) or kpartx(8)
+      Syncing disks.
+    \end{lstlisting}
+
+  \item La partición es ahora accesible en Linux en \path{/dev/sdc1}. Tras esto, formateo la partición usando la
+    herramienta \lstinline!luksFormat! de Cryptsetup, creando una partición encriptada con LUKS con una palabra
+    de paso. Antes de esto, no obstante, debo desmontar la unidad, sacar el pendrive y volver a introducirlo en
+    el puerto USB, pues, si no hago esto, no me dejará formatearlo (pondrá
+    \lstinline+Cannot format device /dev/sdc1 wich is still in use.+):
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=|]
+      |\promptr| @@cryptsetup luksFormat /dev/sdc1@@
+
+      WARNING!
+      ========
+      This will overwrite data on /dev/sdd1 irrevocably.
+
+      Are you sure? (Type uppercase yes): @@YES@@
+      Enter LUKS passphrase:
+      Verify passphrase:
+    \end{lstlisting}
+
+  \item Ahora, necesito formatear la partición desencriptada. La elección del sistema de archivos dependerá del
+    uso que le vaya a dar al pendrive: si quiero usarlo tanto en Linux como en Windows, necesitaré seleccionar
+    FAT32 (\lstinline!vfat!); si se va a usar solo para Linux, puedo usar otro. Para formatear la partición
+    desencriptada, necesito usar el comando \lstinline!luksOpen! de Cryptsetup y mapear un dispositivo, que yo
+    llamo \path{LUKS001} (el mapeado se hace también con el comando luksOpen). El dispositivo mapeado estará
+    presente en \path{/dev/mapper/LUKS001}. Tras esto, podemos formatear el dispositivo mapeado (con nombre
+    \path{LUKS001}) y cerrarlo:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@cryptsetup luksOpen /dev/sdc1 LUKS001@@
+      Enter passphrase for /dev/sdc1:
+      !\promptr! @@mkfs.vfat /dev/mapper/LUKS001 -n LUKS001@@
+      mkfs.fat 3.0.26 (2014-03-07)
+      unable to get drive geometry, using default 255/63
+      !\promptr! @@cryptsetup luksClose LUKS001@@
+    \end{lstlisting}
+
+  \item Ahora podemos desconectar el pendrive y volverlo a conectar. Debería aparecer automáticamente un cuadro
+    de diálogo cuando conectamos el pendrive pidiéndonos la palabra de paso. El autor del artículo en el que me
+    baso, dice que ha comprobado que funciona con los entornos de escritorio Gnome y XFCE. Yo lo he hecho con
+    Ubuntu 14.04, que usa Unity, que se basa en Gnome.
+
+    A la hora de copiar ficheros de gran tamaño en la unidad encriptada, notará que tarda bastante. Es normal,
+    al estar encriptada.
+
+\end{enumerate}

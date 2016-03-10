@@ -1,0 +1,14 @@
+\section{Desinstalar \TeX{} Live}\label{sec:desinst}
+% --------------------------------------------------------------------------------------------------------------
+Para desinstalar la distribucioń \TeX{} Live de su sistema, deberá:
+
+\begin{itemize}
+  \item Eliminar el vínculo simbólico \path{/opt/texbin}.
+  \item Eliminar el fichero \path{/opt/texbin} de la ruta del/los usuario(s) que configuró para usar \TeX{}
+    Live.
+  \item Eliminar el fichero \path{/etc/fonts/conf.d/09-texlive.conf} y actualizar la caché de fuentes.
+  \item Eliminar recursivamente el directorio \path{/usr/local/texlive/}.
+  \item En caso de que haya usado el paquete \lstinline+equivs+, púrguelo.
+  \item Si lo desea, también puede quitar del grupo tex a los usuarios. También puede eliminar, si lo desea, el
+    grupo \texttt{tex} de su sistema.
+\end{itemize}

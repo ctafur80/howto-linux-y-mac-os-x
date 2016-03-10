@@ -1,0 +1,18 @@
+\section{Espacios o tabs en indentación}\label{sec:vim-esp-indent}
+% --------------------------------------------------------------------------------------------------------------
+Para establecer que se usen espacios en lugar de tabs, deberá poner:
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  :set expandtab
+\end{lstlisting}
+
+Si desea que se usen tabs, basta con no poner nada. Pero si ya había establecido que se usaran espacios, deberá
+entonces introducir:
+
+\begin{lstlisting}[gobble=2,style=bashinteract,escapechar=!]
+  :set noexpandtab
+\end{lstlisting}
+
+Tenga en cuenta que, aunque cambie esta opción, no cambiará lo que ya ha escrito. Es decir, los indentados
+seguirán estando como antes. Lo que puede hacer, si desea pasar todo a la nueva forma de trabajar que acaba de
+descubrir, es seleccionar (vea \ref{sec:vim-sel-text}) y recuadrar su texto (vea \ref{sec:vim-recuadrar}).

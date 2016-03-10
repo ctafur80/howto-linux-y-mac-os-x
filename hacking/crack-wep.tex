@@ -1,0 +1,223 @@
+\section{Cracking de redes wireless con seguridad WEP}\label{sec:crack-wep}
+% -------------------------------------------------------------------------------------------------------------
+Para hacer este tutorial me he basado en el que puede encontrar en
+\url{http://www.aircrack-ng.org/doku.php?id=simple_wep_crack}, aunque hay cosas que he hecho de forma distinta;
+tenga en cuenta que éste último es del año 2010.
+
+Aquí se supone que usted tiene en su sistema una WNIC (tarjeta de interfaz wireless de red; en ingles,
+\foreignlanguage{english}{\textit{wireless network interface card}}) con los controladores necesarios para hacer
+inyección de paquetes. Tenga en cuenta que, según qué chip tenga en dicha tarjeta, se le puede hacer muy
+complicado el proceso de instalar los controladores para inyección de paquetes, así que, si va a comprar una
+para practicar estos tutoriales, lo mejor es que se informe antes de cuál le conviene comprar. Puede consultar
+el siguiente enlace de enero de 2015:
+\url{http://www.wirelesshack.org/top-kali-linux-compatible-usb-adapters-dongles-2015.html}. La mía es una
+TP-Link TL-WN772N, que ha funcionado muy bien, en todas las distribuciones de Linux en las que la he probado,
+sin necesidad de instalar ``manualmente'' los controladores.
+
+Este ataque que se describe aquí se basa en usar el software Aireplay-ng para replay paquetes ARP para generar
+nuevos IVs (vectores de inicialización, \foreignlanguage{english}{\textit{initialization vectors}}). Luego,
+estos IVs los usará la herramienta de software Aircrack-ng para crackear la clave WEP.
+
+Antes de nada, debe asegurarse de cumplir ciertos requisitos:
+
+\begin{itemize}
+  \item La WNIC que va a usar para este tutorial tiene controladores que le permitan realizar inyección
+    de paquetes.
+  \item Su WNIC se encuentra lo bastante cerca del AP para emitir y recibir paquetes. Advierta que, aunque pueda
+    transmitir paquetes al AP (punto de acceso, se sobreentiende que wireless;
+    \foreignlanguage{english}{\textit{(wireless) access point}}), quizás no pueda recibirlos, pues es fácil
+    variar la potencia a la que transmite su WNIC, mientras que para mejorar su recepción lo único que puede
+    hacer es cambiar la antena de su WNIC por una de más \si{\deci\bel i}.
+  \item Existe al menos un cliente conectado, por cable o inalámbricamente (?????????TKTKTKTK), al AP que quiere
+    atacar y este/estos cliente(s) está(n) activo(s). La razón está en que este tutorial presupone que usted
+    pueda recibir al menos un paquete de solicitud de ARP.
+\end{itemize}
+
+Recuerde la notación empleada en todo este capítulo (vea \nameref{chapter:hacking}).
+
+Para crackear una clave WEP de un AP, usted necesita recolectar muchos IVs. El tráfico normal de red no suele
+generar muchos IVs en poco tiempo. Usted podría crackear un AP con seguridad WEP simplemente monitorizando los
+paquetes wireless en la red y guardándolos para analizarlos, pero esto le llevaría seguramente mucho tiempo.
+Así, pues, será mejor usar una técnica, llamada inyección, para acelerar el proceso. La inyección consiste, en
+este ámbito, en hacer que el AP reenvíe paquetes seleccionados de forma rápida una y otra vez. Gracias a esto,
+podrá capturar un gran número de IVs en poco tiempo.
+
+\begin{enumerate}
+
+  \item Pase \val{nic\_att} a modo monitor.
+
+    El modo en el que suelen estar configuradas las WNIC es managed, que consiste en que su interfaz sólo
+    ``escuche'' los paquetes que se envían a ella (incluidos los de broadcast). Las interfaces de la wireless
+    LAN de los AP se encuentran en modo master. El modo monitor le permitirá ``escuchar'' todos los paquetes
+    wifi que hay en las cercanías (en realidad, las señales electromagnéticas de dichos paquetes). Para inyectar
+    paquetes, deberá estar en modo monitor (creo que también puede hacerlo en algún otro modo, como el modo
+    promiscuo, pero no viene al caso).
+
+    Para pasarla a modo monitor, antes deberá ponerla en down:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@ifconfig !\val{nic\_att}! down@@
+    \end{lstlisting}
+
+    Ahora, con \lstinline!airmon-ng! debería pasar a modo monitor:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@airmon-ng start !\val{nic\_att}!@@
+    \end{lstlisting}
+
+    Ahora podrá comprobar, con
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptu! @@iwconfig@@
+    \end{lstlisting}
+
+    \noindent que \val{nic\_att} ha pasado a modo monitor. Verá que el nombre de \val{nic\_att} ha cambiado;
+    aquí, la nueva designación la representaremos de forma genérica como \val{nic\_att\_mon}, que en su caso
+    será distinta.
+
+    Ahora, si lo desea, puede hacer MAC spoofing de su interfaz mon (vea \nameref{sec:mac-spoofing}).
+
+  \item Probar que su interfaz \val{nic\_att\_mon} recibe la señal del AP a atacar con la suficiente potencia
+    para poder realizar la inyección de paquetes. Para esto, deberá introducir:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@aireplay-ng -9 -e !\val{essid\_ap}!a !\val{bssid\_ap}! !\val{nic\_att\_mon}!@@
+    \end{lstlisting}
+
+    \noindent Ese \lstinline!9! indica test de inyección. El sistema debería responder algo parecido a lo
+    siguiente:
+
+    \begin{lstlisting}[gobble=6,style=bashinteract]
+      09:23:35  Waiting for beacon frame (BSSID: 00:14:6C:7E:40:80) on channel 9
+      09:23:35  Trying broadcast probe requests...
+      09:23:35  Injection is working!
+      09:23:37  Found 1 AP
+
+      09:23:37  Trying directed probe requests...
+      09:23:37  00:14:6C:7E:40:80 - channel: 9 - 'teddy'
+      09:23:39  Ping (min/avg/max): 1.827ms/68.145ms/111.610ms Power: 33.73
+      09:23:39  30/30: 100%
+    \end{lstlisting}
+
+    \noindent Debe fijarse en la última línea. El porcentaje que le muestra debe ser cercano (si no igual) al
+    \SI{100}{\percent}. Si no es así, es que la señal que recibe no le llega con suficiente potencia,
+    seguramente, porque se encuentra demasiado lejos del AP. Una forma de solucionarlo sería usar una WNIC con
+    una antena con más \si{\deci\bel i}, tal y como se dijo antes. Si el valor es \SI{0}{\percent}, seguramente
+    es síntoma de que su inyección no está funcionando; para solucionarlo puede parchear sus controladores o
+    usar otros.
+
+  \item Ejecute Airodump-ng para capturar los IVs.
+
+    Es aconsejable que este comando lo introduzca en otra consola, pues deberá ejecutarse mientras hace otras
+    cosas. Podría abrir una nueva ventana o pestaña de su emulador de terminal, una nueva ``pestaña'' de un
+    multiplexor de terminal como Tmux (vea \nameref{sec:tmux}), o, si lo prefiere, ejecutarlo en segundo plano
+    (\foreignlanguage{english}{\textit{background}}, vea \nameref{sec:com-ctrl}) y volver al mismo cuando lo
+    necesite.
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@airodump-ng -c !\val{canal\_ap}! -b !\val{bssid\_ap}! \ @@
+      > @@-w !\val{pref\_out}! !\val{nic\_att\_mon}!@@
+    \end{lstlisting}
+
+    \noindent donde \val{pref\_out} es el prefijo de los nombres de los ficheros que contendrán la salida del
+    comando, es decir, que contendrán los IVs.
+
+    Mientras está teniendo lugar la inyección (cosa que se hará posteriormente), deberá aparecerle, en este
+    comando, algo así:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract]
+      CH  9 ][ Elapsed: 8 mins ][ 2007-03-21 19:25
+
+      BSSID              PWR RXQ  Beacons    #Data, #/s  CH  MB  ENC  CIPHER AUTH ESSID
+
+      00:14:6C:7E:40:80   42 100     5240   178307  338   9  54  WEP  WEP         teddy
+
+      BSSID              STATION            PWR  Lost  Packets  Probes
+
+      00:14:6C:7E:40:80  00:0F:B5:88:AC:82   42     0   183782
+    \end{lstlisting}
+
+  \item Use Aireplay-ng para hacer una autenticación falsa con el AP.
+
+    Es necesario, para que el AP acepte un paquete de una interfaz, que dicha interfaz se encuentre ya asociada
+    a dicho AP. En caso de que no sea así, el AP ignorará el paquete y enviará un paquete DeAuthenticarion en
+    claro. Entonces, no se crearán nuevos IVs puesto que el AP estará ignorando todos los paquetes inyectados.
+    La interfaz que usted use para inyección ha de estar asociada con el AP mediante el uso de un autentificador
+    falso o bien usando una dirección MAC de un cliente ya asociado al AP. Aquí usaremos un autentificador
+    falso:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@aireplay-ng -1 0 -e !\val{essid\_ap}! -a !\val{bssid\_ap}! \ @@
+      > @@-h !\val{nic\_att\_mon\_mac}! !\val{nic\_att\_mon}!@@
+    \end{lstlisting}
+
+    \noindent La opción \lstinline!-1! significa autenticación falsa y \lstinline!0! es el tiempo, en segundos,
+    de reasociación. Si ha tenido éxito, el comando le devolverá algo parecido a lo siguiente:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract]
+      18:18:20  Sending Authentication Request
+      18:18:20  Authentication successful
+      18:18:20  Sending Association Request
+      18:18:20  Association successful :-)
+    \end{lstlisting}
+
+  \item Ejecute Aireplay-ng en modo solicitud de replay de ARP.
+
+    El propósito de este paso es ejecutar Aireplay-ng en un modo que escuche las solicitudes de ARP y
+    posteriormente las reinyecte en la red. La razón por la que se usan paquetes de solicitud de ARP es porque
+    el AP normalmente los rebroadcasteará (menuda palabra me acabo de inventar) y generará un nuevo IV. Así se
+    podrán crear muchos IVs en poco tiempo.
+
+    Abra otra ventana/pestaña, etc. e introduzca:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@aireplay-ng -3 -b !\val{bssid\_ap}! \ @@
+      > @@-h !\val{nic\_att\_mon\_mac}! !\val{nic\_att\_mon}!@@
+    \end{lstlisting}
+
+    \noindent Esto empezará a escuchar solicitudes de ARP y, en cuanto escuche la primera, Aireplay-ng comenzará
+    inmediatamente a inyectarlas. Debería aparecerle algo así:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract]
+      Saving ARP requests in replay_arp-0321-191525.cap
+      You should also start airodump-ng to capture replies.
+      Read 629399 packets (got 316283 ARP requests), sent 210955 packets...
+    \end{lstlisting}
+
+    \noindent A mí, al principio, me ponía \lstinline!sent 0 paquets! y no cambiaba. Entonces fui al ordenador
+    que tenía de cliente conectado al AP (porque no era mentira eso de que este tutorial es sólo para
+    divertirse; está feo eso de meterse en la wifi de tu vecina anciana) e hice un ping a la interfaz wireless
+    LAN del AP. Entonces el número cambió y siguió cambiando indefinidamente. Quizás es que hay que esperar a
+    que algún cliente haga algo en la red.
+
+    Ahora puede comprobar que en la shell en la que tiene ejecutando el comando \lstinline!airodump-ng!, bajo la
+    columa \lstinline+#/s+ le aparece un número mayor de \num{100}. Si no es así, no está funcionando bien la
+    cosa.
+
+  \item Ejecute Aircrack-ng para obtener la clave WEP.
+
+    Ahora, con el uso de la herramienta de software Aircrack-ng, podrá obtener, a partir de los IVs que ha
+    recolectado de los pasos anteriores, la clave WEP del AP.
+
+    Aquí mostraré dos métodos. El primero se llama PTW. Deberá introducir el comando siguiente en un shell
+    nuevo:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@aircrack-ng -b !\val{bssid\_ap}! !\val{pref-out}!*.cap@@
+    \end{lstlisting}
+
+    El otro método, llamado FMS/Korek, consiste en lo siguiente:
+
+    \begin{lstlisting}[gobble=6,language=bash,style=bashinteract,escapechar=!]
+      !\promptr! @@aircrack-ng -K -b !\val{bssid\_ap}! !\val{pref-out}!*.cap@@
+    \end{lstlisting}
+
+    A mí me tardó menos el primer método. Según dice el manual, para el ataque FMS/Korek, se necesitan unos
+    \num{250000} IVs para crackear una clave WEP de \SI{64}{\bit}, y aproximadamente \num{150000} para una de
+    \SI{128}{\bit}. Para el ataque PTW, serían unos \num{20000} para una de \SI{64}{\bit} y entre \num{40000} y
+    \num{85000} para una de \SI{128}{\bit}.
+
+    Algo curioso es que el método FMS/Korek me dio dos resultados. Quizás sean válidos ambos\ldots o no. Tengo
+    que probarlo.
+
+\end{enumerate}

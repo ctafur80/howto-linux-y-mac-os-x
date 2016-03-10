@@ -1,0 +1,48 @@
+\section{Actualizar paquetes}\label{sec:update-p}
+% --------------------------------------------------------------------------------------------------------------
+En \url{http://tex.stackexchange.com/questions/55437/how-do-i-update-my-tex-distribution/55438#55438} puede ver
+una explicación de cómo actualizar los paquetes de su distribución de \TeX{} Live.
+
+Existe una aplicación de GUI de esta distribución, llamada \TeX{} Live Manager, que se ejecuta así:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@tlmgr --gui@@
+\end{lstlisting}
+
+\noindent Puede que le dé un error y necesite instalar el paquete \lstinline+perl-tk+, de apt-get, si es éste el
+gestor de paquetes que usa en su distribución:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@apt-get install perl-tk --no-install-recommends@@
+\end{lstlisting}
+
+\noindent En DNF, el paquete es \lstinline+perl-Tk.x86_64+, para arquitectura x86 de 64 bits.
+
+\TeX{} Live Manager tiene también la opción de invocarlo desde la línea de comandos para hacer la actualización
+sin pasar por la interfaz gráfica. Deberá primero actualizar el propio \TeX{} Live Manager:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@tlmgr update --self@@
+\end{lstlisting}
+
+\noindent Y, luego, ya podrá actualizar los paquetes:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@tlmgr update --all@@
+\end{lstlisting}
+
+\noindent En Mac OS X necesito permisos de administrador para ejecutar estos comandos. Tengo que averiguar cómo
+se hace la instalación para poder invocarlo con mi usuario sin usar \lstinline!sudo!. La ruta absoluta del
+comando \lstinline!tlmgr! es \path{/usr/local/texlive/\val{a\~no}/bin/x86_64-linux/}, y se invoca porque
+\path{/opt/texbin} está en la variable de entorno \lstinline!PATH! del usuario y \path{/opt/texbin} es un
+vínculo simbólico a \path{/usr/local/texlive/\val{a\~no}/bin/x86_64-linux/}
+
+Existe otro comando, mejor, para actualizar los paquetes:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@tlmgr update --self --all --reinstall-forcibly-removed@@
+\end{lstlisting}
+
+Creo que los paquetes se actualizan durante el año que dura su versión de distribución. Cuando salga una versión
+nueva, deberá entonces actualizar la distribución completa para poder seguir teniendo actualizados los paquetes
+(vea \nameref{sec:tex-upgrade}).

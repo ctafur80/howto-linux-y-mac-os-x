@@ -1,0 +1,18 @@
+\section{MAC spoofing}\label{sec:mac-spoofing}
+% -------------------------------------------------------------------------------------------------------------
+El MAC spoofing podría traducirse como ``enmascaramiento de MAC''; aquí MAC hace alusión a \emph{dirección MAC}
+(también conocida como ``dirección física'' o`` dirección hardware''). Consiste en cambiar la dirección MAC que
+muestra nuestro equipo, normalmente antes de realizar un ataque wifi, con la intención de que no se nos pueda
+identificar. Advierta que la dirección MAC es única para cada NIC en todo el mundo y una organización con el
+suficiente poder, como, por ejemplo, una perteneciente a un estado, podría consultar los registros de ventas de
+las principales empresas que venden ordenadores y NICs wireless y averiguar quién compró su ordenador o NIC;
+sobretodo si pagó con tarjeta de crédito o débito dicha transacción comercial.
+
+Para hacer MAC spoofing en su \val{nic\_att}, deberá hacer lo siguiente
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@ifconfig !\val{nic\_att\_mon}! down@@
+  !\promptr! @@macchanger -r !\val{nic\_att\_mon}!@@
+  !\promptr! @@iwconfig !\val{nic\_att\_mon}! mode monitor@@
+  !\promptr! @@ifconfig !\val{nic\_att\_mon}! up@@
+\end{lstlisting}

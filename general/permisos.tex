@@ -1,0 +1,110 @@
+\section{Gestión de permisos}\label{sec:permisos}
+% --------------------------------------------------------------------------------------------------------------
+Existen tres formas de gestionar los permisos en Linux.
+
+\subsection{Permisos de UNIX}
+Es la forma más antigua de las que exponemos aquí. Es también la más basta o, como dirían en inglés, la menos
+\foreignlanguage{english}{\textit{fine grained}}. Debería ser, por tanto, la primera opción para los permisos de
+lectura o escritura, e incluso de ejecución de pequeños programas no muy complejos.
+
+Los permisos de UNIX es uno de los primeros temas que se abordan en cualquier libro o tutorial de Linux. Para
+cada fichero existen permisos de lectura (\lstinline!r!), escritura (\lstinline!w!) y ejecución (\lstinline!x!)
+para el dueño (\lstinline!u!) del fichero, el grupo principal del fichero (\lstinline!g!) y para el resto de
+usuarios (\lstinline!o!). La opción \lstinline!-l! del comando \lstinline!ls! le permite ver estos permisos. Por
+ejemplo:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@ls -l@@
+  total 96
+  -rwxrwxrwx  1 zFur  staff  48391 Jan  2 23:20 The.Man.In.The.High.Castle.S01E08.WEBRip.x264-TASTETV.srt
+  drwxr-xr-x  8 zFur  staff    272 Dec 25 20:35 Virtual Machines.localized
+\end{lstlisting}
+
+\noindent Los verá en la primera columna. La primera posición indica el tipo de fichero (directorio, vínculo
+simbólico, etc.; si es un fichero normal, se indica con un guión (\lstinline!-!)). Luego, justo a su derecha
+vienen los permisos de \lstinline!u! (recuerde, el usuario dueño del fichero), luego los de \lstinline!g! y,
+finalmente, los de \lstinline!o!. Los permisos que no se tengan, aparecerán como un guión (\lstinline!-!); no lo
+confunda con el guión de la columna a la izquierda del todo. Existe un particularidad que debe conocer: la
+\lstinline!x!, si el ``fichero'' del que se trata es un directorio, indica si se puede (o no se puede) listar
+sus contenidos. Como dije antes, la explicación de esto viene en cualquier libro de Linux, o en alguna página de
+man también, seguramente, así que no se explicará en más detalle aquí.
+
+\subsection{ACLs}
+Los ACLs (\foreignlanguage{english}{\textit{access control lists}}) permiten un ajuste mayor que los permisos de
+UNIX. Permite, por ejemplo, que se puedan entregar permisos de lectura de un documento en concreto a un usuario
+en particular, sin necesidad de crear un grupo \textit{ad hoc} en el que sólo estaría ese usuario. No sé si el
+software necesario para usar ACLs viene con la instalación básica de Arch Linux. En
+\url{https://wiki.archlinux.org/index.php/Access_Control_Lists} puede ver una buena explicación del uso de de
+ACLs.
+
+Lo normal es que su sistema monte sus sistemas de ficheros con la opción \lstinline!acl! para así poder usar
+ACLs, pero, si no está seguro, puede comprobarlo con:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@tune2fs -l /dev/sdXY | grep "Default mount options:"@@
+  Default mount options:    user_xattr acl
+\end{lstlisting}
+
+Usted puede ver que un fichero de su sistema tiene ACLs porque, por ejemplo, al hacer
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@ls -l@@
+\end{lstlisting}
+
+\noindent para ver los permisos del directorio en el que se encuentra el fichero, le aparece, justo a la derecha
+de los permisos de UNIX de dicho fichero, un signo más (\lstinline!+!). Por ejemplo, podría aparecerle algo así:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@ls -l /dev/audio@@
+  crw-rw----+ 1 root audio 14, 4 nov.   9 12:49 /dev/audio
+\end{lstlisting}
+
+\noindent Entonces, podrá ver los ACLs con el siguiente comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@getfacl /dev/audio@@
+  getfacl: Removing leading '/' from absolute path names
+  # file: dev/audio
+  # owner: root
+  # group: audio
+  user::rw-
+  user:solstice:rw-
+  group::rw-
+  mask::rw-
+  other::---
+\end{lstlisting}
+
+\noindent En este caso le indica, además de los permisos de UNIX, que el usuario \texttt{solstice} tiene
+permisos de lectura (\lstinline!r!) y escritura (\lstinline!w!) del fichero consultado.
+
+Para dar permisos ACL a un usuario \val{usuario}, debe usar el comando:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@setfacl -m "u:!\val{usuario}!:!\val{permisos}!"@@
+\end{lstlisting}
+
+\noindent, si, en lugar de a un usuario, es a un grupo \val{grupo},
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@setfacl -m "g:!\val{grupo}!:!\val{permisos}!"@@
+\end{lstlisting}
+
+\noindent Para eliminar de un fichero todos los permisos ACL,
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptr! @@setfacl -b@@
+\end{lstlisting}
+
+\subsection{Polkit}\label{subsec:polkit}
+Polkit es la última forma que surjió para la gestión de permisos. La idea detrás de Polkit es algo distinta a
+la de los permisos de Unix y la de las ACLs. Es distinta porque en este caso el propósito es que se comuniquen
+de forma segura procesos sin privilegios con procesos con más privilegios. Es decir, es un marco que centraliza
+el proceso de toma de decisión respecto a entregar acceso a operaciones privilegiadas a aplicaciones sin
+privilegios. No es tanto de leer/modificar ficheros, como en los casos anteriores.
+
+Puede ver una buena explicación de Polkit en \url{https://wiki.archlinux.org/index.php/Polkit}.
+
+En Arch Linux para arquitectura ARM no viene de serie y, por tanto, deberá instalar el paquete
+\lstinline!polkit!. Polkit hace uso de agentes de autenticación para permitir al usuario de una sesión
+demostrar que él es realmente el usuario de dicha sesión o que es un administrador del sistema. Hay agentes de
+autenticación tanto de terminal como de GUI.

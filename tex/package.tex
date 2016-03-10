@@ -1,0 +1,83 @@
+\section{Paquetes que suelo usar}\label{sec:tex-package}
+% --------------------------------------------------------------------------------------------------------------
+\LaTeX{} es en realidad un paquete de macros de \TeX. No es el único, hay otros como ConTeXt, más modernos. Aun
+así, sigo prefiriendo usar \LaTeX{} porque es el que más gente usa y en el que más ayuda puedo encontrar a la
+hora de buscar soluciones. No obstante, he de reconocer que ConTeXt es bastante más amigable. Se supone que la
+versión 3 de \LaTeX{} será mucho más amigable y coherente y no habrá que estar usando paquetes para casi todo;
+otro asunto es cuándo saldrá.
+
+Los paquetes que suelo usar en \LaTeX{} tan a menudo que han reemplazado a los originales de la versión
+\LaTeX{}2e son:
+
+\begin{desc-package}
+
+  \item[tabu] Este paquete permite hacer muchas cosas en relación a la creación de tablas que con los paquetes
+    antiguos como \lstinline!tabular!, por ejemplo, eran muy difíciles. Permite crear, además de las columnas
+    tradicionales (\lstinline+l+, \lstinline+c+, \lstinline+p+, etc.), columnas \lstinline+X+, que son
+    elásticas. Así, se pueden tener columnas fijas y columnas elásticas dentro de una misma tabla. Si desea usar
+    el comando \lstinline+\lstinline+ dentro de una tabla, deberá entonces usar \lstinline+tabu*+, en lugar de
+    \lstinline+tabu+.
+
+  \item[colortbl] Está relacionado con \lstinline+tabu+. Permite definir el color de los fondos de las celdas de
+    una tabla.
+
+  \item[siunitx] Este paquete es muy conveniente para la notación de las unidades en ciencia y tecnología, así
+    como permite gran versatilidad en el uso de los numerales.
+
+  \item[hyperref] Permite controlar los hiperenlaces y cómo se resaltan.
+
+  \item[xcolor] Permite el empleo de muchos más colores de los que trae de fábrica \LaTeX{}2e.
+
+  \item[graphicx] Permite la inclusión de gráficos en formato PDF, PNG o JPEG, por ejemplo.
+
+  \item[verbatim] Para introducir código de forma muy directa sin preocuparse de introducir escapes.
+
+  \item[fancyvrb] Para poder usar entornos verbatim pero con la posibilidad de introdicir comandos para que, por
+    ejemplo, parte del texto esté en negrita, o en colores, o para que se pueda usar gobble.
+
+  \item[titlesec] Para modificar la apariencia de los encabezados de capítulos, secciones, etc.
+
+  \item[url] Permite usar el comando \lstinline+\url+, para introducción de URLs, o \lstinline+\path+, para
+    introducir rutas de ficheros.
+
+  \item[nameref] Con este paquete puedo usar referencias al nombre de una sección, tabla, figura, etc., y no
+    sólo a su número.
+
+  \item[inputenc] Codificación del fichero de entrada. Suelo usar siempre el estándar UTF-8 de Unicode.
+
+  \item[fontenc] Codificación de fuentes.
+
+  \item[titling]
+
+  \item[amsmath] Paquete de la American Mathematical Society (AMS) para mejoras en la tipografía de notación
+    matemática. Es bastante conveniente.
+
+  \item[python] Sirve para usar código Python en documentos de \LaTeX{}. Yo lo uso para hacer gráficos con las
+    librerías Matplotlib.
+
+  \item[enumitem] Sirve para crear nuevos tipos de listas a partir de las predefinidas de \LaTeX{}, es decir, a
+    partir de \lstinline!itemize!, \lstinline!enumerate! y \lstinline!description!.
+
+  \item[dtklogos] Permite insertar los logos relacionados con el mundo \TeX{}, como, por ejemplo, ConTeXt,
+    XeTeX, MiKTeX, etc. Cuando instalé la versión de 2015 de \TeX{} Live, no fui capaz de usar más este paquete.
+
+  \item[imakeidx] Para crear un índice de palabras clave. Es más moderno que el método básico de \LaTeX{}2e.
+
+  \item[glossaries] Para hacer glosarios.
+
+  \item[floatrow] Para poder poner figuras en paralelo para que no ocupen tanto espacio.
+
+  \item[tikz] Para hacer gráficos. Es una monstruosidad este paquete. El manual tiene muchas páginas.
+
+  \item[circuitikz] Para representar esquemas de cirtuitos eléctricos y electrónicos, ya sean de teoría básica
+    de circuitos, de electrónica analógica o de electrónica digital, etc. Este paquete emplea los gráficos del
+    paquete \lstinline!tikz!, así que se podría considerar un subpaquete de aquél, pero hay que llamarlo con
+    \lstinline+\usepackage{}+ como a cualquier otro paquete.
+
+  \item[listings] Para hacer listados de código de programación. Dentro de los paquetes para esta función, creo
+    que es el mejor. Aun así, no me parece muy bueno. Da problemas con los esquemas de colores de Vi y
+    derivados; por ejemplo, considera el signo \$ como que abre/cierra el entorno display math. Puede modificar
+    su esquema de colores o usar el de alguien; por ejemplo, vea
+    \url{http://stackoverflow.com/questions/6738902/vim-syntax-highlighting-with-and-lstlistings-lstinline}.
+
+\end{desc-package}

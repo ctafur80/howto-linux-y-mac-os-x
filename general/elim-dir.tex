@@ -1,0 +1,11 @@
+\section{Eliminar un directorio de su sistema mediante el shell}\label{sec:elim-dir.tex}
+% --------------------------------------------------------------------------------------------------------------
+Para eliminar un directorio de su sistema, incluyendo todos sus ficheros y subdirectorios, haciendo uso de su
+shell de Linux o de Mac OS X, deberá introducir el comando siguiente:
+
+\begin{lstlisting}[gobble=2,language=bash,style=bashinteract,escapechar=!]
+  !\promptu! @@rm -rf !\val{dir}!@@
+\end{lstlisting}
+
+\noindent donde \val{dir} es el directorio que desea eliminar. Esta explicación la pongo aquí porque no es muy
+intuitivo este proceso. El comando \lstinline!rmdir! sólo sirve para eliminar directorios vacíos.
