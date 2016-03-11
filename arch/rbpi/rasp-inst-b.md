@@ -33,10 +33,10 @@ tiene una cuenta root (vea Simular cuenta root).
     dicha tarjeta microSD, desmóntela mediante el shell con el comando `umount`:
 
     ```bash
-    $? umount /dev/sd{{X}}[1-{{n}}]
+    $? umount /dev/sdX[1-n]
     ```
 
-    donde `{{n}}` es el número mayor de su partición del dispositivo /dev/sd{{X}}; si la numeración de dichas
+    donde `n` es el número mayor de su partición del dispositivo /dev/sd{{X}}; si la numeración de dichas
     particiones según sus nombres descriptores del kernel no es consecutiva, desmóntelas una a una. Si trata de
     desmontar estas particiones desde la interfaz gráfica, puede que lo desmonte completamente y no aparezcan
     los ficheros de dispositivo para dicha tarjeta cuando los muestra con el comando `lsblk`, con lo cual, a
